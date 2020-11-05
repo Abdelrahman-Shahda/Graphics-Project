@@ -1,5 +1,5 @@
 #include "application.hpp"
-
+#include <sstream>
 #include <iostream>
 #include <string>
 #include <iomanip>

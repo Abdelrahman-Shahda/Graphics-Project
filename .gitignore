@@ -7,3 +7,6 @@ imgui.ini
 
 # Since ".obj" are ignored by default, we force them to be added
 !assets/models/**/*.obj
+
+#vs related folders
+.vs/
