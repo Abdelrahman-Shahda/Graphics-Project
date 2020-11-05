@@ -52,7 +52,7 @@ namespace std {
     template<> struct hash<GraphicsProject::Vertex> {
         size_t operator()(GraphicsProject::Vertex const& vertex) const {
             size_t combined = hash<glm::vec3>()(vertex.position);
-            combined = hash_combine(combined, hash<our::Color>()(vertex.color));
+            combined = hash_combine(combined, hash<GraphicsProject::Color>()(vertex.color));
             combined = hash_combine(combined, hash<glm::vec2>()(vertex.tex_coord));
             combined = hash_combine(combined, hash<glm::vec3>()(vertex.normal));
             return combined;

@@ -94,8 +94,8 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
         program = glCreateProgram();    // We ask GL to create a program for us and return a uint that we will use it by.
                                         // (act as a pointer to the created program).
 
-        attachShader(program, "assets/shaders/graphicsproject/triangle.vert", GL_VERTEX_SHADER);   // read the vertex shader and attach it to the program.
-        attachShader(program, "assets/shaders/graphicsproject/red.frag", GL_FRAGMENT_SHADER);      // read the fragment shader and attach it to the program.
+        attachShader(program, "assets/shaders/graphicsproject/screen.vert", GL_VERTEX_SHADER);   // read the vertex shader and attach it to the program.
+        attachShader(program, "assets/shaders/graphicsproject/white.frag", GL_FRAGMENT_SHADER);      // read the fragment shader and attach it to the program.
         
         glLinkProgram(program);                     // Link the vertex and fragment shader together.
         checkProgramLinkingErrors(program);         // Check if there is any link errors between the fragment shader and vertex shader.
@@ -119,7 +119,7 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
         // mode (GLenum): what primitives to draw. GL_TRIANGLES will combine each 3 vertices into a triangle.
         // first (GLint): the index of the first vertex to draw. It is useless here since we are not receiving data through the vertex array.
         // count (GLsizei): How many vertices to send to the pipeline. Since we are sending 3 vertices only, only one triangle will be drawn.
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glBindVertexArray(0);                       // Unbind the buffer.
     }
