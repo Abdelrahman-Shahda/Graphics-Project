@@ -1,9 +1,9 @@
-#ifndef OUR_VERTEX_ATTRIBUTES_H
-#define OUR_VERTEX_ATTRIBUTES_H
+#ifndef GRAPHICSPROJECT_VERTEX_ATTRIBUTES_H
+#define GRAPHICSPROJECT_VERTEX_ATTRIBUTES_H
 
 #include <glad/gl.h>
 
-namespace our {
+namespace GraphicsProject {
 
     // Just as convenience, we write which location "we" use for each attribute in our shader.
     // If you used different locations, modify these constants or just ignore (dont' use) them
@@ -22,4 +22,4 @@ namespace our {
     };
 }
 
-#endif //OUR_VERTEX_ATTRIBUTES_H
+#endif //GRAPHICSPROJECT_VERTEX_ATTRIBUTES_H

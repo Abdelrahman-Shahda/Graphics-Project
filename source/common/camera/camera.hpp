@@ -1,10 +1,10 @@
-#ifndef OUR_CAMERA_HPP
-#define OUR_CAMERA_HPP
+#ifndef GRAPHICSPROJECT_CAMERA_HPP
+#define GRAPHICSPROJECT_CAMERA_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace our {
+namespace GraphicsProject {
 
     // An enum for the camera projection type
     enum struct CameraType {
@@ -209,4 +209,4 @@ namespace our {
 
 }
 
-#endif //OUR_CAMERA_HPP
+#endif //GRAPHICSPROJECT_CAMERA_HPP

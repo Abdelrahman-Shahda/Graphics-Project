@@ -77,7 +77,7 @@ void attachShader(GLuint program, const char* filename, GLenum shader_type){
 
 
 // The ingerited class from "Application" to this example.
-class ShaderIntroductionApplication : public our::Application {
+class ShaderIntroductionApplication : public GraphicsProject::Application {
 
     // These unsigned integers represent the way we communicate with the GPU.
     // They act like a name (or, in other words, an ID).
@@ -86,7 +86,7 @@ class ShaderIntroductionApplication : public our::Application {
     GLuint program = 0, vertex_array = 0;
 
     // We need a window with title: "Shader Introduction", size: {1280, 720}, not full screen.
-    our::WindowConfiguration getWindowConfiguration() override {
+    GraphicsProject::WindowConfiguration getWindowConfiguration() override {
         return { "Shader Introduction", {1280, 720}, false };
     }
 

@@ -1,11 +1,11 @@
-#ifndef OUR_MESH_UTILS_H
-#define OUR_MESH_UTILS_H
+#ifndef GRAPHICSPROJECT_MESH_UTILS_H
+#define GRAPHICSPROJECT_MESH_UTILS_H
 
 #include "mesh.hpp"
 
 #include <glm/glm.hpp>
 
-namespace our::mesh_utils {
+namespace GraphicsProject::mesh_utils {
 
     // Load an ".obj" file into the mesh
     bool loadOBJ(Mesh& mesh, const char* filename);
@@ -24,7 +24,7 @@ namespace our::mesh_utils {
                 const glm::vec2& texture_offset = {0, 0},
                 const glm::vec2& texture_tiling = {1, 1});
 
-    void Plane(our::Mesh& mesh,
+    void Plane(GraphicsProject::Mesh& mesh,
                const glm::ivec2& resolution = {1, 1},
                bool colored = false,
                const glm::vec3& center={0, 0, 0},
@@ -34,4 +34,4 @@ namespace our::mesh_utils {
 
 }
 
-#endif //OUR_MESH_UTILS_H
+#endif //GRAPHICSPROJECT_MESH_UTILS_H

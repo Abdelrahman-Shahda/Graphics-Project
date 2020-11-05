@@ -1,5 +1,5 @@
-#ifndef OUR_FLY_CAMERA_CONTROLLER_HPP
-#define OUR_FLY_CAMERA_CONTROLLER_HPP
+#ifndef GRAPHICSPROJECT_FLY_CAMERA_CONTROLLER_HPP
+#define GRAPHICSPROJECT_FLY_CAMERA_CONTROLLER_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
@@ -9,7 +9,7 @@
 #include <camera/camera.hpp>
 #include <application.hpp>
 
-namespace our {
+namespace GraphicsProject {
 
     // Allows you to control the camera freely in world space
     class FlyCameraController {
@@ -118,4 +118,4 @@ namespace our {
     };
 }
 
-#endif //OUR_FLY_CAMERA_CONTROLLER_HPP
+#endif //GRAPHICSPROJECT_FLY_CAMERA_CONTROLLER_HPP

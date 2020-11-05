@@ -1,5 +1,5 @@
-#ifndef OUR_ORBIT_CAMERA_CONTROLLER_HPP
-#define OUR_ORBIT_CAMERA_CONTROLLER_HPP
+#ifndef GRAPHICSPROJECT_ORBIT_CAMERA_CONTROLLER_HPP
+#define GRAPHICSPROJECT_ORBIT_CAMERA_CONTROLLER_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
@@ -9,7 +9,7 @@
 #include <camera/camera.hpp>
 #include <application.hpp>
 
-namespace our {
+namespace GraphicsProject {
 
     // Allows you to control the camera in an orbit motion around a point in world space
     class OrbitCameraController {
@@ -98,4 +98,4 @@ namespace our {
 
 }
 
-#endif //OUR_ORBIT_CAMERA_CONTROLLER_HPP
+#endif //GRAPHICSPROJECT_ORBIT_CAMERA_CONTROLLER_HPP

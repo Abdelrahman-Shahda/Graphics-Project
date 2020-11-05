@@ -1,5 +1,5 @@
-#ifndef OUR_UTILS_IMGUI_H
-#define OUR_UTILS_IMGUI_H
+#ifndef GRAPHICSPROJECT_UTILS_IMGUI_H
+#define GRAPHICSPROJECT_UTILS_IMGUI_H
 
 #include <functional>
 #include <iterator>
@@ -12,7 +12,7 @@
 #include <imgui.h>
 #include <glm/common.hpp>
 
-namespace our {
+namespace GraphicsProject {
 
     namespace gl_enum_options {
         typedef std::map<GLenum, const char*> const EnumMap;
@@ -225,4 +225,4 @@ namespace our {
 
 }
 
-#endif //OUR_UTILS_IMGUI_H
+#endif //GRAPHICSPROJECT_UTILS_IMGUI_H

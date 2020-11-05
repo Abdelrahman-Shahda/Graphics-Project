@@ -1,12 +1,12 @@
-#ifndef OUR_COMMON_VERTEX_ATTRIBUTES_H
-#define OUR_COMMON_VERTEX_ATTRIBUTES_H
+#ifndef GRAPHICSPROJECT_COMMON_VERTEX_ATTRIBUTES_H
+#define GRAPHICSPROJECT_COMMON_VERTEX_ATTRIBUTES_H
 
 #include "vertex-attributes.hpp"
 #include "common-vertex-types.hpp"
 
 #include <glad/gl.h>
 
-namespace our {
+namespace GraphicsProject {
 
     // For each of our common vertex types, we are defining how they can be sent to the shader attributes
 
@@ -46,4 +46,4 @@ namespace our {
 
 }
 
-#endif //OUR_COMMON_VERTEX_ATTRIBUTES_H
+#endif //GRAPHICSPROJECT_COMMON_VERTEX_ATTRIBUTES_H
