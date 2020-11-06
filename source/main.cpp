@@ -12,20 +12,20 @@
 #define KEY_3	51
 #define KEY_4	52
 
-// The ingerited class from "Application" to this example.
+// Inherting Application class to define out application
 class ShaderIntroductionApplication : public GraphicsProject::Application {
 
-    // These unsigned integers represent the way we communicate with the GPU.
-    // They act like a name (or, in other words, an ID).
-    // These uint are passed to the GL header functions to tell the GL which OpenGL object
-    // we are referring to. Also the values are set by the GL functions when passed by reference.
+private:
+	//
+    //Defining 5 shader programs for out shapes
     GraphicsProject::ShaderProgram program[5];
     GLuint vertex_array = 0;
     int state = 0;
-    GraphicsProject::Mouse mouseController;  //To control mouse Actions
-    // We need a window with title: "Shader Introduction", size: {1280, 720}, not full screen.
+    GraphicsProject::Mouse mouseController;  
+
+    // Defining an unresizable window of resolution 1280*720
     GraphicsProject::WindowConfiguration getWindowConfiguration() override {
-        return { "Shader Introduction", {1280, 720}, false };
+        return { "Project Phase 1", {1280, 720}, false };
     }
 
     void onInitialize() override {
@@ -37,6 +37,7 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
 		}
 
         program[0].attach(ASSETS_DIR "/shaders/graphicsproject/white.frag", GL_FRAGMENT_SHADER);
+		program[1].attach(ASSETS_DIR "/shaders/shapes/SmileyFace.frag", GL_FRAGMENT_SHADER);
 		program[2].attach(ASSETS_DIR "/shaders/shapes/HeartShader.frag", GL_FRAGMENT_SHADER);
         program[3].attach(ASSETS_DIR "/shaders/shapes/PacManShader.frag", GL_FRAGMENT_SHADER);
         program[4].attach(ASSETS_DIR "/shaders/shapes/LetterGShader.frag", GL_FRAGMENT_SHADER);
@@ -47,17 +48,16 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
         mouse.enable(window);                          //Enable mouse events
         keyboard.enable(window);                       // Enable keyboard events
         glGenVertexArrays(1, &vertex_array);        // Ask GL to create a vertex array to easily create a triangle.
-
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);       // Set the clear color
 
     }
 
     void onDraw(double deltaTime) override {
         glClear(GL_COLOR_BUFFER_BIT);               // Clear the frame buffer (back buffer of the window)
-        glUseProgram(program[state]);                      // Ask GL to use this program for the upcoming operations.
-                                                    // Every shader and rendering call after glUseProgram will now use this program object (and the shaders).
+        glUseProgram(program[state]);               // Use shader program of selected key
         GLuint scale_uniform_location = glGetUniformLocation(program[state], "mousePosition");
 
+		//Checking pressed key to choose shader program
 		if (keyboard.justPressed(KEY_1))
 			state = 1;
 		else if (keyboard.justPressed(KEY_2))
@@ -67,28 +67,23 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
         else if (keyboard.justPressed(KEY_4))
           state=4;
 
-
         //Get mouse position and set the uniform
         glm::vec2 mousePosition = mouse.getMousePosition();
         glUniform2f(scale_uniform_location, mousePosition.x, 720-mousePosition.y);
-        glBindVertexArray(vertex_array);            // Binding is like selecting which object to use.
-                                                    // Note that we need to bind a vertex array to draw
-                                                    // Even if that vertex array does not send any data down the pipeline
 
-        // Sends vertices down the pipeline for drawing
-        // Parameters:
-        // mode (GLenum): what primitives to draw. GL_TRIANGLES will combine each 3 vertices into a triangle.
-        // first (GLint): the index of the first vertex to draw. It is useless here since we are not receiving data through the vertex array.
-        // count (GLsizei): How many vertices to send to the pipeline. Since we are sending 3 vertices only, only one triangle will be drawn.
+		//Bind the vertices so that we can draw a rectangle covering the whole screen
+        glBindVertexArray(vertex_array);            
         glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        glBindVertexArray(0);                       // Unbind the buffer.
+       glBindVertexArray(0);                       
     }
 
     void onDestroy() override {
+		//Deleting programs
         for (int i=0; i<5; i++)
-        glDeleteProgram(program[i]);                   // Cleaning up the program we compiled and saved.
-        glDeleteVertexArrays(1, &vertex_array);     // Clean up the array we allocated Params: (n: number of vertex array objects, array containing the n addresses of the objects)
+			glDeleteProgram(program[i]);     
+
+		//Deleting vertex array used
+        glDeleteVertexArrays(1, &vertex_array);    
     }
 
 };
