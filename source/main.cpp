@@ -6,6 +6,12 @@
 
 #pragma region helper_functions
 
+//Keyboard keys
+#define KEY_1	49
+#define KEY_2	50
+#define KEY_3	51
+#define KEY_4	52
+
 // The ingerited class from "Application" to this example.
 class ShaderIntroductionApplication : public GraphicsProject::Application {
 
@@ -23,25 +29,26 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
     }
 
     void onInitialize() override {
-        program[0].create();
-        program[0].attach(ASSETS_DIR "/shaders/graphicsproject/screen.vert", GL_VERTEX_SHADER);
+		//Intializing shader programs
+		for (int i = 0; i < 5; i++)
+		{
+			program[i].create();
+			program[i].attach(ASSETS_DIR "/shaders/graphicsproject/screen.vert", GL_VERTEX_SHADER);
+		}
+
         program[0].attach(ASSETS_DIR "/shaders/graphicsproject/white.frag", GL_FRAGMENT_SHADER);
-        program[0].link();
-        program[3].create();
-        program[3].attach(ASSETS_DIR "/shaders/graphicsproject/screen.vert", GL_VERTEX_SHADER);
+		program[2].attach(ASSETS_DIR "/shaders/shapes/HeartShader.frag", GL_FRAGMENT_SHADER);
         program[3].attach(ASSETS_DIR "/shaders/shapes/PacManShader.frag", GL_FRAGMENT_SHADER);
-        program[3].link();
-        program[4].create();
-        program[4].attach(ASSETS_DIR "/shaders/graphicsproject/screen.vert", GL_VERTEX_SHADER);
         program[4].attach(ASSETS_DIR "/shaders/shapes/LetterGShader.frag", GL_FRAGMENT_SHADER);
-        program[4].link();
+
+		for(int i=0;i<5;i++)
+			program[i].link();
 
         mouse.enable(window);                          //Enable mouse events
         keyboard.enable(window);                       // Enable keyboard events
         glGenVertexArrays(1, &vertex_array);        // Ask GL to create a vertex array to easily create a triangle.
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);       // Set the clear color
-
 
     }
 
@@ -51,9 +58,13 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
                                                     // Every shader and rendering call after glUseProgram will now use this program object (and the shaders).
         GLuint scale_uniform_location = glGetUniformLocation(program[state], "mousePosition");
 
-        if (keyboard.justPressed(51))
-          state=3;
-        else if (keyboard.justPressed(52))
+		if (keyboard.justPressed(KEY_1))
+			state = 1;
+		else if (keyboard.justPressed(KEY_2))
+			state = 2;
+		else if (keyboard.justPressed(KEY_3))
+			state = 3;
+        else if (keyboard.justPressed(KEY_4))
           state=4;
 
 
