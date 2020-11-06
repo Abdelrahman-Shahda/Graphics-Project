@@ -21,7 +21,6 @@ private:
     GraphicsProject::ShaderProgram program[5];
     GLuint vertex_array = 0;
     int state = 0;
-    GraphicsProject::Mouse mouseController;  
 
     // Defining an unresizable window of resolution 1280*720
     GraphicsProject::WindowConfiguration getWindowConfiguration() override {
