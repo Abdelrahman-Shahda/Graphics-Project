@@ -1,14 +1,16 @@
 #version 330 core
 out vec4 frag_color;
-
+uniform vec2 mousePosition;
 //uniform vec2 u_resolution;
 //uniform vec2 u_mouse;
 //uniform float u_time;
 
 
 void main(){
+
+
     vec2 u_resolution =vec2(1280,720);
-    vec2 u_mouse= vec2(640,360);
+    vec2 u_mouse= mousePosition;
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     vec2 dist = u_mouse/u_resolution - st.xy;
     dist.x *= u_resolution.x/u_resolution.y;
