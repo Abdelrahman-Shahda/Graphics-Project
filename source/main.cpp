@@ -1,6 +1,8 @@
 #include <application.hpp>
 #include <shader.hpp>
-#include <cassert>
+#include <iostream>
+//#include "input/mouse.hpp"
+
 
 #pragma region helper_functions
 
@@ -13,7 +15,7 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
     // we are referring to. Also the values are set by the GL functions when passed by reference.
     GraphicsProject::ShaderProgram program;
     GLuint vertex_array = 0;
-
+    GraphicsProject::Mouse mouseController;  //To control mouse Actions
     // We need a window with title: "Shader Introduction", size: {1280, 720}, not full screen.
     GraphicsProject::WindowConfiguration getWindowConfiguration() override {
         return { "Shader Introduction", {1280, 720}, false };
@@ -24,7 +26,7 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
         program.attach(ASSETS_DIR "/shaders/graphicsproject/screen.vert", GL_VERTEX_SHADER);
         program.attach(ASSETS_DIR "/shaders/Shapes/PacManShader.frag", GL_FRAGMENT_SHADER);
         program.link();
-
+        mouse.enable(window);                       // Enable mouse events
         glGenVertexArrays(1, &vertex_array);        // Ask GL to create a vertex array to easily create a triangle.
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);       // Set the clear color
@@ -34,7 +36,11 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
         glClear(GL_COLOR_BUFFER_BIT);               // Clear the frame buffer (back buffer of the window)
         glUseProgram(program);                      // Ask GL to use this program for the upcoming operations.
                                                     // Every shader and rendering call after glUseProgram will now use this program object (and the shaders).
-        
+
+        //Get mouse position and set the uniform
+        glm::vec2 mousePosition = mouse.getMousePosition();
+        GLuint scale_uniform_location = glGetUniformLocation(program, "mousePosition");
+        glUniform2f(scale_uniform_location, mousePosition.x, 720-mousePosition.y);
         glBindVertexArray(vertex_array);            // Binding is like selecting which object to use.
                                                     // Note that we need to bind a vertex array to draw
                                                     // Even if that vertex array does not send any data down the pipeline
