@@ -245,6 +245,8 @@ int GraphicsProject::Application::run() {
                 std::cerr << "Failed to save a Screenshot" << std::endl;
             }
         }
+
+		//Close program if escape key is pressed
 		if (keyboard.justPressed(GLFW_KEY_ESCAPE))
 			break;
 
