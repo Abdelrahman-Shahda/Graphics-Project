@@ -24,7 +24,7 @@ class ShaderIntroductionApplication : public GraphicsProject::Application {
     void onInitialize() override {
         program.create();
         program.attach(ASSETS_DIR "/shaders/graphicsproject/screen.vert", GL_VERTEX_SHADER);
-        program.attach(ASSETS_DIR "/shaders/Shapes/PacManShader.frag", GL_FRAGMENT_SHADER);
+        program.attach(ASSETS_DIR "/shaders/Shapes/LetterGShader.frag", GL_FRAGMENT_SHADER);
         program.link();
         mouse.enable(window);                       // Enable mouse events
         glGenVertexArrays(1, &vertex_array);        // Ask GL to create a vertex array to easily create a triangle.
