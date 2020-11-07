@@ -14,7 +14,6 @@ private:
     GraphicsProject::ShaderProgram program[5];
     GLuint vertex_array = 0;
     int state = 0;
-    GraphicsProject::Mouse mouseController;  
 
 
 	/*******************************************************************************
