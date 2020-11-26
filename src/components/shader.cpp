@@ -1,4 +1,4 @@
-#include "shader.hpp"
+#include "../../inc/components/shader.hpp"
 
 #include <cassert>
 #include <iostream>

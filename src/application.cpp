@@ -1,4 +1,4 @@
-#include "application.hpp"
+#include "../inc/application.hpp"
 #include <sstream>
 #include <iostream>
 #include <string>
@@ -15,7 +15,7 @@
 #define ENABLE_OPENGL_DEBUG_MESSAGES
 #endif
 
-#include "texture/screenshot.h"
+//#include "texture/screenshot.h"
 
 // This function will be used to log errors thrown by GLFW
 void glfw_error_callback(int error, const char* description){
@@ -231,7 +231,7 @@ int GraphicsProject::Application::run() {
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 #endif
-
+		/*
         // If F12 is pressed, take a screenshot
         if(keyboard.justPressed(GLFW_KEY_F12)){
             glViewport(0, 0, frame_buffer_size.x, frame_buffer_size.y);
@@ -244,7 +244,9 @@ int GraphicsProject::Application::run() {
             } else {
                 std::cerr << "Failed to save a Screenshot" << std::endl;
             }
+			
         }
+		*/
 
 		//Close program if escape key is pressed
 		if (keyboard.justPressed(GLFW_KEY_ESCAPE))

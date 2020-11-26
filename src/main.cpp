@@ -1,5 +1,5 @@
 #include <application.hpp>
-#include <shader.hpp>
+#include <../inc/components/shader.hpp>
 #include <iostream>
 #pragma region helper_functions
 
