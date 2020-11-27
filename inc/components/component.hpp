@@ -3,7 +3,7 @@
 
 #include "../entities/entity.hpp"
 // Enum that defines all components in ECS
-typedef enum{MESH,TRANSFORM} ComponentType;
+typedef enum{MESH,TRANSFORM,CAMERA} ComponentType;
 
 class Component
 {
