@@ -15,14 +15,12 @@ class ComponentLookUp{
 
 public:
     static void setLookUpMap();
-
     template<class T>
     static ComponentType lookUp();
 private:
     static std::unordered_map<std::type_index,ComponentType > lookUpMap;
 };
-
-
+std::unordered_map<std::type_index,ComponentType > ComponentLookUp::lookUpMap;
 void ComponentLookUp::setLookUpMap() {
 
     //Set Up the map to fetch the type quickly
@@ -38,4 +36,5 @@ ComponentType ComponentLookUp::lookUp(){
    return ComponentType ::BASE;
 
 }
+
 #endif //GRAPHICSPROJECT_COMPONENTLOOKUP_H
