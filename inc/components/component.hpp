@@ -2,16 +2,17 @@
 #define COMPONENT___H
 
 #include "../entities/entity.hpp"
+#include <memory>
 // Enum that defines all components in ECS
-typedef enum{MESH,TRANSFORM,CAMERA} ComponentType;
+typedef enum{BASE, MESH,TRANSFORM,CAMERA, COUNT} ComponentType;
 
 class Component
 {
 public:
 	ComponentType type;
-	Entity* entity;
+	std::weak_ptr<Entity> entity;
 
-	Component(Entity* entity);
+	Component(std::weak_ptr<Entity> entity);
 	virtual ~Component();
 
 };
