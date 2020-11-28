@@ -1,1 +1,1 @@
-#include "../../inc/systems/renderingSystem.hpp"
+#include INCLUDE_DIR "renderingSystem.hpp"

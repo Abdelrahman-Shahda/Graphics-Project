@@ -1,6 +1,7 @@
 #include <application.hpp>
 #include <../inc/components/shader.hpp>
 #include <iostream>
+#include "../inc/entities/entity.hpp"
 #pragma region helper_functions
 
 // Inherting Application class to define our application

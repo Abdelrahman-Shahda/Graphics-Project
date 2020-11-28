@@ -29,7 +29,7 @@ set(IMGUI_SOURCES
 # Combine all vendor source files together into a single variable
 set(VENDOR_SOURCES ${GLAD_SOURCE} ${IMGUI_SOURCES})
 
-# A variable with all our source files that are common between executable targets 
+# A variable with all our source files 
 set(COMMON_SOURCES
         src/application.cpp
         src/components/shader.cpp
@@ -48,6 +48,7 @@ include_directories(
 
 #define shaders direcotry
 add_definitions(-DASSETS_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/assets\")
+#add_definitions(-DINCLUDE_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/inc\")
 
 #add executable target and link GLFW
 add_executable(GraphicsProject src/main.cpp ${COMMON_SOURCES} ${VENDOR_SOURCES})
