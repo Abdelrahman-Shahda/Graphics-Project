@@ -7,6 +7,9 @@
 
 #include "../components/component.h"
 #include "../components/cameraComponent.hpp"
+#include "../components/mesh.h"
+
+
 #include <unordered_map>
 #include <typeindex>
 #include <typeinfo>
@@ -25,6 +28,7 @@ void ComponentLookUp::setLookUpMap() {
 
     //Set Up the map to fetch the type quickly
     ComponentLookUp::lookUpMap[typeid(CameraComponent)] = ComponentType::CAMERA;
+	ComponentLookUp::lookUpMap[typeid(Mesh)] = ComponentType:: MESH;
 }
 template <class T>
 ComponentType ComponentLookUp::lookUp(){
