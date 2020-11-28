@@ -5,7 +5,7 @@ Component::Component(std::weak_ptr<Entity> entity) :entity(entitity)
 	this->type = BASE;
 }
 
-Component::COMPONENT_TYPE getType()
+Component::ComponentType getType()
 {
 	return this.type;
 }

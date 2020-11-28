@@ -3,14 +3,15 @@
 
 #include <glm/glm.hpp>
 
-#include "component.hpp"
+#include "component.h"
+#include <memory>
 
 typedef enum{PERSPECTIVE,ORTHOGRAPHIC} CameraType;
 
 class CameraComponent : public Component
 {
 public:
-	CameraComponent(Entity* entity,CameraType cameraType, glm::vec3 cp = { 0, 0, 0 }, glm::vec3 cd = { 0, 0, -1 }) 
+	CameraComponent(std::weak_ptr<Entity> entity,CameraType cameraType, glm::vec3 cp = { 0, 0, 0 }, glm::vec3 cd = { 0, 0, -1 })
 		: Component(entity), cameraOffset(cp), cameraDirection(cd)
 	{
 		type = CAMERA;
@@ -20,7 +21,8 @@ public:
 	void Init(glm::vec3 cp, glm::vec3 cd)
 	{
 		cameraDistance = glm::length(cp);
-		yaw = lib::DegToRadf(180);
+		//TODO::
+		//yaw = lib::DegToRadf(180);
 		if (cp.y != 0)
 		{
 			pitch = atanf(cp.z / cp.y);
