@@ -26,6 +26,8 @@ namespace GraphicsProject {
         // The camera position, camera forward direction and camera up direction
         glm::vec3 eye = {0, 0, 0}, direction = {0, 0, -1}, up = {0, 1, 0};
 
+
+
         CameraType type = CameraType::Perspective;
 
         // The field_of_view_y is in radians and is only used for perspective cameras
@@ -36,7 +38,7 @@ namespace GraphicsProject {
 
     public:
         Camera(){
-            dirtyFlags = V_DIRTY | P_DIRTY | VP_DIRTY;
+            dirtyFlags = V_DIRTY | P_DIRTY | VP_DIRTY;          // At beginning all needs regeneration
             up = {0, 1, 0};
         }
 
