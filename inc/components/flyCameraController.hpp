@@ -27,12 +27,11 @@
 
     public:
 
-    FlyCameraController (std::weak_ptr<Entity> entity) :Component(entity)
+    FlyCameraController (std::weak_ptr<Entity> entity,GraphicsProject::Application* application, Camera* camera) :Component(entity)
 	{
 		type = CAMERACONTROLLER;
-	}
-        void initialize(GraphicsProject::Application* application, Camera* camera){
-            this->app = application;
+
+        this->app = application;
             this->camera = camera;
             yaw_sensitivity = pitch_sensitivity = 0.01f;
             position_sensitivity = {3.0f, 3.0f, 3.0f};
@@ -43,7 +42,7 @@
             yaw = glm::atan(-direction.z, direction.x);
             float base_length = glm::sqrt(direction.x * direction.x + direction.z * direction.z);
             pitch = glm::atan(direction.y, base_length);
-        }
+	}
 
         void release(){
             if(mouse_locked) {
