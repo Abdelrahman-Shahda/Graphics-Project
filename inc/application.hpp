@@ -5,7 +5,7 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
-
+#include "../../inc/game_states/game_state.hpp"
 #include "input/keyboard.hpp"
 #include "input/mouse.hpp"
 
@@ -25,7 +25,8 @@ namespace GraphicsProject {
         GLFWwindow * window = nullptr;      // Pointer to the window created by GLFW using "glfwCreateWindow()".
         Keyboard keyboard;                  // Instance of "our" keyboard class that handles keyboard functionalities.
         Mouse mouse;                        // Instance of "our" mouse class that handles mouse functionalities.
-
+        game_state* next_state= nullptr;
+        game_state* current_state= nullptr;
         // Virtual functions to be overrode and change the default behaviour of the application
         // according to the example needs.
         virtual void configureOpenGL();                             // This function sets OpenGL Window Hints in GLFW.
@@ -37,7 +38,27 @@ namespace GraphicsProject {
         virtual void onImmediateGui(ImGuiIO& io){}      // Called every frame to draw the Immediate GUI (if any).
         virtual void onDraw(double deltaTime){}         // Called every frame in the game loop passing the time taken to draw the frame "Delta time".
         virtual void onDestroy(){}                      // Called once after the game loop ends for house cleaning.
+        void goToState(game_state* g) {
+            while (!glfwWindowShouldClose(window)) {
+                next_state = g;
+                if (next_state != nullptr) {
+                    if (current_state != nullptr) {
+                        current_state->onExit();
+                    }
+                    current_state = next_state;
+                    next_state = nullptr;
+                    current_state->onEnter();
 
+                }
+                if (current_state != nullptr) {
+                    current_state->onDraw1();
+                }
+            }
+            if(current_state!= nullptr)
+            {
+                current_state->onExit();
+            }
+        }
 
         // Override these functions to get mouse and keyboard event.
         virtual void onKeyEvent(int key, int scancode, int action, int mods){}      
