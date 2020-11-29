@@ -10,12 +10,10 @@
 #include <components/component.h>
 #include <application.hpp>
 
-namespace GraphicsProject {
-
     // Allows you to control the camera freely in world space
     class FlyCameraController : public Component {
     private:
-        Application* app;
+        GraphicsProject::Application* app;
         Camera* camera;
 
         float yaw, pitch;
@@ -28,7 +26,12 @@ namespace GraphicsProject {
         bool mouse_locked = false;
 
     public:
-        void initialize(Application* application, Camera* camera){
+
+    FlyCameraController (std::weak_ptr<Entity> entity) :Component(entity)
+	{
+		type = CAMERACONTROLLER;
+	}
+        void initialize(GraphicsProject::Application* application, Camera* camera){
             this->app = application;
             this->camera = camera;
             yaw_sensitivity = pitch_sensitivity = 0.01f;
@@ -117,6 +120,5 @@ namespace GraphicsProject {
         void setPositionSensitivity(glm::vec3 sensitivity){this->position_sensitivity = sensitivity;}
 
     };
-}
 
 #endif //GRAPHICSPROJECT_FLY_CAMERA_CONTROLLER_HPP
