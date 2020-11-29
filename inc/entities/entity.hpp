@@ -18,6 +18,9 @@ public:
     template<class T>
 	bool hasComp();
 
+    template<class T1, class T2, class ...Rest>
+    bool hasComp();
+
     template<class T, class ...Args>
     std::shared_ptr<T> addComp(Args...args);
 
@@ -32,6 +35,15 @@ public:
 template<class T>
 bool Entity::hasComp() {
     return isComps.test(ComponentLookUp::lookUp<T>());
+}
+
+template<class T1, class T2, class ...Rest>
+bool Entity::hasComp(){
+
+    if(isComps.test(ComponentLookUp::lookUp<T1>())){
+        return hasComp<T2,Rest...>();
+    }
+    return false;
 }
 
 template<class T>
