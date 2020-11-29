@@ -6,13 +6,14 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 
-#include <camera/camera.hpp>
+#include <components/camera.hpp>
+#include <components/component.h>
 #include <application.hpp>
 
 namespace GraphicsProject {
 
     // Allows you to control the camera freely in world space
-    class FlyCameraController {
+    class FlyCameraController : public Component {
     private:
         Application* app;
         Camera* camera;
