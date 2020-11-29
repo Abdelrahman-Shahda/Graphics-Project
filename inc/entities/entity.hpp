@@ -13,7 +13,6 @@ class Entity: std::enable_shared_from_this<Entity>
     std::bitset<ComponentType::COUNT> isComps;
     std::vector<std::shared_ptr<Component>> comps;
 
-
 public:
     template<class T>
 	bool hasComp();
@@ -53,7 +52,7 @@ std::shared_ptr<T> Entity::getComp(){
         ComponentType type = ComponentLookUp::lookUp<T>();
 
         for(int i = 0; i < (int)comps.size(); i++){
-            if(comps[i]->type == type)
+            if(comps[i]->getType() == type)
                 return  comps[i];
         }
     }
@@ -68,7 +67,7 @@ bool Entity::removeComp(){
 
         for(int i = 0; i< comps.size(); i++){
 
-            if(comps[i] -> type == typeToBeRemoved){
+            if(comps[i]->getType() == typeToBeRemoved){
                 comps.erase(comps.begin()+i);
                 isComps.reset(typeToBeRemoved);
                 return true;
@@ -88,7 +87,7 @@ std::shared_ptr<T> Entity::addComp(Args...args){
 
     //Create new component and set its bit in isComps and Add it in comps Vector
     std::shared_ptr<T> newComp = std::make_shared<T>(weak_from_this(), args...);
-    isComps.set(newComp->type);
+    isComps.set(newComp->getType());
     comps.push_back(newComp);
     return newComp;
 }

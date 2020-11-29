@@ -23,7 +23,7 @@ public:
 
 protected:
 	ComponentType type;
-	std::weak_ptr<Entity>* entity;
+	std::weak_ptr<Entity> entity;
 
 };
 

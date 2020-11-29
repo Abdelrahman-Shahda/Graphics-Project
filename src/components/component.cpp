@@ -1,13 +1,13 @@
 #include "../../inc/components/component.h"
 
-Component::Component(std::weak_ptr<Entity> entity) :entity(entitity)
+Component::Component(std::weak_ptr<Entity> e) :entity(e)
 {
 	this->type = BASE;
 }
 
-Component::ComponentType getType()
+ComponentType Component::getType()
 {
-	return this.type;
+	return this->type;
 }
 
 Component::~Component() {}
