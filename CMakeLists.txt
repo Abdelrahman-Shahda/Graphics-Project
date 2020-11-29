@@ -33,7 +33,7 @@ set(VENDOR_SOURCES ${GLAD_SOURCE} ${IMGUI_SOURCES})
 set(COMMON_SOURCES
         src/application.cpp
         src/components/shader.cpp
-        )
+		src/components/transform/transform_component.hpp)
 
 # Define the directories in which to search for the included headers
 include_directories(
