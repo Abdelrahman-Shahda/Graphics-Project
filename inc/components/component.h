@@ -9,6 +9,7 @@ typedef enum{
 	MESH,
 	TRANSFORM,
 	CAMERA,
+	CAMERACONTROLLER,
 	COUNT,
 } ComponentType;
 

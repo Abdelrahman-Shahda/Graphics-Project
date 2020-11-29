@@ -5,8 +5,12 @@
 #ifndef GRAPHICSPROJECT_COMPONENTLOOKUP_H
 #define GRAPHICSPROJECT_COMPONENTLOOKUP_H
 
-#include "../components/component.h"
-#include "../components/cameraComponent.hpp"
+#include <components/component.h>
+#include <components/camera.hpp>
+#include <components/flyCameraController.hpp>
+#include <components/mesh.h>
+
+
 #include <unordered_map>
 #include <typeindex>
 #include <typeinfo>
@@ -24,7 +28,9 @@ std::unordered_map<std::type_index,ComponentType > ComponentLookUp::lookUpMap;
 void ComponentLookUp::setLookUpMap() {
 
     //Set Up the map to fetch the type quickly
-    ComponentLookUp::lookUpMap[typeid(CameraComponent)] = ComponentType::CAMERA;
+    ComponentLookUp::lookUpMap[typeid(Camera)] = ComponentType::CAMERA;
+    ComponentLookUp::lookUpMap[typeid(FlyCameraController)] = ComponentType::CAMERACONTROLLER;
+	ComponentLookUp::lookUpMap[typeid(Mesh)] = ComponentType:: MESH;
 }
 template <class T>
 ComponentType ComponentLookUp::lookUp(){

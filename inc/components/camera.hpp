@@ -3,8 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-namespace GraphicsProject {
+#include <components/component.h>
 
     // An enum for the camera projection type
     enum struct CameraType {
@@ -14,7 +13,7 @@ namespace GraphicsProject {
 
     // A class that represents a camera
     // Used to generate a view and a projection matrix
-    class Camera {
+    class Camera : public Component {
     private:
         // Dirty Flags are programming pattern where we only regenerate some output if:
         // 1- The inputs were changed.
@@ -26,7 +25,9 @@ namespace GraphicsProject {
         // The camera position, camera forward direction and camera up direction
         glm::vec3 eye = {0, 0, 0}, direction = {0, 0, -1}, up = {0, 1, 0};
 
-        CameraType type = CameraType::Perspective;
+
+
+        CameraType camera_type = CameraType::Perspective;
 
         // The field_of_view_y is in radians and is only used for perspective cameras
         // The orthographic_height is only used for orthographic cameras
@@ -35,14 +36,16 @@ namespace GraphicsProject {
         glm::mat4 V{}, P{}, VP{};
 
     public:
-        Camera(){
-            dirtyFlags = V_DIRTY | P_DIRTY | VP_DIRTY;
+        Camera(std::weak_ptr<Entity> entity) :Component(entity)
+	    {
+		    type = CAMERA;
+            dirtyFlags = V_DIRTY | P_DIRTY | VP_DIRTY;          // At beginning all needs regeneration
             up = {0, 1, 0};
         }
 
         // Setup the camera as a perspective camera
         void setupPerspective(float field_of_view_y, float aspect_ratio, float near, float far){
-            this->type = CameraType::Perspective;
+            this->camera_type = CameraType::Perspective;
             this->field_of_view_y = field_of_view_y;
             this->aspect_ratio = aspect_ratio;
             this->near = near;
@@ -52,7 +55,7 @@ namespace GraphicsProject {
 
         // Setup the camera as an orthographic camera
         void setupOrthographic(float orthographic_height, float aspect_ratio, float near, float far){
-            this->type = CameraType::Orthographic;
+            this->camera_type = CameraType::Orthographic;
             this->orthographic_height = orthographic_height;
             this->aspect_ratio = aspect_ratio;
             this->near = near;
@@ -61,9 +64,9 @@ namespace GraphicsProject {
         }
 
         void setType(CameraType _type){
-            if(this->type != _type){
+            if(this->camera_type != _type){
                 dirtyFlags |= P_DIRTY | VP_DIRTY;
-                this->type = _type;
+                this->camera_type = _type;
             }
         }
         void setOrthographicSize(float orthographic_height){
@@ -124,7 +127,7 @@ namespace GraphicsProject {
 
         glm::mat4 getProjectionMatrix(){
             if(dirtyFlags & P_DIRTY){ // Only regenerate the projection matrix if its flag is dirty
-                if(type == CameraType::Orthographic){
+                if(camera_type == CameraType::Orthographic){
                     float half_height = orthographic_height * 0.5f;
                     float half_width = aspect_ratio * half_height;
                     P = glm::ortho(-half_width, half_width, -half_height, half_height, near, far);
@@ -154,7 +157,7 @@ namespace GraphicsProject {
             return VP;
         }
 
-        CameraType getType(){return type;}
+        CameraType getCameraType(){return camera_type;}
         [[nodiscard]] float getVerticalFieldOfView() const {return field_of_view_y;}
         [[nodiscard]] float getHorizontalFieldOfView() const {return field_of_view_y * aspect_ratio;}
         [[nodiscard]] float getOrthographicHeight() const {return orthographic_height;}
@@ -206,7 +209,5 @@ namespace GraphicsProject {
             // Note that we must divide by w even though we not going to the NDC space. This is because of the projection matrix.
         }
     };
-
-}
 
 #endif //GRAPHICSPROJECT_CAMERA_HPP

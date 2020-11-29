@@ -5,16 +5,14 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
-
-#include <camera/camera.hpp>
+#include <components/camera.hpp>
+#include <components/component.h>
 #include <application.hpp>
 
-namespace GraphicsProject {
-
     // Allows you to control the camera freely in world space
-    class FlyCameraController {
+    class FlyCameraController : public Component {
     private:
-        Application* app;
+        GraphicsProject::Application* app;
         Camera* camera;
 
         float yaw, pitch;
@@ -27,9 +25,13 @@ namespace GraphicsProject {
         bool mouse_locked = false;
 
     public:
-        void initialize(Application* application, Camera* camera){
-            this->app = application;
-            this->camera = camera;
+
+    FlyCameraController (std::weak_ptr<Entity> entity,GraphicsProject::Application* application) :Component(entity)
+	{
+		type = CAMERACONTROLLER;
+        //Transform* transform = entity->getComp<TRANSFORM>();  //gets transform component of camera entity
+
+        this->app = application;
             yaw_sensitivity = pitch_sensitivity = 0.01f;
             position_sensitivity = {3.0f, 3.0f, 3.0f};
             fov_sensitivity = glm::pi<float>()/10;
@@ -39,7 +41,7 @@ namespace GraphicsProject {
             yaw = glm::atan(-direction.z, direction.x);
             float base_length = glm::sqrt(direction.x * direction.x + direction.z * direction.z);
             pitch = glm::atan(direction.y, base_length);
-        }
+	}
 
         void release(){
             if(mouse_locked) {
@@ -116,6 +118,5 @@ namespace GraphicsProject {
         void setPositionSensitivity(glm::vec3 sensitivity){this->position_sensitivity = sensitivity;}
 
     };
-}
 
 #endif //GRAPHICSPROJECT_FLY_CAMERA_CONTROLLER_HPP

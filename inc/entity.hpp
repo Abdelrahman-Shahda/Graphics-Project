@@ -2,8 +2,8 @@
 #define ENTITY___H
 
 
-#include "../components/component.h"
-#include "../utils/ComponentLookUp.h"
+#include "components/component.h"
+#include "utils/ComponentLookUp.h"
 #include <memory>
 #include <vector>
 #include <bitset>
