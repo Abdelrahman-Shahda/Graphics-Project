@@ -3,7 +3,7 @@
 //
 #include <glm/gtx/euler_angles.hpp>
 
-#include "transform_component.hpp"
+#include "../../inc/components/transform_component.h"
 void transform_component::set_parent(transform_component *transformComponent) {parent=transformComponent;}
 void transform_component::set_position(glm::vec3 v) {position= glm::translate(glm::mat4(1.0f),v);}
 void transform_component::set_scale(glm::vec3 v) {scale=glm::scale(glm::mat4(1.0f),v);}
