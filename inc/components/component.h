@@ -2,6 +2,7 @@
 #define COMPONENT___H
 
 #include <memory>
+#include <components/component.h>
 
 // Enum that defines all components in ECS
 typedef enum{

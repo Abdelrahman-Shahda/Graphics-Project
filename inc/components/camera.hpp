@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <components/component.h>
 
 namespace GraphicsProject {
 
@@ -14,7 +15,7 @@ namespace GraphicsProject {
 
     // A class that represents a camera
     // Used to generate a view and a projection matrix
-    class Camera {
+    class Camera : public Component {
     private:
         // Dirty Flags are programming pattern where we only regenerate some output if:
         // 1- The inputs were changed.
@@ -37,7 +38,9 @@ namespace GraphicsProject {
         glm::mat4 V{}, P{}, VP{};
 
     public:
-        Camera(){
+        Camera()(std::weak_ptr<Entity> entity) :Component(entity)
+	    {
+		    type = CAMERA;
             dirtyFlags = V_DIRTY | P_DIRTY | VP_DIRTY;          // At beginning all needs regeneration
             up = {0, 1, 0};
         }
