@@ -28,14 +28,12 @@
     FlyCameraController (std::weak_ptr<Entity> entity,GraphicsProject::Application* application) :Component(entity)
 	{
 		type = CAMERACONTROLLER;
-        Transform* transform = entity->getComp<TRANSFORM>();  //gets transform component of camera entity
-
         this->app = application;
             yaw_sensitivity = pitch_sensitivity = 0.01f;
             position_sensitivity = {3.0f, 3.0f, 3.0f};
             fov_sensitivity = glm::pi<float>()/10;
-            position = camera->getEyePosition();
-            auto direction = camera->getDirection();
+            position = {0.0,0.0,0.0};
+            auto direction ={0,0,-1};
             yaw = glm::atan(-direction.z, direction.x);
             float base_length = glm::sqrt(direction.x * direction.x + direction.z * direction.z);
             pitch = glm::atan(direction.y, base_length);
