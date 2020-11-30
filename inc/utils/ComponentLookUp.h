@@ -31,6 +31,7 @@ void ComponentLookUp::setLookUpMap() {
     ComponentLookUp::lookUpMap[typeid(Camera)] = ComponentType::CAMERA;
     ComponentLookUp::lookUpMap[typeid(FlyCameraController)] = ComponentType::CAMERACONTROLLER;
 	ComponentLookUp::lookUpMap[typeid(Mesh)] = ComponentType:: MESH;
+    ComponentLookUp::lookUpMap[typeid(Transform)] = ComponentType:: TRANSFORM;
 }
 template <class T>
 ComponentType ComponentLookUp::lookUp(){

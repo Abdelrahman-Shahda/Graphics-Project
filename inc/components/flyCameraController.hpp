@@ -5,7 +5,7 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
-#include <components/camera.hpp>
+#include <components/transform.h>
 #include <components/component.h>
 #include <application.hpp>
 
@@ -13,7 +13,6 @@
     class FlyCameraController : public Component {
     private:
         GraphicsProject::Application* app;
-        Camera* camera;
 
         float yaw, pitch;
         glm::vec3 position;
@@ -29,13 +28,12 @@
     FlyCameraController (std::weak_ptr<Entity> entity,GraphicsProject::Application* application) :Component(entity)
 	{
 		type = CAMERACONTROLLER;
-        //Transform* transform = entity->getComp<TRANSFORM>();  //gets transform component of camera entity
+        Transform* transform = entity->getComp<TRANSFORM>();  //gets transform component of camera entity
 
         this->app = application;
             yaw_sensitivity = pitch_sensitivity = 0.01f;
             position_sensitivity = {3.0f, 3.0f, 3.0f};
             fov_sensitivity = glm::pi<float>()/10;
-
             position = camera->getEyePosition();
             auto direction = camera->getDirection();
             yaw = glm::atan(-direction.z, direction.x);
