@@ -23,10 +23,10 @@
         uint8_t dirtyFlags = 0;
 
         // The camera position, camera forward direction and camera up direction
-        glm::vec3 eye = {0, 0, 0}, direction = {0, 0, -1}, up = {0, 1, 0};
+        // glm::vec3 eye = {0, 0, 0}, direction = {0, 0, -1}, up = {0, 1, 0};
 
 
-
+ 
         CameraType camera_type = CameraType::Perspective;
 
         // The field_of_view_y is in radians and is only used for perspective cameras
@@ -40,7 +40,6 @@
 	    {
 		    type = CAMERA;
             dirtyFlags = V_DIRTY | P_DIRTY | VP_DIRTY;          // At beginning all needs regeneration
-            up = {0, 1, 0};
         }
 
         // Setup the camera as a perspective camera
@@ -99,6 +98,7 @@
                 this->far = far;
             }
         }
+        /*
         void setEyePosition(glm::vec3 eye){
             if(this->eye != eye){
                 dirtyFlags |= V_DIRTY | VP_DIRTY;
@@ -124,6 +124,7 @@
                 this->up = up;
             }
         }
+         */
 
         glm::mat4 getProjectionMatrix(){
             if(dirtyFlags & P_DIRTY){ // Only regenerate the projection matrix if its flag is dirty
@@ -139,7 +140,7 @@
             return P;
         }
 
-        glm::mat4 getViewMatrix(){
+        glm::mat4 getViewMatrix(glm::vec3 eye, glm::vec3 direction, glm::vec3 up){
             if(dirtyFlags & V_DIRTY){ // Only regenerate the view matrix if its flag is dirty
                 V = glm::lookAt(eye, eye + direction, up);
                 dirtyFlags &= ~V_DIRTY; // V is no longer dirty
@@ -147,9 +148,9 @@
             return V;
         }
 
-        glm::mat4 getVPMatrix(){
+        glm::mat4 getVPMatrix(glm::vec3 eye, glm::vec3 direction, glm::vec3 up){
             if(dirtyFlags & VP_DIRTY){
-                VP = getProjectionMatrix() * getViewMatrix();
+                VP = getProjectionMatrix() * getViewMatrix(eye, direction,up);
                 // Note that we called the functions getProjectionMatrix & getViewMatrix instead of directly using V & P
                 // to make sure that they are not outdated
                 dirtyFlags = 0; // Nothing is dirty anymore
@@ -165,46 +166,46 @@
         [[nodiscard]] float getAspectRatio() const {return aspect_ratio;}
         [[nodiscard]] float getNearPlane() const {return near;}
         [[nodiscard]] float getFarPlane() const {return far;}
-        [[nodiscard]] glm::vec3 getEyePosition() const {return eye;}
-        [[nodiscard]] glm::vec3 getDirection() const {return direction;}
-        [[nodiscard]] glm::vec3 getOriginalUp() const {return up;}
+        //[[nodiscard]] glm::vec3 getEyePosition() const {return eye;}
+        //[[nodiscard]] glm::vec3 getDirection() const {return direction;}
+        //[[nodiscard]] glm::vec3 getOriginalUp() const {return up;}
 
         // Get the directions of the camera coordinates in the world space
-        glm::vec3 Right(){
-            getViewMatrix();
+        glm::vec3 Right(glm::vec3 eye, glm::vec3 direction, glm::vec3 up){
+            getViewMatrix(eye,direction,up);
             return {V[0][0],V[1][0],V[2][0]};
         }
-        glm::vec3 Left(){
-            getViewMatrix();
+        glm::vec3 Left(glm::vec3 eye, glm::vec3 direction, glm::vec3 up){
+            getViewMatrix(eye,direction,up);
             return {-V[0][0],-V[1][0],-V[2][0]};
         }
-        glm::vec3 Up(){
-            getViewMatrix();
+        glm::vec3 Up(glm::vec3 eye, glm::vec3 direction, glm::vec3 up){
+            getViewMatrix(eye,direction,up);
             return {V[0][1],V[1][1],V[2][1]};
         }
-        glm::vec3 Down(){
-            getViewMatrix();
+        glm::vec3 Down(glm::vec3 eye, glm::vec3 direction, glm::vec3 up){
+            getViewMatrix(eye,direction,up);
             return {-V[0][1],-V[1][1],-V[2][1]};
         }
-        glm::vec3 Forward(){
-            getViewMatrix();
+        glm::vec3 Forward(glm::vec3 eye, glm::vec3 direction, glm::vec3 up){
+            getViewMatrix(eye,direction,up);
             return {-V[0][2],-V[1][2],-V[2][2]};
         }
-        glm::vec3 Backward(){
-            getViewMatrix();
+        glm::vec3 Backward(glm::vec3 eye, glm::vec3 direction, glm::vec3 up){
+            getViewMatrix(eye,direction,up);
             return {V[0][2],V[1][2],V[2][2]};
         }
 
         // Transform point from world space to normalized device coordinates
-        glm::vec3 fromWorldToDeviceSpace(glm::vec3 world){
-            glm::vec4 clip = getVPMatrix() * glm::vec4(world, 1.0f);
+        glm::vec3 fromWorldToDeviceSpace(glm::vec3 eye, glm::vec3 direction, glm::vec3 up,glm::vec3 world){
+            glm::vec4 clip = getVPMatrix(eye,direction,up) * glm::vec4(world, 1.0f);
             return glm::vec3(clip)/clip.w;
             // Note that we must divide by w. This is because of the projection matrix.
         }
 
         // Transform point from normalized device coordinates to world space
-        glm::vec3 fromDeviceToWorldSpace(glm::vec3 device){
-            glm::vec4 clip = glm::inverse(getVPMatrix()) * glm::vec4(device, 1.0f);
+        glm::vec3 fromDeviceToWorldSpace(glm::vec3 eye, glm::vec3 direction, glm::vec3 up,glm::vec3 device){
+            glm::vec4 clip = glm::inverse(getVPMatrix(eye,direction,up)) * glm::vec4(device, 1.0f);
             return glm::vec3(clip)/clip.w;
             // Note that we must divide by w even though we not going to the NDC space. This is because of the projection matrix.
         }
