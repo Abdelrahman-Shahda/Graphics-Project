@@ -17,7 +17,7 @@ private:
     glm::mat4 scale;
     Transform* parent;
 public:
-    Transform (std::weak_ptr<Entity> entity:Component(entity));
+    Transform (std::weak_ptr<Entity> entity);
     void set_position(glm::vec3 v);
     void set_rotation(glm::vec3 v);
     void set_scale(glm::vec3 v);
