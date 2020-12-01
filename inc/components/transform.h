@@ -1,28 +1,32 @@
 
 //
 // Created by Shaimaa on 11/29/2020.
+// Naming Edited by Asfar 11/30/2020.
+// Inherited from Component by Asfar 11/30/2020
 //
 
 #ifndef GRAPHICSPROJECT_TRANSFORM_COMPONENT_HPP
 #define GRAPHICSPROJECT_TRANSFORM_COMPONENT_HPP
-
 #include <glm/glm.hpp>
-class transform_component{
+#include <components/component.h>
+
+class Transform : public Component{
 private:
     glm::mat4 position;
     glm::mat4 Rotation;
     glm::mat4 scale;
-    transform_component * parent;
+    Transform* parent;
 public:
+    Transform (std::weak_ptr<Entity> entity);
     void set_position(glm::vec3 v);
     void set_rotation(glm::vec3 v);
     void set_scale(glm::vec3 v);
-    void set_parent(transform_component * transformComponent);
-    glm::mat4 get_final_position();
+    void set_parent(Transform * transformComponent);
+    glm::mat4 get_transform();
     glm::mat4 get_position();
     glm::mat4 get_rotation();
     glm::mat4 get_scale();
-    transform_component * get_parent();
+    Transform * get_parent();
 
 };
 #endif //GRAPHICSPROJECT_TRANSFORM_COMPONENT_HPP

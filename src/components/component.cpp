@@ -1,4 +1,4 @@
-#include <components/component.h>
+#include "../../inc/components/component.h"
 
 Component::Component(std::weak_ptr<Entity> e) :entity(e)
 {

@@ -34,7 +34,7 @@ set(COMMON_SOURCES
         src/application.cpp
 		src/components/component.cpp
 		src/components/meshRenderer.cpp
-		src/components/transform_component.cpp
+		src/components/transform.cpp
 		src/resources/material.cpp
 		src/resources/shader.cpp
 		src/game_states/game_state.cpp
