@@ -5,6 +5,8 @@
 #include <vector>
 #include <glad/gl.h>
 #include <functional>
+#include <iostream>
+#include <cassert>
 
 namespace Resources {
 	class Mesh {
