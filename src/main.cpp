@@ -21,13 +21,11 @@ private:
 	 *                          Member functions                               *
 	 *******************************************************************************/
     GraphicsProject::WindowConfiguration getWindowConfiguration() override {
-		std::cout << "Alo?\n";
 		// Defining an unresizable window of resolution 1280*720
         return { "Project Phase 1", {1280, 720}, false };
     }
 
     void onInitialize() override {
-		std::cout << "Hena\n";
 		//Intializing shader programs
 		for (int i = 0; i < 5; i++)
 		{
