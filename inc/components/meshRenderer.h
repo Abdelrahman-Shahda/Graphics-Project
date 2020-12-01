@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "component.h"
-#include "../resources/mesh.h"
+#include "../resources/mesh.hpp"
 #include "../resources/material.h"
 
 using namespace Resources;
