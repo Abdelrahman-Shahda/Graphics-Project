@@ -1,4 +1,4 @@
-#include "../../inc/components/shader.hpp"
+#include "../../inc/resources/shader.hpp"
 
 #include <cassert>
 #include <iostream>
@@ -9,18 +9,19 @@
 #define STB_INCLUDE_IMPLEMENTATION
 #include <stb/stb_include.h>
 
-void GraphicsProject::ShaderProgram::create() {
+
+void  Resources::ShaderProgram::create() {
     //Create Shader Program
     program = glCreateProgram();
 }
 
-void GraphicsProject::ShaderProgram::destroy() {
+void  Resources::ShaderProgram::destroy() {
     //Delete Shader Program
     if(program != 0) glDeleteProgram(program);
     program = 0;
 }
 
-bool GraphicsProject::ShaderProgram::attach(const std::string &filename, GLenum type) const {
+bool  Resources::ShaderProgram::attach(const std::string &filename, GLenum type) const {
     // first, we use C++17 filesystem library to get the directory (parent) path of the file.
     // the parent path will be sent to stb_include to search for files referenced by any "#include" preprocessor command.
     auto file_path = std::filesystem::path(filename);
@@ -70,7 +71,7 @@ bool GraphicsProject::ShaderProgram::attach(const std::string &filename, GLenum 
     return true;
 }
 
-bool GraphicsProject::ShaderProgram::link() const {
+bool  Resources::ShaderProgram::link() const {
     //Link
     glLinkProgram(program);
 

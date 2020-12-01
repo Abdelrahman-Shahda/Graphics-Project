@@ -6,7 +6,7 @@
 // Enum that defines all components in ECS
 typedef enum{
 	BASE,
-	MESH,
+	MESH_RENDERER,
 	TRANSFORM,
 	CAMERA,
 	CAMERACONTROLLER,
@@ -24,7 +24,7 @@ public:
 
 protected:
 	ComponentType type;
-	std::weak_ptr<Entity>* entity;
+	std::weak_ptr<Entity> entity;
 
 };
 
