@@ -1,24 +1,28 @@
 #include  <systems/renderingSystem.hpp>
 #include <entity.hpp>
 
-void RenderingSystem::drawNode(const std::shared_ptr<Transform> node , const glm::mat4 parent_transform_matrix){
+void RenderingSystem::drawNode(const std::shared_ptr<Transform> &node , const glm::mat4 &parent_transform_matrix){
     std::shared_ptr<Entity> entity = node->getEntity();
     std::shared_ptr<Component> meshRenderer = entity->getComp<MeshRenderer>();
     glm::mat4 transform_matrix = parent_transform_matrix * node->get_transform();
-        if(meshRenderer.has_value()){
-            auto it = meshes.find(node->mesh.value());
-            if(it != meshes.end()) {
-                program.set("tint", node->tint);
-                program.set("transform", transform_matrix);
-                it->second->draw();
-            }
-        }
-        for(auto& [name, child]: node->children){
-            drawNode(child, transform_matrix);
-        }
+//        if(meshRenderer.has_value()){
+//            auto it = meshes.find(node->mesh.value());
+//            if(it != meshes.end()) {
+//                program.set("tint", node->tint);
+//                program.set("transform", transform_matrix);
+//                it->second->draw();
+//            }
+//        }
+    std::vector<std::shared_ptr<Transform>> childern = node->get_children();
+    for(int i =0;i<childern.size();i++){
+        drawNode(childern[i],transform_matrix);
+    }
     }
 void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> entities){
 
+    //clear screen
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Get enitities with mesh Component to render them
     std::vector<std::shared_ptr<Entity>> meshEntities = this->getEntitiesByComponents<MeshRenderer, Transform>(entities);
@@ -44,21 +48,17 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> entities){
     glm::mat4 viewProjection=cptr->getVPMatrix(position,(glm::vec3)(direction),(glm::vec3)(up));
 
     //Looping on entities
-    for (unsigned int x = 0; x < entities.size(); ++x)
+    for (unsigned int x = 0; x < meshEntities.size(); ++x)
 	{
-		mcptr = meshEntities[x]->getComp<Mesh>();
-		mtptr = meshEntities[x]->getComp<Transform>();
+        std:: shared_ptr<Transform> tptr = meshEntities[x]->getComp<Transform>();
+        if(tptr->get_parent() == nullptr){
+            this->drawNode(tptr,viewProjection);
+        }
 
     }
 
 
 
-        
 
 
-
-
-    //clear screen
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

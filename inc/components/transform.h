@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <components/component.h>
+#include <vector>
 
 class Transform : public Component{
 private:
