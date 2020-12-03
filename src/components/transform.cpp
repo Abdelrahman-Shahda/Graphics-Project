@@ -4,9 +4,9 @@
 //
 #include <glm/gtx/euler_angles.hpp>
 #include <components/transform.h>
-Transform::Transform(std::weak_ptr<Entity> entity:Component(entity)) {type = TRANSFORM;}
-void Transform:set_parent(Transform* transformComponent) {parent=transformComponent;}
-void Transfrom::set_position(glm::vec3 v) {position= glm::translate(glm::mat4(1.0f),v);}
+Transform::Transform(std::weak_ptr<Entity> entity):Component(entity) {type = TRANSFORM;}
+void Transform::set_parent(Transform* transformComponent) {parent=transformComponent;}
+void Transform::set_position(glm::vec3 v) {position= glm::translate(glm::mat4(1.0f),v);}
 void Transform::set_scale(glm::vec3 v) {scale=glm::scale(glm::mat4(1.0f),v);}
 void Transform::set_rotation(glm::vec3 v) {Rotation=glm::yawPitchRoll(v.y, v.x, v.z);}
 Transform * Transform::get_parent(){return parent;}
