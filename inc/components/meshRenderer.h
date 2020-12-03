@@ -18,7 +18,7 @@ class MeshRenderer :public Component
 
 public:
 	MeshRenderer(weak_ptr<Entity> entityPtr,shared_ptr<Mesh> meshPtr=nullptr, shared_ptr<Material> materialPtr=nullptr);
-	void renderMesh();
+	void renderMesh(glm::mat4 transform_matrix);
 
 };
 #endif // !MESH__REDERER_H

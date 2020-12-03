@@ -1,5 +1,22 @@
 #include  <systems/renderingSystem.hpp>
+#include <entity.hpp>
 
+void RenderingSystem::drawNode(const std::shared_ptr<Transform> node , const glm::mat4 parent_transform_matrix){
+    std::shared_ptr<Entity> entity = node->getEntity();
+    std::shared_ptr<Component> meshRenderer = entity->getComp<MeshRenderer>();
+    glm::mat4 transform_matrix = parent_transform_matrix * node->get_transform();
+        if(meshRenderer.has_value()){
+            auto it = meshes.find(node->mesh.value());
+            if(it != meshes.end()) {
+                program.set("tint", node->tint);
+                program.set("transform", transform_matrix);
+                it->second->draw();
+            }
+        }
+        for(auto& [name, child]: node->children){
+            drawNode(child, transform_matrix);
+        }
+    }
 void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> entities){
 
 
@@ -27,7 +44,16 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> entities){
     glm::mat4 viewProjection=cptr->getVPMatrix(position,(glm::vec3)(direction),(glm::vec3)(up));
 
     //Looping on entities
-    for(auto iterator=meshEntities)
+    for (unsigned int x = 0; x < entities.size(); ++x)
+	{
+		mcptr = meshEntities[x]->getComp<Mesh>();
+		mtptr = meshEntities[x]->getComp<Transform>();
+
+    }
+
+
+
+        
 
 
 

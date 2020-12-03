@@ -8,6 +8,7 @@
 class RenderingSystem : public System 
 {
     void Run(const std::vector<std::shared_ptr<Entity>> enitities);
+    void drawNode(const std::shared_ptr<Transform>& node, const glm::mat4& parent_transform_matrix);
 
     std::shared_ptr<MeshRenderer> mcptr;
     std::shared_ptr<Transform> mtptr;

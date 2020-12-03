@@ -10,4 +10,10 @@ ComponentType Component::getType()
 	return this->type;
 }
 
+std::shared_ptr<Entity> Component::getEntity()
+{
+	return this->entity.lock();
+}
+
+
 Component::~Component() {}

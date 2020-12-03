@@ -20,6 +20,7 @@ class Component
 public:
 	Component(std::weak_ptr<Entity> entity);
 	ComponentType getType();
+	std::shared_ptr<Entity> getEntity();
 	virtual ~Component();
 
 protected:
