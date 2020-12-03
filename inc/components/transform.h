@@ -17,15 +17,14 @@ private:
     glm::mat4 scale;
     Transform* parent;
 public:
-    Transform (std::weak_ptr<Entity> entity);
+    Transform(std::weak_ptr<Entity> entity,glm::vec3 p, glm::vec3 r, glm::vec3 s);
+
     void set_position(glm::vec3 v);
     void set_rotation(glm::vec3 v);
     void set_scale(glm::vec3 v);
     void set_parent(Transform * transformComponent);
     glm::mat4 get_transform();
     glm::mat4 get_position();
-    glm::mat4 get_rotation();
-    glm::mat4 get_scale();
     Transform * get_parent();
 
 };
