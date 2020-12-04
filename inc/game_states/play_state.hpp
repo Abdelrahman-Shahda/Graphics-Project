@@ -13,7 +13,6 @@
 #include<utils/mesh-utils.hpp>
 
 
-
 class play_state : public game_state {
 public:
     std::vector <shared_ptr<Entity>> world;
@@ -83,4 +82,3 @@ public:
         program.destroy();
     }
 };
-#endif

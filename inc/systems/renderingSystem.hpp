@@ -4,7 +4,6 @@
 #include <systems/System.hpp>
 #include <memory>
 
-
 class RenderingSystem : public System 
 {
 	//Private Member functions
@@ -20,7 +19,7 @@ class RenderingSystem : public System
     std::shared_ptr<FlyCameraController> ccptr;
 
 public:
-    void Run(const std::vector<std::shared_ptr<Entity>> enitities);
+    void Run(const std::vector<std::shared_ptr<Entity>> enitities) override;
 };
 
 #endif // !RENDERING___SYSTEM__H
