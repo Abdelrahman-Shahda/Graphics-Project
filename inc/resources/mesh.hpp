@@ -25,6 +25,7 @@ namespace Resources {
 
 	public:
 
+		Mesh() {};
 		// Destroy the OpenGL objects if they were allocated
 		void destroy() {
 			if (vertex_array != 0) glDeleteVertexArrays(1, &vertex_array);

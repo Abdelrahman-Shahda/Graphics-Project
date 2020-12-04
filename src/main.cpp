@@ -34,6 +34,8 @@ private:
 
     void onInitialize() override {
         playState=new play_state(static_cast<Application*>(this));
+		playState->onEnter();
+		current_state = playState;
 
 
         /*

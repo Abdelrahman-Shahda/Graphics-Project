@@ -7,6 +7,7 @@
 #include <vector>
 #include <unordered_map>
 #include <filesystem>
+#include <functional>
 
 #include<utils/common-vertex-attributes.hpp>
 #include <utils/common-vertex-types.hpp>

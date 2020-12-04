@@ -12,8 +12,8 @@ void play_state::onEnter() {
 	shaderProgram->attach(ASSETS_DIR "/shaders/tint.frag", GL_FRAGMENT_SHADER);
 	shaderProgram->link();
 
-	shared_ptr<Mesh> meshPtr1 = nullptr;
-	shared_ptr<Mesh> meshPtr2 = nullptr;
+	shared_ptr<Mesh> meshPtr1(new Mesh);
+	shared_ptr<Mesh> meshPtr2(new Mesh);
 	MeshUtils::Cuboid(*meshPtr1, true);
 	MeshUtils::Sphere(*meshPtr2);
 
