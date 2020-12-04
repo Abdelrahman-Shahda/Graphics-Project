@@ -34,13 +34,13 @@ glm::mat4 RenderingSystem::getCameraViewProjectionMatrix()
 	return cptr->getVPMatrix(position, (glm::vec3)(direction), (glm::vec3)(up));
 }
 
-void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> entities){
+void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities){
 
     //Get enitities with mesh Component to render them
-    std::vector<std::shared_ptr<Entity>> meshEntities = this->getEntitiesByComponents<MeshRenderer, Transform>(entities);
+    std::vector<std::shared_ptr<Entity>> meshEntities = this->getEntitiesWithComponents<MeshRenderer, Transform>(entities);
 
     //Get camera Entities
-    std::vector<std::shared_ptr<Entity>> cameraEntities = this->getEntitiesByComponents<Camera, Transform, FlyCameraController>(entities);
+    std::vector<std::shared_ptr<Entity>> cameraEntities = this->getEntitiesWithComponents<Camera, Transform, FlyCameraController>(entities);
 
     //Taking the main camera which is the first index in the array
     cptr = cameraEntities[0]->getComp<Camera>();

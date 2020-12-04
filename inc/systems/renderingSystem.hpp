@@ -19,7 +19,7 @@ class RenderingSystem : public System
     std::shared_ptr<FlyCameraController> ccptr;
 
 public:
-    void Run(const std::vector<std::shared_ptr<Entity>> enitities) override;
+    void Run(const std::vector<std::shared_ptr<Entity>> &enitities) override;
 };
 
 #endif // !RENDERING___SYSTEM__H

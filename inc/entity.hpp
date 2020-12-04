@@ -11,9 +11,13 @@
 class Entity: std::enable_shared_from_this<Entity>
 {
     std::bitset<ComponentType::COUNT> isComps;
+    static unsigned int next_id;
+    unsigned int id;
     std::vector<std::shared_ptr<Component>> comps;
-
+    Entity(const Entity&); //disallow copy constructor
+    Entity& operator=(const Entity&);//disallow assignment
 public:
+    Entity();
     template<class T>
 	bool hasComps();
 
@@ -30,6 +34,7 @@ public:
     std::shared_ptr<T> getComp();
 
 };
+
 
 template<class T>
 bool Entity::hasComps() {
