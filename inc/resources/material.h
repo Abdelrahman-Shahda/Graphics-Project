@@ -1,15 +1,17 @@
 #ifndef MATERIAL__H
 #define MATERIAL__H
 
-#include "shader.hpp"
+#include <resources/shader.hpp>
+#include <resources/shaderParameter.hpp>
 #include <memory>
+#include <vector>
 
 namespace Resources {
 
 	class Material
 	{
 		std::shared_ptr<ShaderProgram> shaderPtr;
-
+		vector<
 	public:
 		Material(std::shared_ptr <ShaderProgram> shaderPtr = nullptr);
 
