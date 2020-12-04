@@ -1,7 +1,7 @@
 #ifndef RENDERING___SYSTEM__H
 #define RENDERING___SYSTEM__H
 
-#include <system.hpp>
+#include <systems/System.hpp>
 #include <memory>
 
 

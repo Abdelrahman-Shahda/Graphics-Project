@@ -1,39 +1,77 @@
 #include <string>
 #include <resources/shader.hpp>
+#include <memory>
 
+using std::string;
+using std::shared_ptr;
 
 namespace Resources
 {
-	typedef enum {BASE,FLOAT, MAT4, MAT3, VEC3,VEC4 } PARAMATER_TYPE;
+	typedef enum {BASE,FLOAT, MAT4, MAT3, VEC3,VEC4 } ParameterType;
 
-	template  <class T>
 	class ShaderParameter
 	{
 	protected:
-		T value;
-		std::string name;
+		string name;
 		ParameterType type;
-		void setValue(T value_) { this->value = value_; };
 
 	public:
-		ShaderParameter(PARAMATER_TYPE paramaterType,string name) :type(paramaterType), name(name) {};
-		void setUinform(T value,ShaderProgram program){
-			this->setValue(value);
-			program.set(name, value);
-		}
+		ShaderParameter(string name) :name(name) { type = BASE; };
+		
+		virtual void setUinform(shared_ptr<ShaderProgram> program) = 0;
 	};
 
-	//TODO:: check if this class is necessary
-	//check if it's necessary
-	//Instantiating fload parameter from shader Class
-	class FloatShaderParamter :public ShaderParameter<float>
+	
+	class FloatShaderParamter :public ShaderParameter
 	{
-		FloatShaderParamter() :ShaderParameter<float>(FLOAT) {};
-		 void setUinform(float value, ShaderProgram program) override
+		float value;
+
+	public:
+		FloatShaderParamter(string name,float value) :ShaderParameter(name) ,value(value) { type = FLOAT; };
+
+		void setParameterValue(float value_)
 		{
-			 this->setValue(value);
-			 program.set(name, value);
+			value = value_;
+		}
+
+		void setUinform(shared_ptr<ShaderProgram> program) override {
+			program->set(name, value);
 		}
 	};
 	
+	class Matrix4ShaderParamter :public ShaderParameter
+	{
+		glm::mat4 value;
+
+	public:
+		Matrix4ShaderParamter(string name, glm::mat4 value) :ShaderParameter(name), value(value) { type = MAT4; };
+
+		void setParameterValue(glm::mat4 value_)
+		{
+			value = value_;
+		}
+
+		void setUinform(shared_ptr<ShaderProgram> program) override {
+			program->set(name, value);
+		}
+	};
+
+
+	class Vector3ShaderParamter :public ShaderParameter
+	{
+		glm::vec3 value;
+
+	public:
+		Vector3ShaderParamter(string name, glm::vec3 value) :ShaderParameter(name), value(value) { type = MAT4; };
+
+		void setParameterValue(glm::vec3 value_)
+		{
+			value = value_;
+		}
+
+		void setUinform(shared_ptr<ShaderProgram> program) override {
+			program->set(name, value);
+		}
+	};
+
 }

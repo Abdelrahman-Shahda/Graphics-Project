@@ -11,15 +11,15 @@ namespace Resources {
 	class Material
 	{
 		std::shared_ptr<ShaderProgram> shaderPtr;
-		vector<
+		std::vector<ShaderParameter> shaderParameters;
+
 	public:
 		Material(std::shared_ptr <ShaderProgram> shaderPtr = nullptr);
 
 		//Shader Program
 		void setShaderProgram(std::shared_ptr <ShaderProgram> shaderPtr);
 		std::shared_ptr <ShaderProgram> getShaderProgram();
-
-		//TODO::shader params
+		void passShaderParamters();
 	};
 }
 #endif // !MATERIAL__H

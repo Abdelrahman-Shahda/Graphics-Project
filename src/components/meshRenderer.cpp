@@ -8,6 +8,9 @@ MeshRenderer::MeshRenderer(weak_ptr<Entity> entityPtr,shared_ptr<Mesh> meshPtr ,
 
 void MeshRenderer::renderMesh(glm::mat4 transform_matrix)
 {
-	glUseProgram(*(materialPtr->getShaderProgram()));
+	std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
+	glUseProgram(*shaderProgram);
+	shaderProgram->set("transform", transform_matrix);
+	materialPtr->passShaderParamters();
 	meshPtr->draw();
 }
