@@ -18,6 +18,7 @@ class Entity: std::enable_shared_from_this<Entity>
     Entity& operator=(const Entity&);//disallow assignment
 public:
     Entity();
+    unsigned int getId();
     template<class T>
 	bool hasComps();
 

@@ -11,8 +11,8 @@ class Scene{
     std::vector<std::shared_ptr<Entity>> entities;
 public:
 
-    void addEntity(const std::shared_ptr<Entity> &newEntity);
-    void deleteEntity(unsigned int id);
+    bool addEntity(const std::shared_ptr<Entity> &newEntity);
+    bool deleteEntity(unsigned int id);
     const std::vector<std::shared_ptr<Entity>>& getEntities();
 };
 #endif //GRAPHICSPROJECT_SCENE_H
