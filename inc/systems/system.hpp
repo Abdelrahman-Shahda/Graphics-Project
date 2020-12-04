@@ -7,7 +7,7 @@
 class System
 {
 public:
-    virtual void Run(const std::vector<std::shared_ptr<Entity>> entities);
+    virtual void Run(const std::vector<std::shared_ptr<Entity>> entities)=0;
 
 protected:
     template<class T>

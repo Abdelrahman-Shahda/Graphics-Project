@@ -8,6 +8,7 @@
 #include"../inc/entity.hpp"
 #include <memory>
 #include<utils/mesh-utils.hpp>
+
 #ifndef GRAPHICSPROJECT_PLAY_STATE_HPP
 #define GRAPHICSPROJECT_PLAY_STATE_HPP
 
@@ -81,3 +82,5 @@ public:
         program.destroy();
     }
 };
+
+#endif

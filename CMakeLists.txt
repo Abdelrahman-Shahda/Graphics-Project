@@ -39,7 +39,8 @@ set(COMMON_SOURCES
 		src/resources/shader.cpp
 		src/game_states/game_state.cpp
 		src/game_states/play_state.cpp
-
+		src/utils/mesh-utils.cpp
+		src/systems/renderingSystem.cpp
 		)
 
 # Define the directories in which to search for the included headers

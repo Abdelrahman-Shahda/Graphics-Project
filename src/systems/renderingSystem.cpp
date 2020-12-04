@@ -5,7 +5,7 @@ void RenderingSystem::drawNode(const std::shared_ptr<Transform> &node , const gl
     
 	//getting current entity
 	std::shared_ptr<Entity> entity = node->getEntity();
-    std::shared_ptr<Component> meshRenderer = entity->getComp<MeshRenderer>();
+    std::shared_ptr<MeshRenderer> meshRenderer = entity->getComp<MeshRenderer>();
     glm::mat4 transform_matrix = parent_transform_matrix * node->get_transform();
 	
 	//Drawing Mesh on screen

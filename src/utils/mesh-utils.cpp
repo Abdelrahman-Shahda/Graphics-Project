@@ -8,32 +8,35 @@
 #include <unordered_map>
 #include <filesystem>
 
-#include "common-vertex-types.hpp"
-#include "common-vertex-attributes.hpp"
+#include<utils/common-vertex-attributes.hpp>
+#include <utils/common-vertex-types.hpp>
+#include <utils/vertex-attributes.hpp>
 
-#define WHITE   our::Color(255, 255, 255, 255)
-#define GRAY    our::Color(128, 128, 128, 255)
-#define BLACK   our::Color(  0,   0,   0, 255)
-#define RED     our::Color(255,   0,   0, 255)
-#define GREEN   our::Color(  0, 255,   0, 255)
-#define BLUE    our::Color(  0,   0, 255, 255)
-#define MAGENTA our::Color(255,   0, 255, 255)
-#define YELLOW  our::Color(255, 255,   0, 255)
-#define CYAN    our::Color(  0, 255, 255, 255)
+#define WHITE   Color(255, 255, 255, 255)
+#define GRAY    Color(128, 128, 128, 255)
+#define BLACK   Color(  0,   0,   0, 255)
+#define RED     Color(255,   0,   0, 255)
+#define GREEN   Color(  0, 255,   0, 255)
+#define BLUE    Color(  0,   0, 255, 255)
+#define MAGENTA Color(255,   0, 255, 255)
+#define YELLOW  Color(255, 255,   0, 255)
+#define CYAN    Color(  0, 255, 255, 255)
 
-bool MeshUtils::loadOBJ(our::Mesh &mesh, const char* filename) {
+using namespace Resources;
+
+bool MeshUtils::loadOBJ(Mesh &mesh, const char* filename) {
 
     // We get the parent path since we would like to see if contains any ".mtl" file that define the object materials
     auto parent_path_string = std::filesystem::path(filename).parent_path().string();
 
     // The data that we will use to initialize our mesh
-    std::vector<our::Vertex> vertices;
+    std::vector<Vertex> vertices;
     std::vector<GLuint> elements;
 
     // Since the OBJ can have duplicated vertices, we make them unique using this map
     // The key is the vertex, the value is its index in the vector "vertices".
     // That index will be used to populate the "elements" vector.
-    std::unordered_map<our::Vertex, GLuint> vertex_map;
+    std::unordered_map<Vertex, GLuint> vertex_map;
 
     // The data loaded by Tiny OBJ Loader
     tinyobj::attrib_t attrib;
@@ -99,7 +102,7 @@ bool MeshUtils::loadOBJ(our::Mesh &mesh, const char* filename) {
 
     // Create and populate the OpenGL objects in the mesh
     if (mesh.isCreated()) mesh.destroy();
-    mesh.create({our::setup_buffer_accessors<Vertex>});
+    mesh.create({setup_buffer_accessors<Vertex>});
     mesh.setVertexData(0, vertices);
     mesh.setElementData(elements);
     return true;
@@ -189,16 +192,16 @@ void MeshUtils::Cuboid(Mesh& mesh,
 
     // Create and populate the OpenGL objects in the mesh
     if (mesh.isCreated()) mesh.destroy();
-    mesh.create({our::setup_buffer_accessors<Vertex>});
+    mesh.create({setup_buffer_accessors<Vertex>});
     mesh.setVertexData(0, vertices);
     mesh.setElementData(elements);
 };
 
-void MeshUtils::Sphere(our::Mesh& mesh, const glm::ivec2& segments, bool colored,
+void MeshUtils::Sphere(Mesh& mesh, const glm::ivec2& segments, bool colored,
             const glm::vec3& center, float radius,
             const glm::vec2& texture_offset, const glm::vec2& texture_tiling){
 
-    std::vector<our::Vertex> vertices;
+    std::vector<Vertex> vertices;
     std::vector<GLuint> elements;
 
     // We populate the sphere vertices by looping over its longitude and latitude
@@ -212,7 +215,7 @@ void MeshUtils::Sphere(our::Mesh& mesh, const glm::ivec2& segments, bool colored
             glm::vec3 normal = {cos * glm::cos(yaw), sin, cos * glm::sin(yaw)};
             glm::vec3 position = radius * normal + center;
             glm::vec2 tex_coords = texture_tiling * glm::vec2(u, v) + texture_offset;
-            our::Color color = colored ? our::Color(127.5f * (normal + 1.0f), 255) : WHITE;
+            Color color = colored ? Color(127.5f * (normal + 1.0f), 255) : WHITE;
             vertices.push_back({position, color, tex_coords, normal});
         }
     }
@@ -232,15 +235,15 @@ void MeshUtils::Sphere(our::Mesh& mesh, const glm::ivec2& segments, bool colored
 
     // Create and populate the OpenGL objects in the mesh
     if (mesh.isCreated()) mesh.destroy();
-    mesh.create({our::setup_buffer_accessors<Vertex>});
+    mesh.create({setup_buffer_accessors<Vertex>});
     mesh.setVertexData(0, vertices);
     mesh.setElementData(elements);
 }
 
-void MeshUtils::Plane(our::Mesh& mesh, const glm::ivec2& resolution, bool colored,
+void MeshUtils::Plane(Mesh& mesh, const glm::ivec2& resolution, bool colored,
            const glm::vec3& center, const glm::vec2& size,
            const glm::vec2& texture_offset, const glm::vec2& texture_tiling){
-    std::vector<our::Vertex> vertices;
+    std::vector<Vertex> vertices;
     std::vector<GLuint> elements;
 
     glm::ivec2 it; glm::vec3 position = {0, center.y, 0}; glm::vec2 uv;
@@ -251,9 +254,9 @@ void MeshUtils::Plane(our::Mesh& mesh, const glm::ivec2& resolution, bool colore
             uv.t = ((float)it.y) / resolution.y;
             position.z = size.y * (uv.t - 0.5f) + center.z;
             glm::vec2 tex_coord = uv * texture_tiling + texture_offset;
-            our::Color color = colored ? glm::mix(
-                    glm::mix(our::Color(255, 0, 0, 255), our::Color(0, 255, 0, 255), uv.s),
-                    glm::mix(our::Color(255, 255, 0, 255), our::Color(0, 0, 255, 255), uv.s),
+            Color color = colored ? glm::mix(
+                    glm::mix(Color(255, 0, 0, 255), Color(0, 255, 0, 255), uv.s),
+                    glm::mix(Color(255, 255, 0, 255), Color(0, 0, 255, 255), uv.s),
                     uv.t) : WHITE;
             vertices.push_back({position, color, tex_coord, {0, 1, 0}});
         }
@@ -275,7 +278,7 @@ void MeshUtils::Plane(our::Mesh& mesh, const glm::ivec2& resolution, bool colore
 
     // Create and populate the OpenGL objects in the mesh
     if (mesh.isCreated()) mesh.destroy();
-    mesh.create({our::setup_buffer_accessors<Vertex>});
+    mesh.create({setup_buffer_accessors<Vertex>});
     mesh.setVertexData(0, vertices);
     mesh.setElementData(elements);
 }

@@ -1,5 +1,5 @@
 #ifndef MESH___H
-#define MESH__H
+#define MESH___H
 
 #include <memory>
 #include <vector>
