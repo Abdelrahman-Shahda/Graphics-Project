@@ -7,6 +7,7 @@
 #include<systems/renderingSystem.hpp>
 #include"../inc/entity.hpp"
 #include <memory>
+#include<utils/mesh-utils.hpp>
 #ifndef GRAPHICSPROJECT_PLAY_STATE_HPP
 #define GRAPHICSPROJECT_PLAY_STATE_HPP
 
@@ -15,6 +16,7 @@ class play_state : public game_state {
 public:
     std::vector <shared_ptr<Entity>> world;
     RenderingSystem rs;
+
     Resources::ShaderProgram program;
     shared_ptr<Mesh> meshPtr1=nullptr;
     shared_ptr<Mesh> meshPtr2=nullptr; ////////should be initialized
@@ -26,13 +28,13 @@ public:
         program.link();
         shared_ptr<Entity> entity1(new Entity);
 
-
-     
-
-
+        MeshUtils::Cuboid(*meshPtr1, true);
+        MeshUtils::Sphere(*meshPtr2);
 
 
-        ////////////////scene 1///////////////////
+
+
+
         entity1->addComp<Transform,glm::vec3,glm::vec3,glm::vec3>({0, -1, 0},{glm::pi<float>()/4, glm::pi<float>()/4, 0},{7, 2,  7});
         entity1->addComp<Camera>();
         ///////////entity->addComp<FlyCameraController>();
@@ -41,7 +43,6 @@ public:
 
 
 
-        ////////////scene2/////////////////
         shared_ptr<Entity> entity2(new Entity);
         shared_ptr<Entity> entity3(new Entity);
         entity2->addComp<MeshRenderer,shared_ptr<Mesh>>(meshPtr1);
@@ -54,7 +55,16 @@ public:
 
 
 
+        glClearColor(0, 0, 0, 0);
 
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CCW);
+
+        glClearColor(0, 0, 0, 1);
 
 
         //glfwGetFramebufferSize(window, &width, &height);
@@ -63,7 +73,7 @@ public:
        // Transform (  weakPtr,{0, -1, 0},{0, 0,  0},{7, 2,  7});
 
     }
-    void draw(){
+    void onDraw1(){
          rs.Run(world);
 
     }
