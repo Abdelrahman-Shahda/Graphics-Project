@@ -3,19 +3,25 @@
 #include <iostream>
 #include "../inc/entity.hpp"
 #include <systems/renderingSystem.hpp>
+#include<game_states/play_state.hpp>
 #pragma region helper_functions
 
 // Inherting Application class to define our application
 class ShapeDrawingApplication : public GraphicsProject::Application {
 
 private:
+
+
 	/*******************************************************************************
 	 *                          Member variables                               *
 	 *******************************************************************************/
     //Defining 5 shader programs for out shapes
-	Resources::ShaderProgram program[5];
-    GLuint vertex_array = 0;
-    int state = 0;
+
+    //GLuint vertex_array = 0;
+   // int state = 0;
+
+   // Resources::ShaderProgram program;
+    play_state * playState;
 
 
 	/*******************************************************************************
@@ -27,6 +33,10 @@ private:
     }
 
     void onInitialize() override {
+        playState=new play_state;
+
+
+        /*
 		//Intializing shader programs
 		for (int i = 0; i < 5; i++)
 		{
@@ -49,12 +59,20 @@ private:
 
 		//Creating vertex array 
         glGenVertexArrays(1, &vertex_array);       
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  */
 
     }
 
     void onDraw(double deltaTime) override {
-        glClear(GL_COLOR_BUFFER_BIT);   
+
+
+        goToState(playState);
+
+
+
+
+        /*
+        glClear(GL_COLOR_BUFFER_BIT);
 
 		// Use shader program of selected key and get Uniform location
         glUseProgram(program[state]);               
@@ -77,16 +95,19 @@ private:
 		//Bind the vertices so that we can draw a rectangle covering the whole screen
         glBindVertexArray(vertex_array);            
         glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);                       
+		glBindVertexArray(0);    */
     }
 
     void onDestroy() override {
+        delete playState;
+
+        /*
 		//Deleting programs
         for (int i=0; i<5; i++)
 			glDeleteProgram(program[i]);     
 
 		//Deleting vertex array used
-        glDeleteVertexArrays(1, &vertex_array);    
+        glDeleteVertexArrays(1, &vertex_array);   */
     }
 
 };

@@ -6,9 +6,9 @@
 #define GRAPHICSPROJECT_GAME_STATE_HPP
 class game_state {
 public:
-    virtual void onEnter(){}
-    virtual void onDraw1(){}
-    virtual void onExit(){}
+    virtual void onEnter()=0;
+    virtual void onDraw1()=0;
+    virtual void onExit()=0;
 };
 
 #endif //GRAPHICSPROJECT_GAME_STATE_HPP
