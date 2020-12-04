@@ -216,8 +216,14 @@ int GraphicsProject::Application::run() {
         // Get the current time (the time at which we are starting the current frame).
         double current_frame_time = glfwGetTime();
 
+        //Draw Current state
+        if (current_state != nullptr) {
+            current_state->onDraw1();
+        }
+
+
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
-        onDraw(current_frame_time - last_frame_time);
+
         last_frame_time = current_frame_time; // Then update the last frame start time (this frame is now the last frame)
 
 #if defined(ENABLE_OPENGL_DEBUG_MESSAGES)

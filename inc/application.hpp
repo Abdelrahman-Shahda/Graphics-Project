@@ -39,25 +39,15 @@ namespace GraphicsProject {
         virtual void onDraw(double deltaTime){}         // Called every frame in the game loop passing the time taken to draw the frame "Delta time".
         virtual void onDestroy(){}                      // Called once after the game loop ends for house cleaning.
         void goToState(game_state* g) {
-            while (!glfwWindowShouldClose(window)) {
                 next_state = g;
-                if (next_state != nullptr) {
-                    if (current_state != nullptr) {
+                if (current_state != nullptr) {
                         current_state->onExit();
-                    }
+
                     current_state = next_state;
                     next_state = nullptr;
                     current_state->onEnter();
 
                 }
-                if (current_state != nullptr) {
-                    current_state->onDraw1();
-                }
-            }
-            if(current_state!= nullptr)
-            {
-                current_state->onExit();
-            }
         }
 
         // Override these functions to get mouse and keyboard event.
