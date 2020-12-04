@@ -15,7 +15,7 @@ class Entity: std::enable_shared_from_this<Entity>
 
 public:
     template<class T>
-	bool hasComp();
+	bool hasComps();
 
     template<class T1, class T2, class ...Rest>
     bool hasComps();
@@ -32,7 +32,7 @@ public:
 };
 
 template<class T>
-bool Entity::hasComp() {
+bool Entity::hasComps() {
     return isComps.test(ComponentLookUp::lookUp<T>());
 }
 
@@ -40,7 +40,7 @@ template<class T1, class T2, class ...Rest>
 bool Entity::hasComps(){
 
     if(isComps.test(ComponentLookUp::lookUp<T1>())){
-        return hasComp<T2,Rest...>();
+        return hasComps<T2,Rest...>();
     }
     return false;
 }
@@ -48,12 +48,12 @@ bool Entity::hasComps(){
 template<class T>
 std::shared_ptr<T> Entity::getComp(){
 
-    if(hasComp<T>()){
+    if(hasComps<T>()){
         ComponentType type = ComponentLookUp::lookUp<T>();
 
         for(int i = 0; i < (int)comps.size(); i++){
             if(comps[i]->getType() == type)
-                return  comps[i];
+                return std::static_pointer_cast<T>(comps[i]);
         }
     }
     return NULL;
@@ -61,7 +61,7 @@ std::shared_ptr<T> Entity::getComp(){
 template<class T>
 bool Entity::removeComp(){
 
-    if(hasComp<T>()){
+    if(hasComps<T>()){
         //If it exists get the type to be removed and reset it in isComps and erase it form comps vector
         ComponentType  typeToBeRemoved = ComponentLookUp::lookUp<T>();
 
@@ -82,7 +82,7 @@ template<class T, class ...Args>
 std::shared_ptr<T> Entity::addComp(Args...args){
 
     //If Comp exists return Null
-    if(hasComp<T>())
+    if(hasComps<T>())
         return NULL;
 
     //Create new component and set its bit in isComps and Add it in comps Vector

@@ -1,6 +1,3 @@
-//
-// Created by 20101 on 11/28/2020.
-//
 
 #ifndef GRAPHICSPROJECT_COMPONENTLOOKUP_H
 #define GRAPHICSPROJECT_COMPONENTLOOKUP_H
@@ -18,21 +15,13 @@
 class ComponentLookUp{
 
 public:
-    static void setLookUpMap();
+    static void setUpMap();
     template<class T>
     static ComponentType lookUp();
 private:
     static std::unordered_map<std::type_index,ComponentType > lookUpMap;
 };
-std::unordered_map<std::type_index,ComponentType > ComponentLookUp::lookUpMap;
-void ComponentLookUp::setLookUpMap() {
 
-    //Set Up the map to fetch the type quickly
-    ComponentLookUp::lookUpMap[typeid(Camera)] = ComponentType::CAMERA;
-    ComponentLookUp::lookUpMap[typeid(FlyCameraController)] = ComponentType::CAMERACONTROLLER;
-	ComponentLookUp::lookUpMap[typeid(MeshRenderer)] = ComponentType:: MESH_RENDERER;
-	ComponentLookUp::lookUpMap[typeid(Transform)] = ComponentType::TRANSFORM;
-}
 template <class T>
 ComponentType ComponentLookUp::lookUp(){
 

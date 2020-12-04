@@ -1,3 +1,6 @@
+#ifndef GRAPHICSPROJECT_PLAY_STATE_HPP
+#define GRAPHICSPROJECT_PLAY_STATE_HPP
+
 #include <application.hpp>
 #include "game_state.hpp"
 #include <../inc/resources/shader.hpp>
@@ -8,8 +11,7 @@
 #include"../inc/entity.hpp"
 #include <memory>
 #include<utils/mesh-utils.hpp>
-#ifndef GRAPHICSPROJECT_PLAY_STATE_HPP
-#define GRAPHICSPROJECT_PLAY_STATE_HPP
+
 
 
 class play_state : public game_state {
@@ -81,3 +83,4 @@ public:
         program.destroy();
     }
 };
+#endif

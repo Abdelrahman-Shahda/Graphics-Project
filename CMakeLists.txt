@@ -33,14 +33,16 @@ set(VENDOR_SOURCES ${GLAD_SOURCE} ${IMGUI_SOURCES})
 set(COMMON_SOURCES
         src/application.cpp
 		src/components/component.cpp
+		src/systems/system.cpp
+		src/utils/mesh-utils.cpp
+		src/systems/rendernigSystem.cpp
 		src/components/meshRenderer.cpp
 		src/components/transform.cpp
 		src/resources/material.cpp
 		src/resources/shader.cpp
 		src/game_states/game_state.cpp
 		src/game_states/play_state.cpp
-
-		)
+		src/utils/ComponentLookUp.cpp)
 
 # Define the directories in which to search for the included headers
 include_directories(
