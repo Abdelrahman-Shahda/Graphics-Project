@@ -5,7 +5,6 @@
 #include <GLFW/glfw3.h>
 #include <cstring>
 
-namespace GraphicsProject {
 
     // A convenience class to read mouse input
     class Mouse {
@@ -98,6 +97,5 @@ namespace GraphicsProject {
 
     };
 
-}
 
 #endif //MOUSE_H

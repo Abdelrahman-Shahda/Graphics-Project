@@ -7,7 +7,7 @@
 #pragma region helper_functions
 
 // Inherting Application class to define our application
-class ShapeDrawingApplication : public GraphicsProject::Application {
+class ShapeDrawingApplication : public Application {
 
 private:
 
@@ -27,13 +27,13 @@ private:
 	/*******************************************************************************
 	 *                          Member functions                               *
 	 *******************************************************************************/
-    GraphicsProject::WindowConfiguration getWindowConfiguration() override {
+    WindowConfiguration getWindowConfiguration() override {
 		// Defining an unresizable window of resolution 1280*720
         return { "Project Phase 1", {1280, 720}, false };
     }
 
     void onInitialize() override {
-        playState=new play_state;
+        playState=new play_state(static_cast<Application*>(this));
 
 
         /*
@@ -63,13 +63,10 @@ private:
 
     }
 
+	/*
     void onDraw(double deltaTime) override {
 
-
-        goToState(playState);
-
-
-
+        //goToState(playState);
 
         /*
         glClear(GL_COLOR_BUFFER_BIT);
@@ -96,18 +93,10 @@ private:
         glBindVertexArray(vertex_array);            
         glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);    */
-    }
+    //
 
     void onDestroy() override {
         delete playState;
-
-        /*
-		//Deleting programs
-        for (int i=0; i<5; i++)
-			glDeleteProgram(program[i]);     
-
-		//Deleting vertex array used
-        glDeleteVertexArrays(1, &vertex_array);   */
     }
 
 };

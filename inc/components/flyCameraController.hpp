@@ -12,7 +12,7 @@
     // Allows you to control the camera freely in world space
     class FlyCameraController : public Component {
     private:
-        GraphicsProject::Application* app;
+        Application* app;
 
         float yaw, pitch ,fov;
         glm::vec3 position;
@@ -25,7 +25,7 @@
 
     public:
 
-    FlyCameraController (std::weak_ptr<Entity> entity,GraphicsProject::Application* application) :Component(entity)
+    FlyCameraController (std::weak_ptr<Entity> entity,Application* application) :Component(entity)
 	{
 		type = CAMERACONTROLLER;
         this->app = application;

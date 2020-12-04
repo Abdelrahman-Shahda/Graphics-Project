@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <cstring>
 
-namespace GraphicsProject {
 
     // A convenience class to read keyboard input
     class Keyboard {
@@ -61,6 +60,5 @@ namespace GraphicsProject {
         }
     };
 
-}
 
 #endif //KEYBOARD_H

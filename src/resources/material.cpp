@@ -19,7 +19,11 @@ void Material::passShaderParamters()
 {
 	for (auto iterator = this->shaderParameters.begin(); iterator != this->shaderParameters.end() ;iterator++)
 	{
-		iterator->setUinform(shaderPtr);
+		(*iterator)->setUinform(shaderPtr);
 	}
 }
 
+void Material::addShaderParameter(ShaderParameter* param)
+{
+	shaderParameters.push_back(param);
+}

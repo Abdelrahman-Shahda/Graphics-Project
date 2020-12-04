@@ -83,7 +83,7 @@ void GLAPIENTRY opengl_callback(GLenum source, GLenum type, GLuint id, GLenum se
     << " raised from " << _source << ": " << message << std::endl;
 }
 
-void GraphicsProject::Application::configureOpenGL() {
+void Application::configureOpenGL() {
     // Request that OpenGL is 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -118,12 +118,12 @@ void GraphicsProject::Application::configureOpenGL() {
     glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
 }
 
-GraphicsProject::WindowConfiguration GraphicsProject::Application::getWindowConfiguration() {
+WindowConfiguration Application::getWindowConfiguration() {
     return {"OpenGL Application", {1280, 720}, false };
 }
 
 // This is the main class function that run the whole application (Initialize, Game loop, House cleaning).
-int GraphicsProject::Application::run() {
+int Application::run() {
 
     // Set the function to call when an error occurs.
     glfwSetErrorCallback(glfw_error_callback);
@@ -216,6 +216,7 @@ int GraphicsProject::Application::run() {
         // Get the current time (the time at which we are starting the current frame).
         double current_frame_time = glfwGetTime();
 
+		
         //Draw Current state
         if (current_state != nullptr) {
             current_state->onDraw1();
@@ -283,7 +284,7 @@ int GraphicsProject::Application::run() {
 }
 
 // Sets-up the window callback functions from GLFW to our (Mouse/Keyboard) classes.
-void GraphicsProject::Application::setupCallbacks() {
+void Application::setupCallbacks() {
 
     // We use GLFW to store a pointer to "this" window instance.
     glfwSetWindowUserPointer(window, this);

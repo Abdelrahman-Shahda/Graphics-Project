@@ -5,13 +5,14 @@
 #include <resources/shaderParameter.hpp>
 #include <memory>
 #include <vector>
+#include <string>
 
 namespace Resources {
 
 	class Material
 	{
 		std::shared_ptr<ShaderProgram> shaderPtr;
-		std::vector<ShaderParameter> shaderParameters;
+		std::vector<ShaderParameter*> shaderParameters;
 
 	public:
 		Material(std::shared_ptr <ShaderProgram> shaderPtr = nullptr);
@@ -20,6 +21,7 @@ namespace Resources {
 		void setShaderProgram(std::shared_ptr <ShaderProgram> shaderPtr);
 		std::shared_ptr <ShaderProgram> getShaderProgram();
 		void passShaderParamters();
+		void addShaderParameter(ShaderParameter* param);
 	};
 }
 #endif // !MATERIAL__H

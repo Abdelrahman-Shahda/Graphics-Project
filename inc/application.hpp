@@ -5,11 +5,10 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
-#include "../../inc/game_states/game_state.hpp"
+#include <game_states/game_state.hpp>
 #include "input/keyboard.hpp"
 #include "input/mouse.hpp"
 
-namespace GraphicsProject {
 
     // This struct handles window attributes: (title, size, isFullscreen).
     struct WindowConfiguration {
@@ -83,7 +82,6 @@ namespace GraphicsProject {
         }
     };
 
-}
 
 
 #endif //APPLICATION_H

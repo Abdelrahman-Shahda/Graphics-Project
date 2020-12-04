@@ -74,4 +74,20 @@ namespace Resources
 		}
 	};
 
+	class Vector4ShaderParamter :public ShaderParameter
+	{
+		glm::vec3 value;
+
+	public:
+		Vector4ShaderParamter(string name, glm::vec4 value) :ShaderParameter(name), value(value) { type = VEC4; };
+
+		void setParameterValue(glm::vec4 value_)
+		{
+			value = value_;
+		}
+
+		void setUinform(shared_ptr<ShaderProgram> program) override {
+			program->set(name, value);
+		}
+	};
 }
