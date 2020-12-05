@@ -1,8 +1,10 @@
 #include "../../inc/resources/material.h"
+
 using namespace Resources;
 
 Material::Material(std::shared_ptr <ShaderProgram> shaderPtr) :shaderPtr(shaderPtr)
 {
+
 }
 
  void Material::setShaderProgram(std::shared_ptr < ShaderProgram> shaderPtr)
@@ -19,7 +21,8 @@ void Material::passShaderParamters()
 {
 	for (auto iterator = this->shaderParameters.begin(); iterator != this->shaderParameters.end() ;iterator++)
 	{
-	    std::cout << "Shader Program "<< std::endl;
+	    std::cout << "Shader Program "<< *iterator << " " << shaderPtr <<std::endl;
+
 		(*iterator)->setUinform(shaderPtr);
 	}
 }

@@ -18,7 +18,9 @@ namespace Resources
 	public:
 		ShaderParameter(string name) :name(name) { type = BASE; };
 		
-		virtual void setUinform(shared_ptr<ShaderProgram> program) = 0;
+		virtual void setUinform(shared_ptr<ShaderProgram> program){
+		    std::cout<<"Ana hena"<<std::endl;
+		};
 	};
 
 	
@@ -35,6 +37,7 @@ namespace Resources
 		}
 
 		void setUinform(shared_ptr<ShaderProgram> program) override {
+            std::cout << "Uniform Not Done" << std::endl;
 			program->set(name, value);
 		}
 	};
@@ -52,6 +55,7 @@ namespace Resources
 		}
 
 		void setUinform(shared_ptr<ShaderProgram> program) override {
+            std::cout << "Uniform Not Done" << std::endl;
 			program->set(name, value);
 		}
 	};
@@ -70,13 +74,14 @@ namespace Resources
 		}
 
 		void setUinform(shared_ptr<ShaderProgram> program) override {
+            std::cout << "Uniform Not Done" << std::endl;
 			program->set(name, value);
 		}
 	};
 
 	class Vector4ShaderParamter :public ShaderParameter
 	{
-		glm::vec3 value;
+		glm::vec4 value;
 
 	public:
 		Vector4ShaderParamter(string name, glm::vec4 value) :ShaderParameter(name), value(value) { type = VEC4; };
