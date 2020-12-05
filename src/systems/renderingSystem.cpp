@@ -40,7 +40,17 @@ glm::mat4 RenderingSystem::getCameraViewProjectionMatrix()
 	return cptr->getVPMatrix(position, (glm::vec3)(direction), (glm::vec3)(up));
 }
 
-void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities){
+void RenderingSystem::updateCameraPosition(double delta_time)
+{
+
+ 	glm::vec4 direction = glm::vec4({ 0,0,-1,0 })*ctptr->get_transform();
+	glm::vec4 up = glm::vec4({ 0,1,0,0 })*ctptr->get_transform();
+	glm::mat4 camPosition = ctptr->get_position();
+	glm::vec3 position(camPosition[0][3], camPosition[1][3], camPosition[2][3]);
+    ccptr->update(delta_time,cptr->Forward(position, (glm::vec3)(direction), (glm::vec3)(up)),cptr->Up(position, (glm::vec3)(direction), (glm::vec3)(up)),cptr->Right(position, (glm::vec3)(direction), (glm::vec3)(up)));
+}
+
+void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time){
 
     //Get enitities with mesh Component to render them
     std::vector<std::shared_ptr<Entity>> meshEntities = this->getEntitiesWithComponents<MeshRenderer, Transform>(entities);
@@ -52,6 +62,9 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities){
     cptr = cameraEntities[0]->getComp<Camera>();
     ctptr = cameraEntities[0]->getComp<Transform>();
     ccptr = cameraEntities[0]->getComp<FlyCameraController>();
+
+    //Updating Camera position
+    this->updateCameraPosition(delta_time);
 
 	//Getiing view projection matrix of camera
 	glm::mat4 viewProjection =this->getCameraViewProjectionMatrix() ;
