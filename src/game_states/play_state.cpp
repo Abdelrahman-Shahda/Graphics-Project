@@ -53,5 +53,5 @@ void play_state::onEnter() {
 }
 
 void play_state::onDraw1() {
-	renderingSystem.Run(world,10.0f);
+	renderingSystem.Run(world,0.000500f);
 }
