@@ -8,7 +8,7 @@
 #include <vector>
 #include <bitset>
 
-class Entity: std::enable_shared_from_this<Entity>
+class Entity: public std::enable_shared_from_this<Entity>
 {
     std::bitset<ComponentType::COUNT> isComps;
     static unsigned int next_id;
@@ -92,7 +92,7 @@ std::shared_ptr<T> Entity::addComp(Args...args){
         return NULL;
 
     //Create new component and set its bit in isComps and Add it in comps Vector
-    std::shared_ptr<T> newComp = std::make_shared<T>(weak_from_this(), args...);
+    std::shared_ptr<T> newComp = std::make_shared<T>(this->weak_from_this(), args...);
     isComps.set(newComp->getType());
     comps.push_back(newComp);
     return newComp;

@@ -12,6 +12,7 @@ Transform::Transform(std::weak_ptr<Entity> entity,glm::vec3 p, glm::vec3 r, glm:
     set_rotation(r);
     set_scale(s);
     set_position(p);
+    parent = nullptr;
 }
 
 void Transform::set_parent(Transform* transformComponent) {parent=transformComponent;}

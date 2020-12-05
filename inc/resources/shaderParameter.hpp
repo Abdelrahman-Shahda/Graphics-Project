@@ -1,7 +1,7 @@
 #include <string>
 #include <resources/shader.hpp>
 #include <memory>
-
+#include <iostream>
 using std::string;
 using std::shared_ptr;
 
@@ -87,7 +87,9 @@ namespace Resources
 		}
 
 		void setUinform(shared_ptr<ShaderProgram> program) override {
-			program->set(name, value);
+            std::cout << "Uniform Not Done" << std::endl;
+		    program->set(name, value);
+			std::cout << "Uniform Done" << std::endl;
 		}
 	};
 }

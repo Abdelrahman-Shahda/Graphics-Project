@@ -51,6 +51,7 @@ namespace Resources {
         //So it is usually a better option to either cache the location
         //or explicitly define the uniform location in the shader
         void set(const std::string &uniform, GLfloat value) {
+
             glUniform1f(getUniformLocation(uniform), value);
         }
 

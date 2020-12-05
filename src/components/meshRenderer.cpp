@@ -10,7 +10,8 @@ void MeshRenderer::renderMesh(glm::mat4 transform_matrix)
 {
 	std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
 	glUseProgram(*shaderProgram);
-	shaderProgram->set("transform", transform_matrix);
+    shaderProgram->set("transform", transform_matrix);
 	materialPtr->passShaderParamters();
+    std::cout<<"drawNode "<< shaderProgram<<std::endl;
 	meshPtr->draw();
 }

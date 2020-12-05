@@ -4,6 +4,7 @@
 #include "../inc/entity.hpp"
 #include <systems/renderingSystem.hpp>
 #include<game_states/play_state.hpp>
+#include <utils/ComponentLookUp.h>
 #pragma region helper_functions
 
 // Inherting Application class to define our application
@@ -36,7 +37,7 @@ private:
         playState=new play_state(static_cast<Application*>(this));
 		playState->onEnter();
 		current_state = playState;
-
+        ComponentLookUp::setUpMap();
 
         /*
 		//Intializing shader programs
