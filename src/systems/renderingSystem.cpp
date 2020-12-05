@@ -15,7 +15,7 @@ void RenderingSystem::drawNode(const std::shared_ptr<Transform> &node , const gl
 
 	//Drawing Mesh on screen
 	//Value of other parameters should be set before
-
+    std::cout<<transform_matrix[3][2]<<std::endl;
 	meshRenderer->renderMesh(transform_matrix);
     std::cout<<"drawNode"<<std::endl;
 	//Calling function on children of current entity

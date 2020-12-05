@@ -7,19 +7,18 @@
 void play_state::onEnter() {
 	//Intializing resources
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
+	shared_ptr<Resources::Vector4ShaderParamter> tint(new Resources::Vector4ShaderParamter("tint", glm::vec4(1, 1, 1, 1)));
 	shaderProgram->create();
 	shaderProgram->attach(ASSETS_DIR"/shaders/transform.vert", GL_VERTEX_SHADER);
 	shaderProgram->attach(ASSETS_DIR "/shaders/tint.frag", GL_FRAGMENT_SHADER);
 	shaderProgram->link();
-
 	shared_ptr<Mesh> meshPtr1(new Mesh);
 	shared_ptr<Mesh> meshPtr2(new Mesh);
 	MeshUtils::Cuboid(*meshPtr1, true);
 	MeshUtils::Sphere(*meshPtr2);
 
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
-	Resources::Vector4ShaderParamter tint("tint", glm::vec4(1, 1, 1, 1));
-	material->addShaderParameter(&tint);
+	material->addShaderParameter(tint);
 
 	//TODO:: set paramaters in material
 

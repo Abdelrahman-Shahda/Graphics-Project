@@ -35,7 +35,6 @@ private:
 
     void onInitialize() override {
         playState=new play_state(static_cast<Application*>(this));
-//        std::cout<<"Enter onInitialize"<<std::endl;
 		playState->onEnter();
 		current_state = playState;
         ComponentLookUp::setUpMap();
