@@ -35,9 +35,10 @@ private:
 
     void onInitialize() override {
         playState=new play_state(static_cast<Application*>(this));
+       ComponentLookUp::setUpMap();
 		playState->onEnter();
 		current_state = playState;
-        ComponentLookUp::setUpMap();
+    
 
         /*
 		//Intializing shader programs

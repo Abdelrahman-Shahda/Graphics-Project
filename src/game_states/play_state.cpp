@@ -7,7 +7,7 @@
 void play_state::onEnter() {
 	//Intializing resources
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
-	//Be r3ayet Shahod el HACKER
+	//Be r3ayet Shahoda el HACKER
 	shared_ptr<Resources::Vector4ShaderParamter> tint(new Resources::Vector4ShaderParamter("tint", glm::vec4(1, 1, 1, 1)));
 	shaderProgram->create();
 	shaderProgram->attach(ASSETS_DIR"/shaders/transform.vert", GL_VERTEX_SHADER);
@@ -25,19 +25,19 @@ void play_state::onEnter() {
 
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
-	mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, -1, 0 }, { glm::pi<float>() / 4, glm::pi<float>() / 4, 0 }, { 7, 2,  7 });
-	mainCamera->addComp<Camera>();
-	mainCamera->addComp<FlyCameraController, Application*>(applicationPtr);
+	mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 10 }, {0, 0, 0 }, { 1,1,1 });
+	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
+	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr);
 	world.push_back(mainCamera);
 
 	//Two entities
 	shared_ptr<Entity> entity2(new Entity);
-	shared_ptr<Entity> entity3(new Entity);
+    shared_ptr<Entity> entity3(new Entity);
 	entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material);
-	entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, -1, 0 }, { 0, 0,  0 }, { 7, 2,  7 });
+	entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -2,1, -2 }, { 0, 0,  0 }, { 1,1,1});
 
 	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
-	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, -1, 0 }, { 0, 0,  0 }, { 7, 2,  7 });
+	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, -1, 0 }, { 0, 0, 0 }, { 1, 1,  1 });
 	world.push_back(entity2);
 	world.push_back(entity3);
 

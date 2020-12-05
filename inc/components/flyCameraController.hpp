@@ -7,15 +7,18 @@
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <components/transform.h>
 #include <components/component.h>
+#include <components/camera.hpp>
 #include <application.hpp>
 
-    // Allows you to control the camera freely in world space
+   // Allows you to control the camera freely in world space
     class FlyCameraController : public Component {
     private:
         Application* app;
+        std::shared_ptr<Camera> camera;
 
-        float yaw, pitch ,fov;
+        float yaw, pitch;
         glm::vec3 position;
+        
 
         float yaw_sensitivity, pitch_sensitivity, fov_sensitivity;
         glm::vec3 position_sensitivity;
@@ -24,21 +27,21 @@
         bool mouse_locked = false;
 
     public:
-
-    FlyCameraController (std::weak_ptr<Entity> entity,Application* application) :Component(entity)
+         FlyCameraController (std::weak_ptr<Entity> entity,Application* application,std::shared_ptr<Camera> camera) :Component(entity)
 	{
 		type = CAMERACONTROLLER;
         this->app = application;
+            this->camera = camera;
             yaw_sensitivity = pitch_sensitivity = 0.01f;
             position_sensitivity = {3.0f, 3.0f, 3.0f};
             fov_sensitivity = glm::pi<float>()/10;
-            position = {0.0,0.0,0.0};
-            fov = glm::radians(90.0f);
-            auto direction = glm::vec3{0,0,-1};
+
+            position = camera->getEyePosition();
+            auto direction = camera->getDirection();
             yaw = glm::atan(-direction.z, direction.x);
             float base_length = glm::sqrt(direction.x * direction.x + direction.z * direction.z);
             pitch = glm::atan(direction.y, base_length);
-	}
+        }
 
         void release(){
             if(mouse_locked) {
@@ -47,7 +50,7 @@
             }
         }
 
-        void update(double delta_time ,glm::vec3 front , glm::vec3 up , glm::vec3 right){
+        void update(double delta_time){
             if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && !mouse_locked){
                 app->getMouse().lockMouse(app->getWindow());
                 mouse_locked = true;
@@ -66,8 +69,11 @@
             if(pitch >  glm::half_pi<float>() * 0.99f) pitch  = glm::half_pi<float>() * 0.99f;
             yaw = glm::wrapAngle(yaw);
 
-            fov += app->getMouse().getScrollOffset().y * fov_sensitivity;
+            float fov = camera->getVerticalFieldOfView() + app->getMouse().getScrollOffset().y * fov_sensitivity;
             fov = glm::clamp(fov, glm::pi<float>() * 0.01f, glm::pi<float>() * 0.99f);
+            camera->setVerticalFieldOfView(fov);
+
+            glm::vec3 front = camera->Forward(), up = camera->Up(), right = camera->Right();
 
             glm::vec3 current_sensitivity = this->position_sensitivity;
             if(app->getKeyboard().isPressed(GLFW_KEY_LEFT_SHIFT)) current_sensitivity *= speedup_factor;
@@ -77,15 +83,15 @@
             if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * ((float)delta_time * current_sensitivity.y);
             if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * ((float)delta_time * current_sensitivity.y);
             if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * ((float)delta_time * current_sensitivity.x);
-            if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * ((float)delta_time * current_sensitivity.x);        }
+            if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * ((float)delta_time * current_sensitivity.x);
+
+            camera->setDirection(glm::vec3(glm::cos(yaw), 0, -glm::sin(yaw)) * glm::cos(pitch) + glm::vec3(0, glm::sin(pitch), 0));
+            camera->setEyePosition(position);
+        }
 
         [[nodiscard]] float getYaw() const {return yaw;}
         [[nodiscard]] float getPitch() const {return pitch;}
         [[nodiscard]] glm::vec3 getPosition() const {return position;}
-        [[nodiscard]] glm::vec3 getDirection() const {return glm::vec3(glm::cos(yaw), 0, -glm::sin(yaw)) * glm::cos(pitch) + glm::vec3(0, glm::sin(pitch), 0);}
-        [[nodiscard]] float getVerticalFieldOfView() const {return fov;}
-
-
 
         [[nodiscard]] float getYawSensitivity() const {return yaw_sensitivity;}
         [[nodiscard]] float getPitchSensitivity() const {return pitch_sensitivity;}
