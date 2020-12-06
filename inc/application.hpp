@@ -6,8 +6,8 @@
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <game_states/game_state.hpp>
-#include "input/keyboard.hpp"
-#include "input/mouse.hpp"
+#include <utils/input/keyboard.hpp>
+#include <utils/input/mouse.hpp>
 
 
     // This struct handles window attributes: (title, size, isFullscreen).

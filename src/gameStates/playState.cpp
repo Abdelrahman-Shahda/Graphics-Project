@@ -1,10 +1,9 @@
 //
 // Created by Shaimaa on 11/29/2020.
 //
+#include <gameStates/gameState.hpp>
 
-#include <game_states/play_state.hpp>
-
-void play_state::onEnter() {
+void PlayState::onEnter() {
 	//Intializing resources
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
 	//Be r3ayet Shahoda el HACKER
@@ -20,8 +19,6 @@ void play_state::onEnter() {
 
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
 	material->addShaderParameter(tint);
-
-	//TODO:: set paramaters in material
 
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);

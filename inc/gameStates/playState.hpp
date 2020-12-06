@@ -1,22 +1,23 @@
 #ifndef GRAPHICSPROJECT_PLAY_STATE_HPP
 #define GRAPHICSPROJECT_PLAY_STATE_HPP
 
-#include <application.hpp>
-#include "game_state.hpp"
-#include <../inc/resources/shader.hpp>
-#include <../inc/components/flyCameraController.hpp>
-#include "../inc/components/camera.hpp"
-#include"../inc/components/transform.h"
-#include<systems/renderingSystem.hpp>
-#include"../inc/entity.hpp"
 #include <memory>
+
+#include <gameStates/gameState.hpp>
+#include <application.hpp>
+#include<entity.hpp>
+#include <components/flyCameraController.hpp>
+#include <components/camera.hpp>
+#include <components/transform.h>
+#include<systems/renderingSystem.hpp>
 #include<utils/mesh-utils.hpp>
 #include <resources/material.h>
+#include <resources/shader.hpp>
 
 
-class play_state : public game_state {
+class PlayState : public GameState {
 public:
-	play_state(Application* app) :game_state(app) {};
+	PlayState(Application* app) :game_state(app) {};
     std::vector <shared_ptr<Entity>> world;
     RenderingSystem renderingSystem;
 

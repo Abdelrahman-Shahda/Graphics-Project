@@ -7,12 +7,12 @@
 
 class Application;
 
-class game_state {
+class GameState {
 protected:
 	Application* applicationPtr;
 
 public:
-	game_state(Application * applicationPtr) : applicationPtr(applicationPtr) {};
+	GameState(Application * applicationPtr) : applicationPtr(applicationPtr) {};
     virtual void onEnter()=0;
     virtual void onDraw1()=0;
     virtual void onExit()=0;

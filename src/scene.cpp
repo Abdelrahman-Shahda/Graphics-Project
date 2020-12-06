@@ -2,7 +2,7 @@
 // Created by 20101 on 12/4/2020.
 //
 
-#include <scenes/Scene.h>
+#include <scene.h>
 
 bool Scene::addEntity(const std::shared_ptr<Entity> &newEntity) {
     entities.push_back(newEntity);

@@ -42,7 +42,9 @@ set(COMMON_SOURCES
 		src/resources/shader.cpp
 		src/game_states/game_state.cpp
 		src/game_states/play_state.cpp
-		src/utils/ComponentLookUp.cpp src/entity.cpp src/senes/scene.cpp)
+		src/utils/ComponentLookUp.cpp 
+		src/entity.cpp 
+		src/scene.cpp)
 
 # Define the directories in which to search for the included headers
 include_directories(
