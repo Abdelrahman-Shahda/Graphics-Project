@@ -41,11 +41,14 @@ glm::mat4 RenderingSystem::getCameraViewProjectionMatrix()
 
 void RenderingSystem::updateCameraPosition(double delta_time)
 {
-
+    ctptr->set_position(ccptr->getPosition());
+    glm::mat4 camPosition = ctptr->get_position();
+    glm::vec3 position (camPosition[0][3],camPosition[1][3],camPosition[2][3]);
+    cptr->setEyePosition(position);
  	//glm::vec4 direction = glm::vec4({ 0,0,-1,1 })*ctptr->get_transform();
 	//glm::vec4 up = glm::vec4({ 0,1,0,1 })*ctptr->get_transform();
     //glm::vec4 up = glm::vec4({ 0,1,0,1 });
-	//glm::mat4 camPosition = ctptr->get_position();
+
 	//glm::vec3 position((camPosition[0][3]/camPosition[3][3]), (camPosition[1][3]/camPosition[3][3]), (camPosition[2][3]/camPosition[3][3]));
     ccptr->update(delta_time);
 }
@@ -62,10 +65,10 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     cptr = cameraEntities[0]->getComp<Camera>();
     ctptr = cameraEntities[0]->getComp<Transform>();
     ccptr = cameraEntities[0]->getComp<FlyCameraController>();
-	//Getting view projection matrix of camera
-        this->updateCameraPosition(delta_time);
+      //Updating Camera position
+    this->updateCameraPosition(delta_time);
+    	//Getting view projection matrix of camera
 	glm::mat4 viewProjection =this->getCameraViewProjectionMatrix();
-    //Updating Camera position
 
 
 
