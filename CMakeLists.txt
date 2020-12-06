@@ -40,8 +40,7 @@ set(COMMON_SOURCES
 		src/components/transform.cpp
 		src/resources/material.cpp
 		src/resources/shader.cpp
-		src/game_states/game_state.cpp
-		src/game_states/play_state.cpp
+		src/gameStates/playState.cpp
 		src/utils/ComponentLookUp.cpp 
 		src/entity.cpp 
 		src/scene.cpp)

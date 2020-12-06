@@ -1,11 +1,9 @@
 #ifndef GRAPHICSPROJECT_PLAY_STATE_HPP
 #define GRAPHICSPROJECT_PLAY_STATE_HPP
 
-#include <memory>
-
 #include <gameStates/gameState.hpp>
 #include <application.hpp>
-#include<entity.hpp>
+
 #include <components/flyCameraController.hpp>
 #include <components/camera.hpp>
 #include <components/transform.h>
@@ -17,13 +15,11 @@
 
 class PlayState : public GameState {
 public:
-	PlayState(Application* app) :game_state(app) {};
-    std::vector <shared_ptr<Entity>> world;
-    RenderingSystem renderingSystem;
+	PlayState(Application* app) :GameState(app) {};
 
-	void onEnter();
-	void onDraw1();
-    void onExit(){
+	void onEnter() override;
+	void onDraw(double deltaTime) override;
+    void onExit() override {
     }
 };
 #endif

@@ -1,9 +1,12 @@
 //
 // Created by Shaimaa on 11/29/2020.
 //
-#include <gameStates/gameState.hpp>
+#include <gameStates/playState.hpp>
 
 void PlayState::onEnter() {
+	shared_ptr<RenderingSystem> RS(new RenderingSystem);
+	systems.push_back(RS);
+
 	//Intializing resources
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
 	//Be r3ayet Shahoda el HACKER
@@ -49,6 +52,7 @@ void PlayState::onEnter() {
 
 }
 
-void play_state::onDraw1() {
-	renderingSystem.Run(world,0.000500f);
+void PlayState::onDraw(double deltaTime) {
+	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
+		(*systemIterator)->Run(world, deltaTime);
 }

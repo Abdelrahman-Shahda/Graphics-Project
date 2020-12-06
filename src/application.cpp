@@ -216,16 +216,11 @@ int Application::run() {
         // Get the current time (the time at which we are starting the current frame).
         double current_frame_time = glfwGetTime();
 
-		
-        //Draw Current state
-        if (current_state != nullptr) {
-            current_state->onDraw1();
-        }
-
 
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
+		onDraw(current_frame_time - last_frame_time);
+		last_frame_time = current_frame_time; // Then update the last frame start time (this frame is now the last frame)
 
-        last_frame_time = current_frame_time; // Then update the last frame start time (this frame is now the last frame)
 
 #if defined(ENABLE_OPENGL_DEBUG_MESSAGES)
         // Since ImGui causes many messages to be thrown, we are temporarily disabling the debug messages till we render the ImGui
@@ -238,7 +233,8 @@ int Application::run() {
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 #endif
-		/*
+
+#ifdef SCREENSHOT
         // If F12 is pressed, take a screenshot
         if(keyboard.justPressed(GLFW_KEY_F12)){
             glViewport(0, 0, frame_buffer_size.x, frame_buffer_size.y);
@@ -253,7 +249,7 @@ int Application::run() {
             }
 			
         }
-		*/
+#endif
 
 		//Close program if escape key is pressed
 		if (keyboard.justPressed(GLFW_KEY_ESCAPE))
