@@ -21,8 +21,6 @@ void Material::passShaderParamters()
 {
 	for (auto iterator = this->shaderParameters.begin(); iterator != this->shaderParameters.end() ;iterator++)
 	{
-	    std::cout << "Shader Program "<< *iterator << " " << shaderPtr <<std::endl;
-
 		(*iterator)->setUinform(shaderPtr);
 	}
 }

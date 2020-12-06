@@ -2,13 +2,13 @@
 #define RENDERING___SYSTEM__H
 
 #include <systems/System.hpp>
+#include <entity.hpp>
 #include <memory>
 
 class RenderingSystem : public System 
 {
 	//Private Member functions
     void drawNode(const std::shared_ptr<Transform>& node, const glm::mat4& parent_transform_matrix);
-	glm::mat4 getCameraViewProjectionMatrix();
     void updateCameraPosition(double delta_time);
 
 	//Data Members
