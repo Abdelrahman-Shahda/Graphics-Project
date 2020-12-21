@@ -15,6 +15,7 @@
     private:
         Application* app;
         std::shared_ptr<Camera> camera;
+        std::shared_ptr<Transform> transform;
 
         float yaw, pitch;
         glm::vec3 position;
@@ -27,11 +28,12 @@
         bool mouse_locked = false;
 
     public:
-         FlyCameraController (std::weak_ptr<Entity> entity,Application* application,std::shared_ptr<Camera> camera) :Component(entity)
+         FlyCameraController (std::weak_ptr<Entity> entity,Application* application,std::shared_ptr<Camera> camera,std::shared_ptr<Transform> transform) :Component(entity)
 	{
 		type = CAMERACONTROLLER;
         this->app = application;
             this->camera = camera;
+            this->transform = transform;
             yaw_sensitivity = pitch_sensitivity = 0.01f;
             position_sensitivity = {3.0f, 3.0f, 3.0f};
             fov_sensitivity = glm::pi<float>()/10;
@@ -85,8 +87,10 @@
             if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * ((float)delta_time * current_sensitivity.x);
             if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * ((float)delta_time * current_sensitivity.x);
 
-            camera->setDirection(glm::vec3(glm::cos(yaw), 0, -glm::sin(yaw)) * glm::cos(pitch) + glm::vec3(0, glm::sin(pitch), 0));
-            camera->setEyePosition(position);
+            //camera->setDirection(glm::vec3(glm::cos(yaw), 0, -glm::sin(yaw)) * glm::cos(pitch) + glm::vec3(0, glm::sin(pitch), 0));
+            transform->set_position(position);
+            transform->set_rotation(glm::vec3(pitch,yaw,0));
+            //camera->setEyePosition(position);
         }
 
         [[nodiscard]] float getYaw() const {return yaw;}
