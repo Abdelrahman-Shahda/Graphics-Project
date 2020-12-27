@@ -52,7 +52,7 @@ void PlayState::onEnter() {
 	world.push_back(entity4);
 
 
-	//openGL rendering settings
+	//OpenGL Rendering Settings
 	glClearColor(0, 0, 0, 0);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
