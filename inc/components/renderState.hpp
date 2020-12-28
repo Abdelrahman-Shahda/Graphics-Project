@@ -1,26 +1,25 @@
-#ifndef GRAPHICSPROJECT_RENDER_SETTINGS_HPP
-#define GRAPHICSPROJECT_RENDER_SETTINGS_HPP
+#ifndef GRAPHICSPROJECT_RENDER_STATE_HPP
+#define GRAPHICSPROJECT_RENDER_STATE_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <components/component.h>
 
     // A class that represents render settings
-    class RenderSettings : public Component {
+    class RenderState : public Component {
     public:
     bool enable_depth_test = true;
     GLenum depth_function = GL_LEQUAL;
     bool enable_face_culling = true;
     GLenum culled_face = GL_BACK;
     GLenum front_face_winding = GL_CCW;
-
     bool enable_blending;
     GLenum blend_equation = GL_FUNC_ADD;
     GLenum blend_source_function = GL_SRC_ALPHA, blend_destination_function = GL_ONE_MINUS_SRC_ALPHA;
 
     glm::vec4 blend_constant_color = {1.0f,1.0f,1.0f,1.0f};
         //Default OpenGL Rendering Settings
-        RenderSettings(std::weak_ptr<Entity> entity,) :Component(entity)
+        RenderState(std::weak_ptr<Entity> entity,) :Component(entity)
 	    {
 		    type = RENDERSETTINGS;
         if(enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
@@ -54,4 +53,4 @@
 
     };
 
-#endif //GRAPHICSPROJECT_RENDERSETTINGS_HPP
+#endif //GRAPHICSPROJECT_RENDERSTATE_HPP
