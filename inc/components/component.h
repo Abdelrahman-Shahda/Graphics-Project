@@ -10,6 +10,7 @@ typedef enum{
 	TRANSFORM,
 	CAMERA,
 	CAMERACONTROLLER,
+	RENDERSETTINGS,
 	COUNT,
 } ComponentType;
 

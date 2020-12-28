@@ -21,10 +21,9 @@ void RenderingSystem::drawNode(const std::shared_ptr<Transform> &node , const gl
 
 void RenderingSystem::updateCameraPosition(double delta_time)
 {
-    ctptr->set_position(ccptr->getPosition());
-    glm::mat4 camPosition = ctptr->get_position();
-    glm::vec3 position (camPosition[0][3],camPosition[1][3],camPosition[2][3]);
-    cptr->setEyePosition(position);
+    cptr->setEyePosition(glm::vec3(ctptr->get_position()[3]));
+    cptr->setDirection(glm::vec4(0, 0, -1,0) * ctptr->get_transform());
+    cptr->setUp(glm::vec4(0,1,0,0) * ctptr->get_transform());
  	ccptr->update(delta_time);
 }
 
