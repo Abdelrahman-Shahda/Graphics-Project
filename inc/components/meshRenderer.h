@@ -2,7 +2,7 @@
 #define MESH__REDERER_H
 
 #include <memory>
-
+#include <iostream>
 #include <components/component.h>
 #include <resources/mesh.hpp>
 #include <resources/material.h>

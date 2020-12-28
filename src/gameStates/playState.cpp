@@ -9,8 +9,7 @@ void PlayState::onEnter() {
 
 	//Intializing resources
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
-	//Be r3ayet Shahoda el HACKER
-	shared_ptr<Resources::Vector4ShaderParamter> tint(new Resources::Vector4ShaderParamter("tint", glm::vec4(1, 1, 1, 1)));
+	shared_ptr<Resources::ShaderParameter<glm::vec4>> tint(new ShaderParameter<glm::vec4>("tint", {1,0,0,1}));
 	shaderProgram->create();
 	shaderProgram->attach(ASSETS_DIR"/shaders/transform.vert", GL_VERTEX_SHADER);
 	shaderProgram->attach(ASSETS_DIR "/shaders/tint.frag", GL_FRAGMENT_SHADER);

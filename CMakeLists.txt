@@ -32,16 +32,17 @@ set(VENDOR_SOURCES ${GLAD_SOURCE} ${IMGUI_SOURCES})
 # A variable with all our source files 
 set(COMMON_SOURCES
         src/application.cpp
-		src/components/component.cpp
-		src/systems/system.cpp
 		src/utils/mesh-utils.cpp
+		src/utils/ComponentLookUp.cpp 
+		src/systems/system.cpp
 		src/systems/renderingSystem.cpp
+		src/components/component.cpp
 		src/components/meshRenderer.cpp
 		src/components/transform.cpp
 		src/resources/material.cpp
 		src/resources/shader.cpp
+		src/resources/texture.cpp
 		src/gameStates/playState.cpp
-		src/utils/ComponentLookUp.cpp 
 		src/entity.cpp 
 		src/scene.cpp)
 
