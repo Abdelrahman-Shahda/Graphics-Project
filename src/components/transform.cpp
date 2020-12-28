@@ -21,6 +21,6 @@ void Transform::set_scale(glm::vec3 v) {scale=glm::scale(glm::mat4(1.0f),v);}
 void Transform::set_rotation(glm::vec3 v) {Rotation=glm::yawPitchRoll(v.y, v.x, v.z);}
 Transform * Transform::get_parent(){return parent;}
 std::vector<std::shared_ptr<Transform>> Transform::get_children(){return children;}
-glm::mat4 Transform::get_transform() {return position*scale*Rotation;}
+glm::mat4 Transform::get_transform() {return position*Rotation*scale;}
 glm::mat4 Transform::get_position() { return position;}
 
