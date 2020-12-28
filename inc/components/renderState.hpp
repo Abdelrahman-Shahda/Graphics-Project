@@ -21,7 +21,7 @@
         //Default OpenGL Rendering Settings
         RenderState(std::weak_ptr<Entity> entity,) :Component(entity)
 	    {
-		    type = RENDERSETTINGS;
+		    type = RENDERSTATE;
         if(enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
         glDepthFunc(depth_function);
 

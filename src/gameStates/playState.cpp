@@ -30,7 +30,7 @@ void PlayState::onEnter() {
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
-	std::shared_ptr<Transform> transformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 10 }, {0, 0, 0 }, { 1,1,1 });
+	std::shared_ptr<Transform> transformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 0, 0 }, {0, 0, 0 }, { 1,1,1 });
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,transformPtr);
 	world.push_back(mainCamera);
 
