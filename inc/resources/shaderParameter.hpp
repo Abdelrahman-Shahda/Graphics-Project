@@ -31,6 +31,6 @@ namespace Resources
 		}
 
 		void changeParameterValue(T value_) { value = value_; }
-		T getParameterValue() { return T; }
+		T getParameterValue() { return value; }
 	};
 }
