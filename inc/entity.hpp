@@ -56,7 +56,6 @@ std::shared_ptr<T> Entity::getComp(){
 
     if(hasComps<T>()){
         ComponentType type = ComponentLookUp::lookUp<T>();
-
         for(int i = 0; i < (int)comps.size(); i++){
             if(comps[i]->getType() == type)
                 return std::static_pointer_cast<T>(comps[i]);

@@ -11,7 +11,8 @@
 #include<utils/mesh-utils.hpp>
 #include <resources/material.h>
 #include <resources/shader.hpp>
-
+#include <components/lighting.h>
+#include <resources/texture.h>
 
 class PlayState : public GameState {
 public:

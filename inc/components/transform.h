@@ -28,6 +28,7 @@ public:
     void set_parent(Transform * transformComponent);
     glm::mat4 get_transform();
     glm::mat4 get_position();
+    glm::mat4 get_rotation();
     Transform* get_parent();
     std::vector<std::shared_ptr<Transform>> get_children();
 

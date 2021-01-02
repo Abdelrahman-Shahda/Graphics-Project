@@ -20,7 +20,7 @@ class RenderingSystem : public System
     std::shared_ptr<FlyCameraController> ccptr;
 
 public:
-    void Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time) override;
+    void Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time,std::shared_ptr<Entity> skyLight =NULL) override;
 };
 
 #endif // !RENDERING___SYSTEM__H

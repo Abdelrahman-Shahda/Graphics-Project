@@ -33,7 +33,7 @@ void Material::addShaderParameter(std::shared_ptr<ShaderParameterBaseClass> para
 	shaderParameters.push_back(param);
 }
 
-void Material::addTexture(std::shared_ptr<Texture> texturePtr)
+void Material::addTexture(std::shared_ptr<Texture> texturePtr, glm::vec3 tint)
 {
 	if (currentTextureUnit > maxTextureUnit)
 	{
@@ -44,10 +44,15 @@ void Material::addTexture(std::shared_ptr<Texture> texturePtr)
 	texturePtrs.push_back(texturePtr);
 
 	//add new shaderParam with same name
-	string paramName = texturePtr->name+"_map";
+	string paramName = "material."+texturePtr->name+"_map";
 	textShaderParameter* shaderParamPtr= new textShaderParameter(paramName, currentTextureUnit);
 	textureShaderParameters.push_back(shaderParamPtr);
 	currentTextureUnit++;
+    string tintParam = "material."+ texturePtr->name+"_tint";
+    ShaderParameter<glm::vec3>* tintParamPtr= new ShaderParameter<glm::vec3>(tintParam, tint);
+    textTintParameters.push_back(tintParamPtr);
+    currentTextureUnit++;
+
 }
 
 void Material::passTexturesToShader()
@@ -57,7 +62,9 @@ void Material::passTexturesToShader()
 	{
 		texturePtrs[index]->useTexture(GL_TEXTURE0+ index);
 		textureShaderParameters[index]->setUinform(shaderPtr);
+		textTintParameters[index]->setUinform(shaderPtr);
 	}
+
 }
 
 bool Material::setShaderParameter(string name)

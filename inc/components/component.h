@@ -11,8 +11,10 @@ typedef enum{
 	CAMERA,
 	CAMERACONTROLLER,
 	RENDERSTATE,
+	LIGHT,
+	SKYLIGHT,
 	COUNT,
-} ComponentType;
+}  ComponentType;
 
 
 class Entity;

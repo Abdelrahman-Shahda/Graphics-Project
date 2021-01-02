@@ -11,10 +11,8 @@ void PlayState::onEnter() {
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
 	shared_ptr<Resources::ShaderParameter<glm::vec4>> tint(new ShaderParameter<glm::vec4>("tint", {1,0,0,1}));
 	shaderProgram->create();
-	shaderProgram->attach(ASSETS_DIR"/shaders/transform.vert", GL_VERTEX_SHADER);
-	shaderProgram->attach(ASSETS_DIR "/shaders/tint.frag", GL_FRAGMENT_SHADER);
-	//shaderProgram->attach(ASSETS_DIR"/shaders/multiple_attributes.vert", GL_VERTEX_SHADER);
-    //shaderProgram->attach(ASSETS_DIR"/shaders/varying_color.frag", GL_FRAGMENT_SHADER);
+	shaderProgram->attach(ASSETS_DIR"/shaders/light_transform.vert", GL_VERTEX_SHADER);
+	shaderProgram->attach(ASSETS_DIR "/shaders/light_array.frag", GL_FRAGMENT_SHADER);
 	shaderProgram->link();
 	shared_ptr<Mesh> meshPtr1(new Mesh);
 	shared_ptr<Mesh> meshPtr2(new Mesh);
@@ -24,7 +22,16 @@ void PlayState::onEnter() {
 	MeshUtils::Sphere(*meshPtr2);
 	MeshUtils::loadOBJ(*meshPtr3,ASSETS_DIR"/models/Batman/batman.obj");
 
+	//Initializing Textures
+	shared_ptr<Resources::Texture> albedoTexture(new Texture("albedo",ASSETS_DIR"/image/material/albedo.jpg"));
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
+	material->addTexture(albedoTexture);
+
+    shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/specular.jpg"));
+    material->addTexture(specularTexture);
+
+    shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/emissive.jpg"));
+    material->addTexture(emissiveTexture);
 	material->addShaderParameter(tint);
 
 	//Intializing Camera component
@@ -51,8 +58,32 @@ void PlayState::onEnter() {
 	world.push_back(entity3);
 	world.push_back(entity4);
 
+	//Testing light
+//    shared_ptr<Entity> directionalLight(new Entity);
+//    directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  3 }, { 1,1,1});
+//    directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.8, 0.2}, true,0.0f,0.0f,0.0f,0.0f,0.0f);
 
-	//OpenGL Rendering Settings
+    shared_ptr<Entity> pointLight(new Entity);
+    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 5, 5, 5 }, { -1, -1,  -1 }, { 1,1,1});
+    pointLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::SPOT,{0.2, 1, 0.5}, true,0.2,0,0.0,0.78539816339,1.57079632679);
+
+//    world.push_back(directionalLight);
+    world.push_back(pointLight);
+
+    shared_ptr<Entity> skyTest(new Entity);
+    skyTest->addComp<SkyLight,bool,glm::vec3,glm::vec3,glm::vec3>(true,{0.25, 0.3, 0.5},{0.35, 0.35, 0.4},{0.25, 0.25, 0.25});
+    shared_ptr< Resources::ShaderProgram> skyProgram(new Resources::ShaderProgram);
+    skyProgram->create();
+    skyProgram->attach(ASSETS_DIR"/shaders/sky_transform.vert", GL_VERTEX_SHADER);
+    skyProgram->attach(ASSETS_DIR "/shaders/sky.frag", GL_FRAGMENT_SHADER);
+    skyProgram->link();
+    shared_ptr<Mesh> skyMesh(new Mesh);
+
+    shared_ptr<Resources::Material> skyMaterial(new Material(skyProgram));
+    MeshUtils::Cuboid(*skyMesh);
+    skyTest->addComp<MeshRenderer,shared_ptr<Mesh>, shared_ptr<Resources::Material>>(skyMesh, skyMaterial);
+    skyLight =skyTest;
+    //OpenGL Rendering Settings
 	glClearColor(0, 0, 0, 0);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -64,5 +95,5 @@ void PlayState::onEnter() {
 
 void PlayState::onDraw(double deltaTime) {
 	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
-		(*systemIterator)->Run(world, deltaTime);
+		(*systemIterator)->Run(world, deltaTime, skyLight);
 }

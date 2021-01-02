@@ -16,7 +16,7 @@ protected:
 	Application* applicationPtr;
 	std::vector <shared_ptr<Entity>> world;
 	std::vector<shared_ptr<System>> systems;
-
+    shared_ptr<Entity> skyLight = NULL;
 public:
 	GameState(Application * applicationPtr) : applicationPtr(applicationPtr) {};
     virtual void onEnter()=0;

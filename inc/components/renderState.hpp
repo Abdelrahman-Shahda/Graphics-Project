@@ -19,7 +19,7 @@
 
     glm::vec4 blend_constant_color = {1.0f,1.0f,1.0f,1.0f};
         //Default OpenGL Rendering Settings
-        RenderState(std::weak_ptr<Entity> entity,) :Component(entity)
+        RenderState(std::weak_ptr<Entity> entity) :Component(entity)
 	    {
 		    type = RENDERSTATE;
         if(enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);

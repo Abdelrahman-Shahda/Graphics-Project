@@ -19,7 +19,7 @@ namespace Resources {
 
 		std::shared_ptr<ShaderProgram> shaderPtr;
 		std::vector<std::shared_ptr<ShaderParameterBaseClass>> shaderParameters;
-
+        std::vector<ShaderParameter<glm::vec3>*> textTintParameters;
 		std::vector<textShaderParameter*> textureShaderParameters;
 		std::vector< std::shared_ptr<Texture>> texturePtrs;
 
@@ -37,7 +37,7 @@ namespace Resources {
 		bool setShaderParameter(string name);
 
 		//Textures
-		void addTexture(std::shared_ptr<Texture>);
+		void addTexture(std::shared_ptr<Texture>, glm::vec3 tint = {1.0f, 1.0f, 1.0f});
 		void passTexturesToShader();
 	};
 

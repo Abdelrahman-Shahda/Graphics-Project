@@ -27,20 +27,81 @@ void RenderingSystem::updateCameraPosition(double delta_time)
  	ccptr->update(delta_time);
 }
 
-void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time){
+void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time,std::shared_ptr<Entity> skyLight ){
 
     //Get enitities with mesh Component to render them
     std::vector<std::shared_ptr<Entity>> meshEntities = this->getEntitiesWithComponents<MeshRenderer, Transform>(entities);
+
     //Get camera Entities
     std::vector<std::shared_ptr<Entity>> cameraEntities = this->getEntitiesWithComponents<Camera, Transform, FlyCameraController>(entities);
 
+    //Get lights componet
+    std::vector<std::shared_ptr<Entity>> lights = this->getEntitiesWithComponents<Light, Transform>(entities);
+
+    std::shared_ptr<SkyLight> sky_light = NULL;
+    if(skyLight != NULL){
+        sky_light = skyLight->getComp<SkyLight>();
+    }
     //Taking the main camera which is the first index in the array
     cptr = cameraEntities[0]->getComp<Camera>();
     ctptr = cameraEntities[0]->getComp<Transform>();
     ccptr = cameraEntities[0]->getComp<FlyCameraController>();
+
     //Updating Camera position and Getting view Projection
     this->updateCameraPosition(delta_time);
 	glm::mat4 viewProjection = cptr->getVPMatrix();
+
+
+    for(int i=0; i<meshEntities.size(); i++){
+
+        std::shared_ptr<MeshRenderer> meshRenderer= meshEntities[i]->getComp<MeshRenderer>();
+        std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
+        std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
+        glUseProgram(*shaderProgram);
+        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
+        shaderProgram->set("view_projection",viewProjection);
+        shaderProgram->set("sky_light.top_color", sky_light!=NULL&&sky_light->enabled ? sky_light->top_color : glm::vec3(0.0f));
+        shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
+        shaderProgram->set("sky_light.bottom_color", sky_light!=NULL&&sky_light->enabled ? sky_light->bottom_color : glm::vec3(0.0f));
+        // We will go through all the lights and send the enabled ones to the shader.
+        int light_index = 0;
+        const int MAX_LIGHT_COUNT = 16;
+        for(const auto& lightEntity : lights) {
+            std::shared_ptr<Light> light = lightEntity->getComp<Light>();
+            std::shared_ptr<Transform> lightTransform = lightEntity->getComp<Transform>();
+            if(!light->enabled) continue;
+            std::string prefix = "lights[" + std::to_string(light_index) + "].";
+
+            shaderProgram->set(prefix + "type", static_cast<int>(light->lightType));
+            shaderProgram->set(prefix + "color", light->color);
+
+            switch (light->lightType) {
+                case LightType::DIRECTIONAL:
+                    shaderProgram->set(prefix + "direction", glm::normalize(glm::vec3(lightTransform->get_rotation()[0])));
+                    break;
+                case LightType::POINT:
+                    shaderProgram->set(prefix + "position", glm::vec3(lightTransform->get_position()[3]));
+                    shaderProgram->set(prefix + "attenuation_constant", light->attenuation.constant);
+                    shaderProgram->set(prefix + "attenuation_linear", light->attenuation.linear);
+                    shaderProgram->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
+                    break;
+                case LightType::SPOT:
+                    shaderProgram->set(prefix + "position", glm::vec3(lightTransform->get_position()[3]));
+                    shaderProgram->set(prefix + "direction", glm::vec3(lightTransform->get_rotation()[0]));
+                    shaderProgram->set(prefix + "attenuation_constant", light->attenuation.constant);
+                    shaderProgram->set(prefix + "attenuation_linear", light->attenuation.linear);
+                    shaderProgram->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
+                    shaderProgram->set(prefix + "inner_angle", light->spot_angle.inner);
+                    shaderProgram->set(prefix + "outer_angle", light->spot_angle.outer);
+                    break;
+            }
+            light_index++;
+            if(light_index >= MAX_LIGHT_COUNT) break;
+            // Since the light array in the shader has a constant size, we need to tell the shader how many lights we sent.
+
+        }
+        shaderProgram->set("light_count", light_index);
+    }
 
 	//Start Drawing the screen
 	//clear screen to draw next frame
@@ -53,7 +114,22 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         std:: shared_ptr<Transform> tptr = meshEntities[x]->getComp<Transform>();
 		//Call this recursive function only on parent nodes
         if(tptr->get_parent() == nullptr)
-            this->drawNode(tptr,viewProjection);
+            this->drawNode(tptr,glm::mat4(1.0f));
     }
 
+    if(sky_light!=NULL){
+        std::shared_ptr<MeshRenderer> meshRenderer= skyLight->getComp<MeshRenderer>();
+        std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
+        std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
+        glUseProgram(*shaderProgram);
+        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
+        shaderProgram->set("view_projection",viewProjection);
+        shaderProgram->set("sky_light.top_color", sky_light!=NULL&&sky_light->enabled ? sky_light->top_color : glm::vec3(0.0f));
+        shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
+        shaderProgram->set("sky_light.bottom_color", sky_light!=NULL&&sky_light->enabled ? sky_light->bottom_color : glm::vec3(0.0f));
+        shaderProgram->set("exposure", 2.0f);
+        glCullFace(GL_FRONT);
+        meshRenderer->renderMesh(glm::mat4(0.0f));
+        glCullFace(GL_BACK);
+    }
 }

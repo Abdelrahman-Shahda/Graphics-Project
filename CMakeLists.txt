@@ -44,7 +44,7 @@ set(COMMON_SOURCES
 		src/resources/texture.cpp
 		src/gameStates/playState.cpp
 		src/entity.cpp 
-		src/scene.cpp)
+		src/scene.cpp src/components/lighting.cpp src/components/skylight.cpp)
 
 # Define the directories in which to search for the included headers
 include_directories(

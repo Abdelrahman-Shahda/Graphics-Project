@@ -10,4 +10,7 @@ void ComponentLookUp::setUpMap() {
     ComponentLookUp::lookUpMap[typeid(FlyCameraController)] = ComponentType::CAMERACONTROLLER;
     ComponentLookUp::lookUpMap[typeid(MeshRenderer)] = ComponentType:: MESH_RENDERER;
     ComponentLookUp::lookUpMap[typeid(Transform)] = ComponentType::TRANSFORM;
+    ComponentLookUp::lookUpMap[typeid(RenderState)] = ComponentType::RENDERSTATE;
+    ComponentLookUp::lookUpMap[typeid(Light)] = ComponentType::LIGHT;
+    ComponentLookUp::lookUpMap[typeid(SkyLight)] = ComponentType::SKYLIGHT;
 }

@@ -24,3 +24,4 @@ std::vector<std::shared_ptr<Transform>> Transform::get_children(){return childre
 glm::mat4 Transform::get_transform() {return position*Rotation*scale;}
 glm::mat4 Transform::get_position() { return position;}
 
+glm::mat4 Transform::get_rotation() { return Rotation;}

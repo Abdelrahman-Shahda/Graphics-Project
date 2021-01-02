@@ -11,7 +11,11 @@ void MeshRenderer::renderMesh(glm::mat4 transform_matrix)
 {
 	std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
 	glUseProgram(*shaderProgram);
-    shaderProgram->set("transform", transform_matrix);
-	materialPtr->setShaderParameter("tint");
+    shaderProgram->set("object_to_world_inv_transpose", glm::inverse(transform_matrix), true);
+    shaderProgram->set("object_to_world", transform_matrix);
+	materialPtr->passTexturesToShader();
 	meshPtr->draw();
 }
+shared_ptr<Material> MeshRenderer::getMaterial() {
+    return materialPtr;
+};

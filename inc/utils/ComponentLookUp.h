@@ -6,7 +6,9 @@
 #include <components/camera.hpp>
 #include <components/flyCameraController.hpp>
 #include <components/meshRenderer.h>
-
+#include <components/lighting.h>
+#include "components/skyLight.h"
+#include <components/renderState.hpp>
 
 #include <unordered_map>
 #include <typeindex>

@@ -4,6 +4,8 @@
 #include <string>
 #include <glad/gl.h>
 #include <glm/vec2.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <string>
 
@@ -18,7 +20,7 @@ namespace Resources
 
 	public:
 		string name;
-		Texture(string name, const char* path,bool generate_mipmap);
+		Texture(string name, const char* path,bool generate_mipmap = true);
 		~Texture();
 		void useTexture(GLuint);
 	};
