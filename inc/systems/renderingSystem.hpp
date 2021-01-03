@@ -8,6 +8,18 @@ struct RenderObjects {
     std::shared_ptr<MeshRenderer> meshRenderer;
     float distance;
     glm::mat4 transform_matrix;
+
+    bool operator<(const RenderObjects& other) const {
+        std::shared_ptr<RenderState> myRenderState = meshRenderer->getEntity()->getComp<RenderState>();
+        std::shared_ptr<RenderState> otherRenderState = other.meshRenderer->getEntity()->getComp<RenderState>();
+
+        // Let opaque objects be drawn before the transparent ones
+        if(myRenderState->enable_blending != otherRenderState->enable_blending) return myRenderState->enable_blending < otherRenderState->enable_blending;
+            // If both are transparent, sort from farthest to nearest
+        else if(myRenderState->enable_blending) return distance > other.distance;
+            // If both are opaque, sort from nearest to farthest
+        else return distance < other.distance;
+    }
 };
 class RenderingSystem : public System 
 {
