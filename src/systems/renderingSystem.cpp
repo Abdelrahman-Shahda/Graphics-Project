@@ -171,7 +171,5 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         skyLight->getComp<RenderState>()->culled_face=GL_FRONT; 
         skyLight->getComp<RenderState>()->update();
         meshRenderer->renderMesh(glm::mat4(0.0f));
-        skyLight->getComp<RenderState>()->culled_face=GL_BACK; 
-        skyLight->getComp<RenderState>()->update();
     }
 }
