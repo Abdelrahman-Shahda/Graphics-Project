@@ -168,8 +168,10 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
         shaderProgram->set("sky_light.bottom_color", sky_light!=NULL&&sky_light->enabled ? sky_light->bottom_color : glm::vec3(0.0f));
         shaderProgram->set("exposure", 2.0f);
-        glCullFace(GL_FRONT);
+        skyLight->getComp<RenderState>()->culled_face=GL_FRONT; 
+        skyLight->getComp<RenderState>()->update();
         meshRenderer->renderMesh(glm::mat4(0.0f));
-        glCullFace(GL_BACK);
+        skyLight->getComp<RenderState>()->culled_face=GL_BACK; 
+        skyLight->getComp<RenderState>()->update();
     }
 }

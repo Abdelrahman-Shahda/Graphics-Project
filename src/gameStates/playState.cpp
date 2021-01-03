@@ -59,7 +59,7 @@ void PlayState::onEnter() {
 
 	entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material2);
 	entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10,10, 8 }, { 0, 0,  0 }, { 1,1,1});
-    entity2->addComp<RenderState>( );
+    entity2->addComp<RenderState>();
 	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
 	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 5, 10, 8 }, { 0, 0, 0 }, { 1, 1,  1 });
     entity3->addComp<RenderState,bool>(true);
@@ -85,6 +85,7 @@ void PlayState::onEnter() {
     shared_ptr<Entity> skyTest(new Entity);
     skyTest->addComp<SkyLight,bool,glm::vec3,glm::vec3,glm::vec3>(true,{0.25, 0.3, 0.5},{0.35, 0.35, 0.4},{0.25, 0.25, 0.25});
     shared_ptr< Resources::ShaderProgram> skyProgram(new Resources::ShaderProgram);
+	skyTest->addComp<RenderState>();
     skyProgram->create();
     skyProgram->attach(ASSETS_DIR"/shaders/sky_transform.vert", GL_VERTEX_SHADER);
     skyProgram->attach(ASSETS_DIR "/shaders/sky.frag", GL_FRAGMENT_SHADER);
@@ -95,13 +96,7 @@ void PlayState::onEnter() {
     MeshUtils::Cuboid(*skyMesh);
     skyTest->addComp<MeshRenderer,shared_ptr<Mesh>, shared_ptr<Resources::Material>>(skyMesh, skyMaterial);
     skyLight =skyTest;
-    //OpenGL Rendering Settings
-	glClearColor(0, 0, 0, 0);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
+
 
 }
 
