@@ -89,13 +89,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         if(tptr->get_parent() == nullptr)
             this->calculateDistance(objects,tptr,glm::mat4(1.0f),viewProjection);
     }
-    //Calculate distance
-    for(int i = 0 ; i< meshRenderers.size(); i++){
-        meshRenderers[i]->setDepth(
-                abs(glm::distance(meshRenderers[i]->getEntity()->getComp<Transform>()->get_position()[3],
-                              ctptr->get_position()[3])));
-
-    }
+    std::sort(std::begin(objects), std::end(objects));
 
     for(int i=0; i<meshRenderers.size(); i++){
 
@@ -161,7 +155,8 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
 //    }
     for (unsigned int x = 0; x < objects.size(); ++x)
 	{
-        std::cout<< "Depth"<< objects[x].distance<< std::endl;
+        std::cout<< "ID:"<< objects[x].meshRenderer->getEntity()->getId()<<" "<< x <<std::endl;
+        objects[x].meshRenderer->getEntity()->getComp<RenderState>()->update();
         objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
     }
     if(sky_light!=NULL){

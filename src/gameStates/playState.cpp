@@ -50,12 +50,13 @@ void PlayState::onEnter() {
 
 	entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material);
 	entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10,10, 8 }, { 0, 0,  0 }, { 1,1,1});
-
+    entity2->addComp<RenderState>( );
 	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
 	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 5, 10, 8 }, { 0, 0, 0 }, { 1, 1,  1 });
-
+    entity3->addComp<RenderState,bool>(true);
 	entity4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr3, material);
 	entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 15, 10, 8 }, {0, 0, 0 }, { 1, 1, 1 });
+    entity4->addComp<RenderState>();
 	world.push_back(entity2);
 	world.push_back(entity3);
 	world.push_back(entity4);
