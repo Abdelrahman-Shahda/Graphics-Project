@@ -91,7 +91,6 @@ void PlayState::onEnter() {
 
     shared_ptr<Entity> skyTest(new Entity);
     skyTest->addComp<SkyLight,bool,glm::vec3,glm::vec3,glm::vec3>(true,{0.25, 0.3, 0.5},{0.35, 0.35, 0.4},{0.25, 0.25, 0.25});
-    shared_ptr< Resources::ShaderProgram> skyProgram(new Resources::ShaderProgram);
 	skyTest->addComp<RenderState>();
     skyProgram->create();
     skyProgram->attach(ASSETS_DIR"/shaders/sky_transform.vert", GL_VERTEX_SHADER);
