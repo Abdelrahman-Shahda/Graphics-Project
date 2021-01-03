@@ -47,11 +47,13 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::ShaderParameter<glm::vec3>> skyLightTopColor(new ShaderParameter<glm::vec3>("sky_light.top_color", skyLightComponent != NULL && skyLightComponent->enabled ? skyLightComponent->top_color : glm::vec3(0.0f)));
 	shared_ptr<Resources::ShaderParameter<glm::vec3>> skyLightMiddleColor(new ShaderParameter<glm::vec3>("sky_light.middle_color", skyLightComponent != NULL && skyLightComponent->enabled ? skyLightComponent->middle_color : glm::vec3(0.0f)));
 	shared_ptr<Resources::ShaderParameter<glm::vec3>> skyLightBottomColor(new ShaderParameter<glm::vec3>("sky_light.bottom_color", skyLightComponent != NULL && skyLightComponent->enabled ? skyLightComponent->bottom_color : glm::vec3(0.0f)));
+	shared_ptr<Resources::ShaderParameter<float>> skyExposure(new ShaderParameter<float>("exposure", 2.0f));
 
-	//Adding colors parameters to sky light entity
+	//Adding parameters to sky light entity
 	skyMaterial->addShaderParameter(skyLightTopColor);
 	skyMaterial->addShaderParameter(skyLightBottomColor);
 	skyMaterial->addShaderParameter(skyLightMiddleColor);
+	skyMaterial->addShaderParameter(skyExposure);
 
 	//Textures & Samplers
 	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());

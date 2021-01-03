@@ -58,7 +58,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     this->updateCameraPosition(delta_time);
 	glm::mat4 viewProjection = cptr->getVPMatrix();
 
-	//Creating rendering objects and arranging them according distance 
+	//Creating rendering objects and arranging them according distance
 	std::vector<RenderObjects> objects;
     for (unsigned int x = 0; x < meshRenderers.size(); ++x)
     {
@@ -69,7 +69,38 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     }
     std::sort(std::begin(objects), std::end(objects));
 
-	// Setting shader parameter for each shader
+    this->setLightParamters(meshRenderers,glm::vec3(ctptr->get_position()[3]),viewProjection,sky_light,lights);
+
+	//Start Drawing the screen
+	//clear screen to draw next frame
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //Looping on entities to draw the from parent to children nodes
+    for (unsigned int x = 0; x < objects.size(); ++x)
+	{
+        objects[x].meshRenderer->getEntity()->getComp<RenderState>()->update();
+        objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
+    }
+
+	//Drawing sky light
+    if(sky_light!=NULL){
+        std::shared_ptr<MeshRenderer> meshRenderer= skyLight->getComp<MeshRenderer>();
+        std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
+        std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
+        glUseProgram(*shaderProgram);
+        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
+        shaderProgram->set("view_projection",viewProjection);
+        skyLight->getComp<RenderState>()->culled_face=GL_FRONT;
+        skyLight->getComp<RenderState>()->update();
+        meshRenderer->renderMesh(glm::mat4(0.0f));
+    }
+}
+
+
+void RenderingSystem::setLightParamters(const std::vector<std::shared_ptr<MeshRenderer>> &meshRenderers, glm::vec3 cameraPosition,
+                                        glm::mat4 viewProjection, std::shared_ptr<SkyLight> sky_light,const  std::vector<std::shared_ptr<Entity>> &lights) {
+
     for(int i=0; i<meshRenderers.size(); i++){
 
         std::shared_ptr<Material> materialPtr = meshRenderers[i]->getMaterial();
@@ -115,29 +146,5 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         }
         shaderProgram->set("light_count", light_index);
     }
-	//Start Drawing the screen
-	//clear screen to draw next frame
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//Drawing entities
-    for (unsigned int x = 0; x < objects.size(); ++x)
-	{
-        objects[x].meshRenderer->getEntity()->getComp<RenderState>()->update();
-        objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
-    }
-
-	//Drawing skylight as a background
-    if(sky_light!=NULL){
-        std::shared_ptr<MeshRenderer> meshRenderer= skyLight->getComp<MeshRenderer>();
-        std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
-        std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
-        glUseProgram(*shaderProgram);
-        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
-        shaderProgram->set("view_projection",viewProjection);
-        shaderProgram->set("exposure", 2.0f);
-        skyLight->getComp<RenderState>()->culled_face=GL_FRONT; 
-        skyLight->getComp<RenderState>()->update();
-        meshRenderer->renderMesh(glm::mat4(0.0f));
-    }
 }

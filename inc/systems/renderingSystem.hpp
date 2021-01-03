@@ -23,12 +23,13 @@ struct RenderObjects {
         else return distance < other.distance;
     }
 };
+
 class RenderingSystem : public System 
 {
 	//Private Member functions
     void calculateDistance(std::vector<RenderObjects>& objects,const std::shared_ptr<Transform>& node, const glm::mat4& parent_transform_matrix, const glm::mat4& cameraVPMatrix);
     void updateCameraPosition(double delta_time);
-
+    void setLightParamters(const std::vector<std::shared_ptr<MeshRenderer>>& meshRenderers, glm::vec3 cameraPosition,glm::mat4 viewProjection,std::shared_ptr<SkyLight> sky_light,const  std::vector<std::shared_ptr<Entity>> &lights);
 	//Data Members
     std::shared_ptr<MeshRenderer> mcptr;
     std::shared_ptr<Transform> mtptr;

@@ -217,7 +217,6 @@ void MeshUtils::Sphere(Mesh& mesh, const glm::ivec2& segments, bool colored,
             glm::vec3 position = radius * normal + center;
             glm::vec2 tex_coords = texture_tiling * glm::vec2(u, v) + texture_offset;
             Color color = colored ? Color(127.5f * (normal + 1.0f), 255) : WHITE;
-            color.w = 0.3;
             vertices.push_back({position, color, tex_coords, normal});
         }
     }
