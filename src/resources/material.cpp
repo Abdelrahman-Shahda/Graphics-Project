@@ -2,12 +2,13 @@
 
 using namespace Resources;
 
-Material::Material(std::shared_ptr <ShaderProgram> shaderPtr) :shaderPtr(shaderPtr)
+Material::Material(std::shared_ptr <ShaderProgram> shaderPtr, bool trans) :shaderPtr(shaderPtr)
 {
 	//get max number of texture units
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnit);
 
 	currentTextureUnit = 0;
+	transparent = trans;
 	this->shaderPtr = shaderPtr;
 }
 

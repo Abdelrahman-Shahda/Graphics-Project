@@ -18,12 +18,36 @@ void RenderingSystem::drawNode(const std::shared_ptr<Transform> &node , const gl
         drawNode(childern[i],transform_matrix);
     }
  }
+void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, const std::shared_ptr<Transform> &node,
+                                        const glm::mat4 &parent_transform_matrix,const glm::mat4& cameraVPMatrix) {
+
+    //getting current entity
+    std::shared_ptr<Entity> entity = node->getEntity();
+
+    std::shared_ptr<MeshRenderer> meshRenderer = entity->getComp<MeshRenderer>();
+
+    glm::mat4 transform_matrix = parent_transform_matrix * node->get_transform();
+    glm::vec4 transformed_origin = cameraVPMatrix* transform_matrix * glm::vec4(0, 0, 0, 1);
+    float depth = transformed_origin.z / transformed_origin.w;
+    objects.push_back({
+        meshRenderer,
+        depth,
+        transform_matrix,
+    });
+    //Calling function on children of current entity
+    std::vector<std::shared_ptr<Transform>> childern = node->get_children();
+    for(int i =0;i<childern.size();i++){
+        calculateDistance(objects,childern[i],transform_matrix,cameraVPMatrix);
+    }
+}
 
 void RenderingSystem::updateCameraPosition(double delta_time)
 {
     cptr->setEyePosition(glm::vec3(ctptr->get_position()[3]));
-    cptr->setDirection(glm::vec4(0, 0, -1,0) * ctptr->get_transform());
-    cptr->setUp(glm::vec4(0,1,0,0) * ctptr->get_transform());
+    //cptr->setDirection(glm::vec3(-1,-1,-1)*glm::vec3(ctptr->get_transform()[2]));
+    //cptr->setUp(glm::vec3(ctptr->get_transform()[1]));
+     cptr->setDirection(glm::vec3(ctptr->get_rotation()[0]));
+    cptr->setUp(cptr->Up());
  	ccptr->update(delta_time);
 }
 
@@ -38,6 +62,10 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     //Get lights componet
     std::vector<std::shared_ptr<Entity>> lights = this->getEntitiesWithComponents<Light, Transform>(entities);
 
+
+    //Get meshRenderers
+    std::vector<std::shared_ptr<MeshRenderer>> meshRenderers = this->getComponentVector<MeshRenderer>(entities);
+
     std::shared_ptr<SkyLight> sky_light = NULL;
     if(skyLight != NULL){
         sky_light = skyLight->getComp<SkyLight>();
@@ -51,11 +79,28 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     this->updateCameraPosition(delta_time);
 	glm::mat4 viewProjection = cptr->getVPMatrix();
 
+	//Create M
+	std::vector<RenderObjects> objects;
 
-    for(int i=0; i<meshEntities.size(); i++){
+    for (unsigned int x = 0; x < meshRenderers.size(); ++x)
+    {
+        std:: shared_ptr<Transform> tptr = meshRenderers[x]->getEntity()->getComp<Transform>();
+        //Call this recursive function only on parent nodes
+        if(tptr->get_parent() == nullptr)
+            this->calculateDistance(objects,tptr,glm::mat4(1.0f),viewProjection);
+    }
+    //Calculate distance
+    for(int i = 0 ; i< meshRenderers.size(); i++){
+        meshRenderers[i]->setDepth(
+                abs(glm::distance(meshRenderers[i]->getEntity()->getComp<Transform>()->get_position()[3],
+                              ctptr->get_position()[3])));
 
-        std::shared_ptr<MeshRenderer> meshRenderer= meshEntities[i]->getComp<MeshRenderer>();
-        std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
+    }
+
+    for(int i=0; i<meshRenderers.size(); i++){
+
+
+        std::shared_ptr<Material> materialPtr = meshRenderers[i]->getMaterial();
         std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
         glUseProgram(*shaderProgram);
         shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
@@ -74,10 +119,9 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
 
             shaderProgram->set(prefix + "type", static_cast<int>(light->lightType));
             shaderProgram->set(prefix + "color", light->color);
-
             switch (light->lightType) {
                 case LightType::DIRECTIONAL:
-                    shaderProgram->set(prefix + "direction", glm::normalize(glm::vec3(lightTransform->get_rotation()[0])));
+                    shaderProgram->set(prefix + "direction", glm::normalize(lightTransform->get_rotation_vec()));
                     break;
                 case LightType::POINT:
                     shaderProgram->set(prefix + "position", glm::vec3(lightTransform->get_position()[3]));
@@ -87,7 +131,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
                     break;
                 case LightType::SPOT:
                     shaderProgram->set(prefix + "position", glm::vec3(lightTransform->get_position()[3]));
-                    shaderProgram->set(prefix + "direction", glm::vec3(lightTransform->get_rotation()[0]));
+                    shaderProgram->set(prefix + "direction", glm::vec3(lightTransform->get_rotation_vec()));
                     shaderProgram->set(prefix + "attenuation_constant", light->attenuation.constant);
                     shaderProgram->set(prefix + "attenuation_linear", light->attenuation.linear);
                     shaderProgram->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
@@ -102,21 +146,24 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         }
         shaderProgram->set("light_count", light_index);
     }
-
 	//Start Drawing the screen
 	//clear screen to draw next frame
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Looping on entities to draw the from parent to children nodes
-    for (unsigned int x = 0; x < meshEntities.size(); ++x)
+//    for (unsigned int x = 0; x < meshEntities.size(); ++x)
+//	{
+//        std:: shared_ptr<Transform> tptr = meshEntities[x]->getComp<Transform>();
+//		//Call this recursive function only on parent nodes
+//        if(tptr->get_parent() == nullptr)
+//            this->drawNode(tptr,glm::mat4(1.0f));
+//    }
+    for (unsigned int x = 0; x < objects.size(); ++x)
 	{
-        std:: shared_ptr<Transform> tptr = meshEntities[x]->getComp<Transform>();
-		//Call this recursive function only on parent nodes
-        if(tptr->get_parent() == nullptr)
-            this->drawNode(tptr,glm::mat4(1.0f));
+        std::cout<< "Depth"<< objects[x].distance<< std::endl;
+        objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
     }
-
     if(sky_light!=NULL){
         std::shared_ptr<MeshRenderer> meshRenderer= skyLight->getComp<MeshRenderer>();
         std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();

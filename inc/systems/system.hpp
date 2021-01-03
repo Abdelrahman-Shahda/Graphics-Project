@@ -15,6 +15,9 @@ protected:
 
     template<class T, class ... rest>
     std::vector<std::shared_ptr<Entity>> getEntitiesWithComponents(const std::vector<std::shared_ptr<Entity>> &entities);
+
+    template<class T>
+    std::vector<std::shared_ptr<T>> getComponentVector(const std::vector<std::shared_ptr<Entity>> &entities);
 };
 
 template<class T>
@@ -30,7 +33,19 @@ std::vector<std::shared_ptr<Entity>> System::getEntitiesWithComponent(const std:
     }
     return temp;
 }
+template<class T>
+std::vector<std::shared_ptr<T>> System::getComponentVector(const std::vector<std::shared_ptr<Entity>> &entities){
+    std::vector<std::shared_ptr<T>> temp;
+    for (unsigned int x = 0; x < entities.size(); ++x)
+    {
+        if (entities[x]->hasComps<T>())
+        {
+            temp.push_back(entities[x]->getComp<T>());
+        }
+    }
+    return temp;
 
+}
 template<class T, class ... rest>
 std::vector<std::shared_ptr<Entity>> System::getEntitiesWithComponents(const std::vector<std::shared_ptr<Entity>> &entities)
 {
