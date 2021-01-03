@@ -18,6 +18,28 @@ void RenderingSystem::drawNode(const std::shared_ptr<Transform> &node , const gl
         drawNode(childern[i],transform_matrix);
     }
  }
+void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, const std::shared_ptr<Transform> &node,
+                                        const glm::mat4 &parent_transform_matrix,const glm::mat4& cameraVPMatrix) {
+
+    //getting current entity
+    std::shared_ptr<Entity> entity = node->getEntity();
+
+    std::shared_ptr<MeshRenderer> meshRenderer = entity->getComp<MeshRenderer>();
+
+    glm::mat4 transform_matrix = parent_transform_matrix * node->get_transform();
+    glm::vec4 transformed_origin = cameraVPMatrix* transform_matrix * glm::vec4(0, 0, 0, 1);
+    float depth = transformed_origin.z / transformed_origin.w;
+    objects.push_back({
+        meshRenderer,
+        depth,
+        transform_matrix,
+    });
+    //Calling function on children of current entity
+    std::vector<std::shared_ptr<Transform>> childern = node->get_children();
+    for(int i =0;i<childern.size();i++){
+        calculateDistance(objects,childern[i],transform_matrix,cameraVPMatrix);
+    }
+}
 
 void RenderingSystem::updateCameraPosition(double delta_time)
 {
@@ -38,6 +60,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     //Get lights componet
     std::vector<std::shared_ptr<Entity>> lights = this->getEntitiesWithComponents<Light, Transform>(entities);
 
+
     //Get meshRenderers
     std::vector<std::shared_ptr<MeshRenderer>> meshRenderers = this->getComponentVector<MeshRenderer>(entities);
 
@@ -54,6 +77,16 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     this->updateCameraPosition(delta_time);
 	glm::mat4 viewProjection = cptr->getVPMatrix();
 
+	//Create M
+	std::vector<RenderObjects> objects;
+
+    for (unsigned int x = 0; x < meshRenderers.size(); ++x)
+    {
+        std:: shared_ptr<Transform> tptr = meshRenderers[x]->getEntity()->getComp<Transform>();
+        //Call this recursive function only on parent nodes
+        if(tptr->get_parent() == nullptr)
+            this->calculateDistance(objects,tptr,glm::mat4(1.0f),viewProjection);
+    }
     //Calculate distance
     for(int i = 0 ; i< meshRenderers.size(); i++){
         meshRenderers[i]->setDepth(
@@ -124,12 +157,10 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
 //        if(tptr->get_parent() == nullptr)
 //            this->drawNode(tptr,glm::mat4(1.0f));
 //    }
-    for (unsigned int x = 0; x < meshRenderers.size(); ++x)
+    for (unsigned int x = 0; x < objects.size(); ++x)
 	{
-        std:: shared_ptr<Transform> tptr = meshRenderers[x]->getEntity()->getComp<Transform>();
-		//Call this recursive function only on parent nodes
-        if(tptr->get_parent() == nullptr)
-            this->drawNode(tptr,glm::mat4(1.0f));
+        std::cout<< "Depth"<< objects[x].distance<< std::endl;
+        objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
     }
     if(sky_light!=NULL){
         std::shared_ptr<MeshRenderer> meshRenderer= skyLight->getComp<MeshRenderer>();

@@ -33,6 +33,9 @@ namespace Resources {
 
 		//Shader Params
 		void addShaderParameter(std::shared_ptr<ShaderParameterBaseClass> param);
+
+        template<class T>
+		void createNewShaderParamter(string name, T value );
 		void setAllShaderParameters(string name);
 		bool setShaderParameter(string name);
 
@@ -41,6 +44,11 @@ namespace Resources {
 		void passTexturesToShader();
 	};
 
+    template<class T>
+    void Material::createNewShaderParamter(string name, T value ){
+        shared_ptr<Resources::ShaderParameter<T>> newParam(new ShaderParameter<T>(name, value));
+        this->shaderParameters.push_back(newParam);
+    }
 	
 }
 

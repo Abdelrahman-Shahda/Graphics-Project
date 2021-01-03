@@ -4,11 +4,16 @@
 #include <systems/System.hpp>
 #include <entity.hpp>
 #include <memory>
-
+struct RenderObjects {
+    std::shared_ptr<MeshRenderer> meshRenderer;
+    float distance;
+    glm::mat4 transform_matrix;
+};
 class RenderingSystem : public System 
 {
 	//Private Member functions
     void drawNode(const std::shared_ptr<Transform>& node, const glm::mat4& parent_transform_matrix);
+    void calculateDistance(std::vector<RenderObjects>& objects,const std::shared_ptr<Transform>& node, const glm::mat4& parent_transform_matrix, const glm::mat4& cameraVPMatrix);
     void updateCameraPosition(double delta_time);
 
 	//Data Members
@@ -21,6 +26,7 @@ class RenderingSystem : public System
 
 public:
     void Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time,std::shared_ptr<Entity> skyLight =NULL) override;
+
 };
 
 #endif // !RENDERING___SYSTEM__H

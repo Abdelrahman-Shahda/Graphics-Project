@@ -10,6 +10,8 @@ void PlayState::onEnter() {
 	//Intializing resources
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
 	shared_ptr<Resources::ShaderParameter<glm::vec4>> tint(new ShaderParameter<glm::vec4>("tint", {1,0,0,1}));
+
+
 	shaderProgram->create();
 	shaderProgram->attach(ASSETS_DIR"/shaders/light_transform.vert", GL_VERTEX_SHADER);
 	shaderProgram->attach(ASSETS_DIR "/shaders/light_array.frag", GL_FRAGMENT_SHADER);
@@ -26,13 +28,13 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Texture> albedoTexture(new Texture("albedo",ASSETS_DIR"/image/material/albedo.jpg"));
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
 	material->addTexture(albedoTexture);
-
+    material->createNewShaderParamter<glm::vec4>("tint", {1,0,0,1});
     shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/specular.jpg"));
     material->addTexture(specularTexture);
 
     shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/emissive.jpg"));
     material->addTexture(emissiveTexture);
-	material->addShaderParameter(tint);
+
 
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
