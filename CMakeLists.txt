@@ -52,7 +52,7 @@ set(COMMON_SOURCES
 
 # Define the directories in which to search for the included headers
 include_directories(
-		src/common
+		src
         inc
         vendor/glfw/include
         vendor/glad/include

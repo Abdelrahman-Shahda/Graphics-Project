@@ -89,13 +89,46 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     }
     std::sort(std::begin(objects), std::end(objects));
 
+    this->setLightParamters(meshRenderers,glm::vec3(ctptr->get_position()[3]),viewProjection,sky_light,lights);
+
+	//Start Drawing the screen
+	//clear screen to draw next frame
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //Looping on entities to draw the from parent to children nodes
+    for (unsigned int x = 0; x < objects.size(); ++x)
+	{
+        std::cout<< "ID:"<< objects[x].meshRenderer->getEntity()->getId()<<" "<< x <<std::endl;
+        objects[x].meshRenderer->getEntity()->getComp<RenderState>()->update();
+        objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
+    }
+    if(sky_light!=NULL){
+        std::shared_ptr<MeshRenderer> meshRenderer= skyLight->getComp<MeshRenderer>();
+        std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
+        std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
+        glUseProgram(*shaderProgram);
+        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
+        shaderProgram->set("view_projection",viewProjection);
+        shaderProgram->set("sky_light.top_color", sky_light!=NULL&&sky_light->enabled ? sky_light->top_color : glm::vec3(0.0f));
+        shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
+        shaderProgram->set("sky_light.bottom_color", sky_light!=NULL&&sky_light->enabled ? sky_light->bottom_color : glm::vec3(0.0f));
+        shaderProgram->set("exposure", 2.0f);
+        skyLight->getComp<RenderState>()->culled_face=GL_FRONT; 
+        skyLight->getComp<RenderState>()->update();
+        meshRenderer->renderMesh(glm::mat4(0.0f));
+    }
+}
+void RenderingSystem::setLightParamters(const std::vector<std::shared_ptr<MeshRenderer>> &meshRenderers, glm::vec3 cameraPosition,
+                                        glm::mat4 viewProjection, std::shared_ptr<SkyLight> sky_light,const  std::vector<std::shared_ptr<Entity>> &lights) {
+
     for(int i=0; i<meshRenderers.size(); i++){
 
 
         std::shared_ptr<Material> materialPtr = meshRenderers[i]->getMaterial();
         std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
         glUseProgram(*shaderProgram);
-        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
+        shaderProgram->set("camera_position", cameraPosition);
         shaderProgram->set("view_projection",viewProjection);
         shaderProgram->set("sky_light.top_color", sky_light!=NULL&&sky_light->enabled ? sky_light->top_color : glm::vec3(0.0f));
         shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
@@ -138,38 +171,5 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         }
         shaderProgram->set("light_count", light_index);
     }
-	//Start Drawing the screen
-	//clear screen to draw next frame
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //Looping on entities to draw the from parent to children nodes
-//    for (unsigned int x = 0; x < meshEntities.size(); ++x)
-//	{
-//        std:: shared_ptr<Transform> tptr = meshEntities[x]->getComp<Transform>();
-//		//Call this recursive function only on parent nodes
-//        if(tptr->get_parent() == nullptr)
-//            this->drawNode(tptr,glm::mat4(1.0f));
-//    }
-    for (unsigned int x = 0; x < objects.size(); ++x)
-	{
-        std::cout<< "ID:"<< objects[x].meshRenderer->getEntity()->getId()<<" "<< x <<std::endl;
-        objects[x].meshRenderer->getEntity()->getComp<RenderState>()->update();
-        objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
-    }
-    if(sky_light!=NULL){
-        std::shared_ptr<MeshRenderer> meshRenderer= skyLight->getComp<MeshRenderer>();
-        std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
-        std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
-        glUseProgram(*shaderProgram);
-        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
-        shaderProgram->set("view_projection",viewProjection);
-        shaderProgram->set("sky_light.top_color", sky_light!=NULL&&sky_light->enabled ? sky_light->top_color : glm::vec3(0.0f));
-        shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
-        shaderProgram->set("sky_light.bottom_color", sky_light!=NULL&&sky_light->enabled ? sky_light->bottom_color : glm::vec3(0.0f));
-        shaderProgram->set("exposure", 2.0f);
-        skyLight->getComp<RenderState>()->culled_face=GL_FRONT; 
-        skyLight->getComp<RenderState>()->update();
-        meshRenderer->renderMesh(glm::mat4(0.0f));
-    }
 }
