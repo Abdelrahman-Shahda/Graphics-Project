@@ -1,23 +1,5 @@
 #include  <systems/renderingSystem.hpp>
 
-void RenderingSystem::drawNode(const std::shared_ptr<Transform> &node , const glm::mat4 &parent_transform_matrix){
-
-    //getting current entity
-	std::shared_ptr<Entity> entity = node->getEntity();
-
-    std::shared_ptr<MeshRenderer> meshRenderer = entity->getComp<MeshRenderer>();
-
-    glm::mat4 transform_matrix = parent_transform_matrix * node->get_transform();
-
-	//Drawing Mesh on screen
-	//Value of other parameters should be set before
-	meshRenderer->renderMesh(transform_matrix);
-	//Calling function on children of current entity
-    std::vector<std::shared_ptr<Transform>> childern = node->get_children();
-    for(int i =0;i<childern.size();i++){
-        drawNode(childern[i],transform_matrix);
-    }
- }
 void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, const std::shared_ptr<Transform> &node,
                                         const glm::mat4 &parent_transform_matrix,const glm::mat4& cameraVPMatrix) {
 
@@ -60,7 +42,6 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     //Get lights componet
     std::vector<std::shared_ptr<Entity>> lights = this->getEntitiesWithComponents<Light, Transform>(entities);
 
-
     //Get meshRenderers
     std::vector<std::shared_ptr<MeshRenderer>> meshRenderers = this->getComponentVector<MeshRenderer>(entities);
 
@@ -77,9 +58,8 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     this->updateCameraPosition(delta_time);
 	glm::mat4 viewProjection = cptr->getVPMatrix();
 
-	//Create M
+	//Creating rendering objects and arranging them according distance 
 	std::vector<RenderObjects> objects;
-
     for (unsigned int x = 0; x < meshRenderers.size(); ++x)
     {
         std:: shared_ptr<Transform> tptr = meshRenderers[x]->getEntity()->getComp<Transform>();
@@ -89,8 +69,8 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     }
     std::sort(std::begin(objects), std::end(objects));
 
+	// Setting shader parameter for each shader
     for(int i=0; i<meshRenderers.size(); i++){
-
 
         std::shared_ptr<Material> materialPtr = meshRenderers[i]->getMaterial();
         std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
@@ -133,7 +113,6 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
             }
             light_index++;
             if(light_index >= MAX_LIGHT_COUNT) break;
-            // Since the light array in the shader has a constant size, we need to tell the shader how many lights we sent.
 
         }
         shaderProgram->set("light_count", light_index);
@@ -143,20 +122,14 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //Looping on entities to draw the from parent to children nodes
-//    for (unsigned int x = 0; x < meshEntities.size(); ++x)
-//	{
-//        std:: shared_ptr<Transform> tptr = meshEntities[x]->getComp<Transform>();
-//		//Call this recursive function only on parent nodes
-//        if(tptr->get_parent() == nullptr)
-//            this->drawNode(tptr,glm::mat4(1.0f));
-//    }
+	//Drawing entities
     for (unsigned int x = 0; x < objects.size(); ++x)
 	{
-        std::cout<< "ID:"<< objects[x].meshRenderer->getEntity()->getId()<<" "<< x <<std::endl;
         objects[x].meshRenderer->getEntity()->getComp<RenderState>()->update();
         objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
     }
+
+	//Drawing skylight as a background
     if(sky_light!=NULL){
         std::shared_ptr<MeshRenderer> meshRenderer= skyLight->getComp<MeshRenderer>();
         std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
