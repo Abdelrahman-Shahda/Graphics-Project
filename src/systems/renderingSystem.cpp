@@ -1,23 +1,5 @@
 #include  <systems/renderingSystem.hpp>
 
-void RenderingSystem::drawNode(const std::shared_ptr<Transform> &node , const glm::mat4 &parent_transform_matrix){
-
-    //getting current entity
-	std::shared_ptr<Entity> entity = node->getEntity();
-
-    std::shared_ptr<MeshRenderer> meshRenderer = entity->getComp<MeshRenderer>();
-
-    glm::mat4 transform_matrix = parent_transform_matrix * node->get_transform();
-
-	//Drawing Mesh on screen
-	//Value of other parameters should be set before
-	meshRenderer->renderMesh(transform_matrix);
-	//Calling function on children of current entity
-    std::vector<std::shared_ptr<Transform>> childern = node->get_children();
-    for(int i =0;i<childern.size();i++){
-        drawNode(childern[i],transform_matrix);
-    }
- }
 void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, const std::shared_ptr<Transform> &node,
                                         const glm::mat4 &parent_transform_matrix,const glm::mat4& cameraVPMatrix) {
 
@@ -77,7 +59,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     this->updateCameraPosition(delta_time);
 	glm::mat4 viewProjection = cptr->getVPMatrix();
 
-	//Create M
+	//Creating rendering objects and arranging them according distance
 	std::vector<RenderObjects> objects;
 
     for (unsigned int x = 0; x < meshRenderers.size(); ++x)
@@ -114,7 +96,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
         shaderProgram->set("sky_light.bottom_color", sky_light!=NULL&&sky_light->enabled ? sky_light->bottom_color : glm::vec3(0.0f));
         shaderProgram->set("exposure", 2.0f);
-        skyLight->getComp<RenderState>()->culled_face=GL_FRONT; 
+        skyLight->getComp<RenderState>()->culled_face=GL_FRONT;
         skyLight->getComp<RenderState>()->update();
         meshRenderer->renderMesh(glm::mat4(0.0f));
     }
@@ -128,7 +110,7 @@ void RenderingSystem::setLightParamters(const std::vector<std::shared_ptr<MeshRe
         std::shared_ptr<Material> materialPtr = meshRenderers[i]->getMaterial();
         std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
         glUseProgram(*shaderProgram);
-        shaderProgram->set("camera_position", cameraPosition);
+        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
         shaderProgram->set("view_projection",viewProjection);
         shaderProgram->set("sky_light.top_color", sky_light!=NULL&&sky_light->enabled ? sky_light->top_color : glm::vec3(0.0f));
         shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
@@ -171,5 +153,32 @@ void RenderingSystem::setLightParamters(const std::vector<std::shared_ptr<MeshRe
         }
         shaderProgram->set("light_count", light_index);
     }
+	//Start Drawing the screen
+	//clear screen to draw next frame
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//Drawing entities
+    for (unsigned int x = 0; x < objects.size(); ++x)
+	{
+        objects[x].meshRenderer->getEntity()->getComp<RenderState>()->update();
+        objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
+    }
+
+	//Drawing skylight as a background
+    if(sky_light!=NULL){
+        std::shared_ptr<MeshRenderer> meshRenderer= skyLight->getComp<MeshRenderer>();
+        std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
+        std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
+        glUseProgram(*shaderProgram);
+        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
+        shaderProgram->set("view_projection",viewProjection);
+        shaderProgram->set("sky_light.top_color", sky_light!=NULL&&sky_light->enabled ? sky_light->top_color : glm::vec3(0.0f));
+        shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
+        shaderProgram->set("sky_light.bottom_color", sky_light!=NULL&&sky_light->enabled ? sky_light->bottom_color : glm::vec3(0.0f));
+        shaderProgram->set("exposure", 2.0f);
+        skyLight->getComp<RenderState>()->culled_face=GL_FRONT; 
+        skyLight->getComp<RenderState>()->update();
+        meshRenderer->renderMesh(glm::mat4(0.0f));
+    }
 }

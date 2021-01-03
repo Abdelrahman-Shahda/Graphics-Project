@@ -12,11 +12,18 @@ void PlayState::onEnter() {
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
 	shared_ptr<Resources::ShaderParameter<glm::vec4>> tint(new ShaderParameter<glm::vec4>("tint", {1,0,0,1}));
 
-
+	//Light shaders
 	shaderProgram->create();
 	shaderProgram->attach(ASSETS_DIR"/shaders/light_transform.vert", GL_VERTEX_SHADER);
 	shaderProgram->attach(ASSETS_DIR "/shaders/light_array.frag", GL_FRAGMENT_SHADER);
 	shaderProgram->link();
+
+	//Sky shaders
+	shared_ptr< Resources::ShaderProgram> skyProgram(new Resources::ShaderProgram);
+	skyProgram->create();
+	skyProgram->attach(ASSETS_DIR"/shaders/sky_transform.vert", GL_VERTEX_SHADER);
+	skyProgram->attach(ASSETS_DIR "/shaders/sky.frag", GL_FRAGMENT_SHADER);
+	skyProgram->link();
 
 	//Meshes
 	shared_ptr<Mesh> meshPtr1(new Mesh);
@@ -63,21 +70,20 @@ void PlayState::onEnter() {
 	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
 	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 5, 10, 8 }, { 0, 0, 0 }, { 1, 1,  1 });
     entity3->addComp<RenderState,bool>(true);
-//    entity3->getComp<RenderState>()->enable_depth_test = false;
 	entity4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr3, material);
-	entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 15, 10, 8 }, {0,3.14 , 0 }, { 1, 1, 1 });
+	entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 15, 10, 8 }, {0, 0, 0 }, { 1, 1, 1 });
     entity4->addComp<RenderState>();
 	world.push_back(entity2);
 	world.push_back(entity3);
 	world.push_back(entity4);
 
 	//Testing light
-    shared_ptr<Entity> directionalLight(new Entity);
-    directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  3 }, { 1,1,1});
+  shared_ptr<Entity> directionalLight(new Entity);
+  directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  3 }, { 1,1,1});
    directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.8, 0.2}, true,0.0f,0.0f,0.0f,0.0f,0.0f);
 
     shared_ptr<Entity> pointLight(new Entity);
-    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 5, 5, 9}, { 1, 1,  1 }, { 1,1,1});
+    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 3, 2, 3 }, { -1, -1,  -1 }, { 1,1,1});
     pointLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::SPOT,{0.2, 1, 0.5}, true,0.2,0,0.0,0.78539816339,1.57079632679);
 
     world.push_back(directionalLight);
