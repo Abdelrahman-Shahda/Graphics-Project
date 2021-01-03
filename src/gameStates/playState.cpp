@@ -63,8 +63,9 @@ void PlayState::onEnter() {
 	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
 	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 5, 10, 8 }, { 0, 0, 0 }, { 1, 1,  1 });
     entity3->addComp<RenderState,bool>(true);
+//    entity3->getComp<RenderState>()->enable_depth_test = false;
 	entity4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr3, material);
-	entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 15, 10, 8 }, {0, 0, 0 }, { 1, 1, 1 });
+	entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 15, 10, 8 }, {0,3.14 , 0 }, { 1, 1, 1 });
     entity4->addComp<RenderState>();
 	world.push_back(entity2);
 	world.push_back(entity3);
@@ -76,7 +77,7 @@ void PlayState::onEnter() {
    directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.8, 0.2}, true,0.0f,0.0f,0.0f,0.0f,0.0f);
 
     shared_ptr<Entity> pointLight(new Entity);
-    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 5, 9, 9}, { 1, 1,  1 }, { 1,1,1});
+    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 5, 5, 9}, { 1, 1,  1 }, { 1,1,1});
     pointLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::SPOT,{0.2, 1, 0.5}, true,0.2,0,0.0,0.78539816339,1.57079632679);
 
     world.push_back(directionalLight);
@@ -102,5 +103,5 @@ void PlayState::onEnter() {
 
 void PlayState::onDraw(double deltaTime) {
 	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
-		(*systemIterator)->Run(world, deltaTime, NULL);
+		(*systemIterator)->Run(world, deltaTime, skyLight);
 }
