@@ -10,7 +10,6 @@ void PlayState::onEnter() {
 	//Intializing resources
 	//shaders
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
-	shared_ptr<Resources::ShaderParameter<glm::vec4>> tint(new ShaderParameter<glm::vec4>("tint", {1,0,0,1}));
 
 	//Light shaders
 	shaderProgram->create();
@@ -40,6 +39,7 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Material> skyMaterial(new Material(skyProgram));
 	skyTest->addComp<SkyLight, bool, glm::vec3, glm::vec3, glm::vec3>(true, { 0.25, 0.3, 0.5 }, { 0.35, 0.35, 0.4 }, { 0.25, 0.25, 0.25 });
 	skyTest->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(skyMesh, skyMaterial);
+	skyTest->addComp<RenderState>();
 	skyLight = skyTest;
 
 	//Shader Params
@@ -47,6 +47,11 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::ShaderParameter<glm::vec3>> skyLightTopColor(new ShaderParameter<glm::vec3>("sky_light.top_color", skyLightComponent != NULL && skyLightComponent->enabled ? skyLightComponent->top_color : glm::vec3(0.0f)));
 	shared_ptr<Resources::ShaderParameter<glm::vec3>> skyLightMiddleColor(new ShaderParameter<glm::vec3>("sky_light.middle_color", skyLightComponent != NULL && skyLightComponent->enabled ? skyLightComponent->middle_color : glm::vec3(0.0f)));
 	shared_ptr<Resources::ShaderParameter<glm::vec3>> skyLightBottomColor(new ShaderParameter<glm::vec3>("sky_light.bottom_color", skyLightComponent != NULL && skyLightComponent->enabled ? skyLightComponent->bottom_color : glm::vec3(0.0f)));
+
+	//Adding colors parameters to sky light entity
+	skyMaterial->addShaderParameter(skyLightTopColor);
+	skyMaterial->addShaderParameter(skyLightBottomColor);
+	skyMaterial->addShaderParameter(skyLightMiddleColor);
 
 	//Textures & Samplers
 	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());
@@ -56,6 +61,7 @@ void PlayState::onEnter() {
     shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/specular.jpg"));
     shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/emissive.jpg"));
 	
+	//Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
 	material->addTexture(albedoTexture, defaultSampler);
     material->addTexture(specularTexture, defaultSampler);
@@ -63,9 +69,7 @@ void PlayState::onEnter() {
 	material->addShaderParameter(skyLightTopColor);
 	material->addShaderParameter(skyLightMiddleColor);
 	material->addShaderParameter(skyLightBottomColor);
-
 	
-	//Material classes
 	shared_ptr<Resources::Material> material2(new Material(shaderProgram));
 	material2->addTexture(albedoTexture, customizedSampler);
 	material2->addTexture(specularTexture, customizedSampler);
@@ -110,9 +114,6 @@ void PlayState::onEnter() {
 
     world.push_back(directionalLight);
     world.push_back(pointLight);
-
-    
-
 }
 
 void PlayState::onDraw(double deltaTime) {

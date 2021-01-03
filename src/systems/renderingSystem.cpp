@@ -135,9 +135,6 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         glUseProgram(*shaderProgram);
         shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
         shaderProgram->set("view_projection",viewProjection);
-        shaderProgram->set("sky_light.top_color", sky_light!=NULL&&sky_light->enabled ? sky_light->top_color : glm::vec3(0.0f));
-        shaderProgram->set("sky_light.middle_color", sky_light!=NULL&&sky_light->enabled ? sky_light->middle_color : glm::vec3(0.0f));
-        shaderProgram->set("sky_light.bottom_color", sky_light!=NULL&&sky_light->enabled ? sky_light->bottom_color : glm::vec3(0.0f));
         shaderProgram->set("exposure", 2.0f);
         skyLight->getComp<RenderState>()->culled_face=GL_FRONT; 
         skyLight->getComp<RenderState>()->update();

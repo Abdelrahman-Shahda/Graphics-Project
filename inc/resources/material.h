@@ -37,7 +37,7 @@ namespace Resources {
 
 		//Shader Params
 		void addShaderParameter(std::shared_ptr<ShaderParameterBaseClass> param);
-		void setAllShaderParameters(string name);
+		void setAllShaderParameters();
 		bool setShaderParameter(string name);
 
 		//Textures

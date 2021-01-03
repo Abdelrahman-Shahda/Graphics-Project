@@ -88,7 +88,7 @@ bool Material::setShaderParameter(string name)
 	return false;
 }
 
-void Material::setAllShaderParameters(string name)
+void Material::setAllShaderParameters()
 {
 	for (auto iterator = this->shaderParameters.begin(); iterator != this->shaderParameters.end(); iterator++)
 		(*iterator)->setUinform(shaderPtr);
