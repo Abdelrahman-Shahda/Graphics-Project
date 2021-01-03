@@ -4,6 +4,8 @@
 #include <systems/System.hpp>
 #include <entity.hpp>
 #include <memory>
+#include <algorithm>
+
 struct RenderObjects {
     std::shared_ptr<MeshRenderer> meshRenderer;
     float distance;
