@@ -42,6 +42,12 @@ void PlayState::onEnter() {
 	skyTest->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(skyMesh, skyMaterial);
 	skyLight = skyTest;
 
+	//Shader Params
+	std::shared_ptr<SkyLight> skyLightComponent = skyLight->getComp<SkyLight>();
+	shared_ptr<Resources::ShaderParameter<glm::vec3>> skyLightTopColor(new ShaderParameter<glm::vec3>("sky_light.top_color", skyLightComponent != NULL && skyLightComponent->enabled ? skyLightComponent->top_color : glm::vec3(0.0f)));
+	shared_ptr<Resources::ShaderParameter<glm::vec3>> skyLightMiddleColor(new ShaderParameter<glm::vec3>("sky_light.middle_color", skyLightComponent != NULL && skyLightComponent->enabled ? skyLightComponent->middle_color : glm::vec3(0.0f)));
+	shared_ptr<Resources::ShaderParameter<glm::vec3>> skyLightBottomColor(new ShaderParameter<glm::vec3>("sky_light.bottom_color", skyLightComponent != NULL && skyLightComponent->enabled ? skyLightComponent->bottom_color : glm::vec3(0.0f)));
+
 	//Textures & Samplers
 	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());
 	shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
@@ -54,14 +60,20 @@ void PlayState::onEnter() {
 	material->addTexture(albedoTexture, defaultSampler);
     material->addTexture(specularTexture, defaultSampler);
     material->addTexture(emissiveTexture, defaultSampler);
+	material->addShaderParameter(skyLightTopColor);
+	material->addShaderParameter(skyLightMiddleColor);
+	material->addShaderParameter(skyLightBottomColor);
+
 	
 	//Material classes
 	shared_ptr<Resources::Material> material2(new Material(shaderProgram));
 	material2->addTexture(albedoTexture, customizedSampler);
 	material2->addTexture(specularTexture, customizedSampler);
 	material2->addTexture(emissiveTexture, customizedSampler);
-
-
+	material2->addShaderParameter(skyLightTopColor);
+	material2->addShaderParameter(skyLightMiddleColor);
+	material2->addShaderParameter(skyLightBottomColor);
+	
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
