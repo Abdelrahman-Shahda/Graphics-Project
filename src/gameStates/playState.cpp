@@ -59,15 +59,15 @@ void PlayState::onEnter() {
 	world.push_back(entity4);
 
 	//Testing light
-//    shared_ptr<Entity> directionalLight(new Entity);
-//    directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  3 }, { 1,1,1});
-//    directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.8, 0.2}, true,0.0f,0.0f,0.0f,0.0f,0.0f);
+  shared_ptr<Entity> directionalLight(new Entity);
+  directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  3 }, { 1,1,1});
+   directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.8, 0.2}, true,0.0f,0.0f,0.0f,0.0f,0.0f);
 
     shared_ptr<Entity> pointLight(new Entity);
-    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 5, 5, 5 }, { -1, -1,  -1 }, { 1,1,1});
+    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 3, 2, 3 }, { -1, -1,  -1 }, { 1,1,1});
     pointLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::SPOT,{0.2, 1, 0.5}, true,0.2,0,0.0,0.78539816339,1.57079632679);
 
-//    world.push_back(directionalLight);
+    world.push_back(directionalLight);
     world.push_back(pointLight);
 
     shared_ptr<Entity> skyTest(new Entity);

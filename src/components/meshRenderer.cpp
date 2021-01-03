@@ -19,3 +19,6 @@ void MeshRenderer::renderMesh(glm::mat4 transform_matrix)
 shared_ptr<Material> MeshRenderer::getMaterial() {
     return materialPtr;
 };
+void MeshRenderer::setDepth(float dis) {
+    depth = dis;
+}

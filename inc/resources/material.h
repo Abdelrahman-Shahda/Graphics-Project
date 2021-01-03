@@ -16,7 +16,7 @@ namespace Resources {
 	{
 		GLint currentTextureUnit;
 		GLint maxTextureUnit;
-
+        bool transparent;
 		std::shared_ptr<ShaderProgram> shaderPtr;
 		std::vector<std::shared_ptr<ShaderParameterBaseClass>> shaderParameters;
         std::vector<ShaderParameter<glm::vec3>*> textTintParameters;
@@ -24,7 +24,7 @@ namespace Resources {
 		std::vector< std::shared_ptr<Texture>> texturePtrs;
 
 	public:
-		Material(std::shared_ptr <ShaderProgram> shaderPtr = nullptr);
+		Material(std::shared_ptr <ShaderProgram> shaderPtr = nullptr,bool trans = false);
 		~Material();
 
 		//Shader Program

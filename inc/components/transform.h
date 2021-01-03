@@ -15,7 +15,7 @@
 class Transform : public Component{
 private:
     glm::mat4 position;
-    glm::mat4 Rotation;
+    glm::vec3 rotation;
     glm::mat4 scale;
     Transform* parent;
     std::vector<std::shared_ptr<Transform>> children;
@@ -29,6 +29,7 @@ public:
     glm::mat4 get_transform();
     glm::mat4 get_position();
     glm::mat4 get_rotation();
+    glm::vec3 get_rotation_vec();
     Transform* get_parent();
     std::vector<std::shared_ptr<Transform>> get_children();
 
