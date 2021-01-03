@@ -44,8 +44,8 @@ void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, con
 void RenderingSystem::updateCameraPosition(double delta_time)
 {
     cptr->setEyePosition(glm::vec3(ctptr->get_position()[3]));
-    cptr->setDirection(glm::vec4(0, 0, -1,0) * ctptr->get_transform());
-    cptr->setUp(glm::vec4(0,1,0,0) * ctptr->get_transform());
+    cptr->setDirection(glm::vec3(-1,-1,-1)*glm::vec3(ctptr->get_transform()[2]));
+    cptr->setUp(glm::vec3(ctptr->get_transform()[1]));
  	ccptr->update(delta_time);
 }
 
