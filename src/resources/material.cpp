@@ -6,16 +6,18 @@ Material::Material(std::shared_ptr <ShaderProgram> shaderPtr) :shaderPtr(shaderP
 {
 	//get max number of texture units
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnit);
-	maxTextureUnit =maxTextureUnit +GL_TEXTURE0 -1;
 
-	currentTextureUnit = GL_TEXTURE0;
+	currentTextureUnit = 0;
 	this->shaderPtr = shaderPtr;
 }
 
 Material::~Material()
 {
 	//deleting texture shader params
-	for (auto itr = textureShaderParameters.begin(); itr != textureShaderParameters.end(); itr++)
+	for (auto itr = textureMapParameters.begin(); itr != textureMapParameters.end(); itr++)
+		delete (*itr);
+
+	for (auto itr = textureTintParameters.begin(); itr != textureTintParameters.end(); itr++)
 		delete (*itr);
 }
  void Material::setShaderProgram(std::shared_ptr < ShaderProgram> shaderPtr)
@@ -33,7 +35,8 @@ void Material::addShaderParameter(std::shared_ptr<ShaderParameterBaseClass> para
 	shaderParameters.push_back(param);
 }
 
-void Material::addTexture(std::shared_ptr<Texture> texturePtr, glm::vec3 tint)
+
+void Material::addTexture(std::shared_ptr<Texture> texturePtr, std::shared_ptr<Sampler> samplerPtr, glm::vec3 tint)
 {
 	if (currentTextureUnit > maxTextureUnit)
 	{
@@ -42,27 +45,31 @@ void Material::addTexture(std::shared_ptr<Texture> texturePtr, glm::vec3 tint)
 	}
 
 	texturePtrs.push_back(texturePtr);
+	samplerPtrs.push_back(samplerPtr);
 
-	//add new shaderParam with same name
+	//add new map shader param for texture with same name
 	string paramName = "material."+texturePtr->name+"_map";
 	textShaderParameter* shaderParamPtr= new textShaderParameter(paramName, currentTextureUnit);
-	textureShaderParameters.push_back(shaderParamPtr);
-	currentTextureUnit++;
+	textureMapParameters.push_back(shaderParamPtr);
+	
+	//add new tint shader param for texture with same name
     string tintParam = "material."+ texturePtr->name+"_tint";
     ShaderParameter<glm::vec3>* tintParamPtr= new ShaderParameter<glm::vec3>(tintParam, tint);
-    textTintParameters.push_back(tintParamPtr);
+	textureTintParameters.push_back(tintParamPtr);
     currentTextureUnit++;
-
 }
 
 void Material::passTexturesToShader()
 {
 	//Bind each texture then pass it to shader program
-	for (int index=0; index<textureShaderParameters.size();index++)
+	for (int index=0; index< currentTextureUnit;index++)
 	{
-		texturePtrs[index]->useTexture(GL_TEXTURE0+ index);
-		textureShaderParameters[index]->setUinform(shaderPtr);
-		textTintParameters[index]->setUinform(shaderPtr);
+		GLuint currentUnit = GL_TEXTURE0 + index;
+		texturePtrs[index]->useTexture(currentUnit);
+		samplerPtrs[index]->useSampler(index);
+		textureMapParameters[index]->setUinform(shaderPtr);
+		textureTintParameters[index]->setUinform(shaderPtr);
+
 	}
 
 }

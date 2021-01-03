@@ -8,31 +8,39 @@ void PlayState::onEnter() {
 	systems.push_back(RS);
 
 	//Intializing resources
+	//shaders
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
 	shared_ptr<Resources::ShaderParameter<glm::vec4>> tint(new ShaderParameter<glm::vec4>("tint", {1,0,0,1}));
 	shaderProgram->create();
 	shaderProgram->attach(ASSETS_DIR"/shaders/light_transform.vert", GL_VERTEX_SHADER);
 	shaderProgram->attach(ASSETS_DIR "/shaders/light_array.frag", GL_FRAGMENT_SHADER);
 	shaderProgram->link();
+
+	//Meshes
 	shared_ptr<Mesh> meshPtr1(new Mesh);
 	shared_ptr<Mesh> meshPtr2(new Mesh);
     shared_ptr<Mesh> meshPtr3(new Mesh);
-
 	MeshUtils::Cuboid(*meshPtr1, true);
 	MeshUtils::Sphere(*meshPtr2);
 	MeshUtils::loadOBJ(*meshPtr3,ASSETS_DIR"/models/Batman/batman.obj");
 
-	//Initializing Textures
+	//Textures & Samplers
+	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());
+	shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
+
 	shared_ptr<Resources::Texture> albedoTexture(new Texture("albedo",ASSETS_DIR"/image/material/albedo.jpg"));
-	shared_ptr<Resources::Material> material(new Material(shaderProgram));
-	material->addTexture(albedoTexture);
-
     shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/specular.jpg"));
-    material->addTexture(specularTexture);
-
     shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/emissive.jpg"));
-    material->addTexture(emissiveTexture);
-	material->addShaderParameter(tint);
+	
+	shared_ptr<Resources::Material> material(new Material(shaderProgram));
+	material->addTexture(albedoTexture, defaultSampler);
+    material->addTexture(specularTexture, defaultSampler);
+    material->addTexture(emissiveTexture, defaultSampler);
+
+	shared_ptr<Resources::Material> material2(new Material(shaderProgram));
+	material2->addTexture(albedoTexture, customizedSampler);
+	material2->addTexture(specularTexture, customizedSampler);
+	material2->addTexture(emissiveTexture, customizedSampler);
 
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
@@ -41,12 +49,12 @@ void PlayState::onEnter() {
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,transformPtr);
 	world.push_back(mainCamera);
 
-	//Two entities
+	//Creating entities
 	shared_ptr<Entity> entity2(new Entity);
     shared_ptr<Entity> entity3(new Entity);
 	shared_ptr<Entity> entity4(new Entity);
 
-	entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material);
+	entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material2);
 	entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10,10, 8 }, { 0, 0,  0 }, { 1,1,1});
 
 	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);

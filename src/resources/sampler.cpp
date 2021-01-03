@@ -3,39 +3,46 @@
 //
 #include <resources/sampler.h>
 using namespace Resources;
-sampler::sampler() {
-    glGenSamplers(1,&sampler_);
+
+Sampler::Sampler(int wrab_s_, int wrab_t_, int magnification_filter_, int minification_filter_, glm::vec4 border_color, GLfloat anistropy_)
+{
+	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnistropoy);
+	glGenSamplers(1,&sampler);
+	setSamplerParams(wrab_s_, wrab_t_, magnification_filter_, minification_filter_, border_color, anistropy_);
 }
 
-void sampler::usesampler() {
-    glGenSamplers(1, &sampler_);
-    glSamplerParameteri(sampler_, GL_texture_mag, magnification_filter);
-    glSamplerParameteri(sampler_, GL_texture_min, minification_filter);
-    glSamplerParameteri(sampler_, GL_texture_wrap_s, wrab_s);
-    glSamplerParameteri(sampler_, GL_texture_wrap_t, wrab_t);
-    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropy_upper_bound);
-    glSamplerParameterf(sampler_, GL_TEXTURE_MAX_ANISOTROPY_EXT, max_anisotropy_upper_bound);
-    for(GLuint unit = 0; unit < 5; ++unit) glBindSampler(unit, sampler_);
-
+void Sampler::passSamplerParams()
+{
+	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, magnificationFilter);
+	glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, minificationFilter);
+	glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, wrabS);
+	glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, wrabT);
+	glSamplerParameterfv(sampler, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(borderColor));
+	glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, anistropy);
 }
 
-void sampler::set(int wrab_s_, int wrab_t_,int magnification_filter_,int minification_filter_,int gl_texture_mag, int gl_texture_min,int gl_texture_wrap_s,int gl_texture_wrap_t,GLfloat max_anisotropy_upper_bound_){
-    wrab_s=wrab_s_;
-    wrab_t=wrab_t_;
-    magnification_filter=magnification_filter_;
-    minification_filter=minification_filter_;
-    GL_texture_mag=gl_texture_mag;
-    GL_texture_min=gl_texture_min;
-    GL_texture_wrap_s=gl_texture_wrap_s;
-    GL_texture_wrap_t=gl_texture_wrap_t;
-    max_anisotropy_upper_bound=max_anisotropy_upper_bound_;
+
+void Sampler::useSampler(GLuint textureUnit) {
+    glBindSampler(textureUnit, sampler);
 }
-GLuint sampler::getsamplerobject() const {
-    return sampler_;
+
+void Sampler::setSamplerParams(int wrab_s_, int wrab_t_, int magnification_filter_, int minification_filter_, glm::vec4 border_color, GLfloat anistropy_)
+{
+    wrabS=wrab_s_;
+    wrabT=wrab_t_;
+    magnificationFilter=magnification_filter_;
+    minificationFilter=minification_filter_;
+	anistropy = anistropy_ > maxAnistropoy ? maxAnistropoy : anistropy_;
+	borderColor = border_color;
+	passSamplerParams();
 }
- sampler::sampler(const sampler &sampler1) {
-     sampler_=sampler1.getsamplerobject();
- }
- sampler::~sampler() {
-         glDeleteSamplers(1,&sampler_);
+
+GLuint Sampler::getSamplerobject() const {
+    return sampler;
+}
+
+ Sampler::~Sampler() {
+         glDeleteSamplers(1,&sampler);
      }
+
+ Sampler::operator GLuint() const { return sampler; }

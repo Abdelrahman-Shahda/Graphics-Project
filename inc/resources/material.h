@@ -4,6 +4,7 @@
 #include <resources/shader.hpp>
 #include <resources/shaderParameter.hpp>
 #include <resources/texture.h>
+#include <resources/sampler.h>
 
 #include <memory>
 #include <vector>
@@ -14,14 +15,16 @@ namespace Resources {
 
 	class Material
 	{
+		std::vector<std::shared_ptr<ShaderParameterBaseClass>> shaderParameters;
+		std::shared_ptr<ShaderProgram> shaderPtr;
+
+		//Textures
 		GLint currentTextureUnit;
 		GLint maxTextureUnit;
-
-		std::shared_ptr<ShaderProgram> shaderPtr;
-		std::vector<std::shared_ptr<ShaderParameterBaseClass>> shaderParameters;
-        std::vector<ShaderParameter<glm::vec3>*> textTintParameters;
-		std::vector<textShaderParameter*> textureShaderParameters;
+        std::vector<ShaderParameter<glm::vec3>*> textureTintParameters;
+		std::vector<textShaderParameter*> textureMapParameters;
 		std::vector< std::shared_ptr<Texture>> texturePtrs;
+		std::vector< std::shared_ptr<Sampler>> samplerPtrs;
 
 	public:
 		Material(std::shared_ptr <ShaderProgram> shaderPtr = nullptr);
@@ -37,7 +40,7 @@ namespace Resources {
 		bool setShaderParameter(string name);
 
 		//Textures
-		void addTexture(std::shared_ptr<Texture>, glm::vec3 tint = {1.0f, 1.0f, 1.0f});
+		void addTexture(std::shared_ptr<Texture>, std::shared_ptr<Sampler> ,glm::vec3 tint = {1.0f, 1.0f, 1.0f});
 		void passTexturesToShader();
 	};
 

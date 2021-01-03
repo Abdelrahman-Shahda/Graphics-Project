@@ -23,6 +23,10 @@ namespace Resources
 		Texture(string name, const char* path,bool generate_mipmap = true);
 		~Texture();
 		void useTexture(GLuint);
+
+		Texture(Texture const &) = delete;
+		Texture &operator=(Texture const &) = delete;
+		operator GLuint() const;
 	};
 
 }

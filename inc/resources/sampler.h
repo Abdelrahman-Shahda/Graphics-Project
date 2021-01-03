@@ -7,29 +7,32 @@
 #ifndef GRAPHICSPROJECT_SAMPLER_H
 #define GRAPHICSPROJECT_SAMPLER_H
 
-#endif //GRAPHICSPROJECT_SAMPLER_H
-namespace Resources {
-    class sampler {
-        GLuint sampler_;
-        // GL_REPEAT OR GL_MIRRORED_REPEAT OR GL_CLAMP_TO_EDGE OR GL_CLAMP_TO_BORDER
-        int wrab_s;
-        int wrab_t;
-        int magnification_filter;
-        int minification_filter;
-        int GL_texture_mag;
-        int GL_texture_min;
-        int GL_texture_wrap_s;
-        int GL_texture_wrap_t;
-        GLfloat max_anisotropy_upper_bound ;
 
+namespace Resources {
+    class Sampler {
+        GLuint sampler;
+        // GL_REPEAT OR GL_MIRRORED_REPEAT OR GL_CLAMP_TO_EDGE OR GL_CLAMP_TO_BORDER
+        int wrabS;
+        int wrabT;
+        int magnificationFilter;
+        int minificationFilter;
+        GLfloat anistropy;
+		GLfloat maxAnistropoy;
+		glm::vec4 borderColor;
+
+		void passSamplerParams();
 
     public:
+        Sampler(int wrab_s_ = GL_REPEAT, int wrab_t_ = GL_REPEAT, int magnification_filter_ = GL_LINEAR, int minification_filter_ = GL_LINEAR_MIPMAP_LINEAR, glm::vec4 border_color = { 1,1,1,1 }, GLfloat max_anisotropy_upper_bound_ = 1.0f);
+        void useSampler(GLuint textureUnit);
+        GLuint getSamplerobject() const;
+        void setSamplerParams(int wrab_s_, int wrab_t_ ,int magnification_filter_,int minification_filter_, glm::vec4 border_color,GLfloat anistropy_);
+        ~Sampler();
 
-        sampler();
-        sampler(const sampler &sampler1);
-        void usesampler();
-        GLuint getsamplerobject() const;
-        void set(int wrab_s_, int wrab_t_,int magnification_filter_,int minification_filter_,int gl_texture_mag, int gl_texture_min,int gl_texture_wrap_s,int gl_texture_wrap_t,GLfloat max_anisotropy_upper_bound_=1.0f);
-        ~sampler();
+		Sampler(Sampler const &) = delete;
+		Sampler &operator=(Sampler const &) = delete;
+		operator GLuint() const; 
     };
 }
+
+#endif //GRAPHICSPROJECT_SAMPLER_H

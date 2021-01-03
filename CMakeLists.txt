@@ -37,14 +37,18 @@ set(COMMON_SOURCES
 		src/systems/system.cpp
 		src/systems/renderingSystem.cpp
 		src/components/component.cpp
+		src/components/lighting.cpp
+		src/components/skylight.cpp
 		src/components/meshRenderer.cpp
 		src/components/transform.cpp
 		src/resources/material.cpp
 		src/resources/shader.cpp
 		src/resources/texture.cpp
+		src/resources/sampler.cpp
 		src/gameStates/playState.cpp
 		src/entity.cpp 
-		src/scene.cpp src/components/lighting.cpp src/components/skylight.cpp)
+		src/scene.cpp 
+		)
 
 # Define the directories in which to search for the included headers
 include_directories(

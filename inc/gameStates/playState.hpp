@@ -3,16 +3,18 @@
 
 #include <gameStates/gameState.hpp>
 #include <application.hpp>
+#include<systems/renderingSystem.hpp>
+#include<utils/mesh-utils.hpp>
 
 #include <components/flyCameraController.hpp>
 #include <components/camera.hpp>
 #include <components/transform.h>
-#include<systems/renderingSystem.hpp>
-#include<utils/mesh-utils.hpp>
+#include <components/lighting.h>
+
 #include <resources/material.h>
 #include <resources/shader.hpp>
-#include <components/lighting.h>
 #include <resources/texture.h>
+#include <resources/sampler.h>
 
 class PlayState : public GameState {
 public:

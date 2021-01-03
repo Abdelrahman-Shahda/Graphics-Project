@@ -46,36 +46,6 @@ Texture::Texture(string name, const char* path, bool generate_mipmap):name(name)
 
 	//loading texture from texture img path
 	loadImage(path);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    // This parameter defines the minification filter. This filter will be used when the texture is minified (1 screen pixel covers more than 1 texture pixel).
-    // The possible values are:
-    //  -   Similar to magnification, we have 2 modes that ignores the mip maps:
-    //      -   GL_NEAREST which returns the color from the nearest texture pixel.
-    //      -   GL_LINEAR which linearly interpolates the colors of the 4 surrounding pixels.
-    //  -   Specific to minification, we have 4 modes that follow the form GL_*_MIPMAP_*
-    //      where the 1st wild card specifies the filtering within a texture and the 2nd wild card specifies the filtering between mip levels.
-    //      -   GL_NEAREST_MIPMAP_NEAREST which returns the color of the nearest pixel in the nearest mip level.
-    //      -   GL_NEAREST_MIPMAP_LINEAR which linearly interpolates between the colors of the nearest pixel in each of the surrounding mip levels.
-    //      -   GL_LINEAR_MIPMAP_NEAREST which applies linear-filtering in the nearest mip level.
-    //      -   GL_LINEAR_MIPMAP_LINEAR which linearly interpolates the results of the linear filtering in each of the surrounding mip levels.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    // These pair of parameters define the Wrap mode along the 2 texture coordinates: S and T.
-    // The Wrap mode specifies how to deal with texture coordinates that lie outside the range [0, 1].
-    // The possible values are:
-    //  -   GL_REPEAT: this mode keeps adding or subtracting 1 from the coordinate till it return to the range [0, 1]. This leads to a texture repeating effect since for example, the coordinates -0.2, 0.8, 1.8, 2.8, and so on all maps to same location in the texture.
-    //  -   GL_MIRRORED_REPEAT: similar to GL_REPEAT but each repetition is the mirrored version of the ones surrounding it.
-    //  -   GL_CLAMP_TO_BORDER: this mode returns the border color for coordinates that exceed the range.
-    //  -   GL_CLAMP_TO_EDGE: this modes clamps the textures coordinates to the range [0, 1] before sampling. So any value below 0 will be 0 and any value above 1 will be 1.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // This parameter identifies the border color to be used with the wrap mode GL_CLAMP_TO_BORDER
-    glm::vec4 border_color = {1,1,1,1};
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(border_color));
-    // This parameter identifies the maximum anisotropy which can be used to enable and specify the quality of the anisotropic filtering.
-    // Minimum value is 1.0 which is equivalent to disabling the anisotropic filtering.
-    // Maximum value depends on the GPU and can be enumerated using the glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropy_upper_bound);
-    // Anisotropic filtering allows the use of mip maps on samples where the derivatives vary vastly on the X & Y directions of the screen space without over-blurring the result.
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
 }
 
 void Texture::useTexture(GLuint textureUnit)
@@ -87,4 +57,9 @@ void Texture::useTexture(GLuint textureUnit)
 Texture::~Texture()
 {
 	glDeleteTextures(1, &textureID);
+}
+
+Texture::operator GLuint() const
+{ 
+	return textureID; 
 }
