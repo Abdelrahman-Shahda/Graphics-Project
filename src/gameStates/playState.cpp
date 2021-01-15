@@ -84,6 +84,7 @@ void PlayState::onEnter() {
 
 	//Make camera follow Main character
      camTransformPtr->set_parent(mainTransformPtr);
+	 mainTransformPtr->add_child(camTransformPtr);
 
 	//Creating lights components
 	shared_ptr<Entity> directionalLight(new Entity);
@@ -96,9 +97,27 @@ void PlayState::onEnter() {
 
     world.push_back(directionalLight);
     world.push_back(pointLight);
+
+	gameSensitivity = 3.0f;
+	this->mainCamera = mainCamera;
+	this->mainChar = mainChar;
+}
+void PlayState::moveChar(double deltaTime)
+{
+	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];
+	glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) position += direction  * ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) position -= direction * ((float)deltaTime * gameSensitivity);
+	//if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) position += direction * ((float)deltaTime * gameSensitivity);
+	//if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) position -= direction * ((float)deltaTime * gameSensitivity);
+	mainChar->getComp<Transform>()->set_position(position);
+	mainChar->getComp<Transform>()->update();
 }
 
 void PlayState::onDraw(double deltaTime) {
 	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
+	{
 		(*systemIterator)->Run(world, deltaTime, skyLight);
+		moveChar(deltaTime);
+	}
 }

@@ -17,6 +17,10 @@
 #include <resources/sampler.h>
 
 class PlayState : public GameState {
+protected:
+std::shared_ptr<Entity> mainChar;
+std::shared_ptr<Entity> mainCamera;
+float gameSensitivity;
 public:
 	PlayState(Application* app) :GameState(app) {};
     
@@ -24,5 +28,6 @@ public:
 	void onDraw(double deltaTime) override;
     void onExit() override {
     }
+	void moveChar(double deltaTime);
 };
 #endif

@@ -90,6 +90,7 @@
            //camera->setDirection(glm::vec3(glm::cos(yaw), 0, -glm::sin(yaw)) * glm::cos(pitch) + glm::vec3(0, glm::sin(pitch), 0));
            transform->set_position(position);
            transform->set_rotation(glm::vec3(0,yaw,pitch));
+           transform->update();
            //camera->setEyePosition(position);
         }
 
