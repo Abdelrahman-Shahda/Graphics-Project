@@ -2,6 +2,7 @@
 // Created by Shaimaa on 11/29/2020.
 //
 #include <gameStates/playState.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 void PlayState::onEnter() {
 	shared_ptr<RenderingSystem> RS(new RenderingSystem);
@@ -26,11 +27,13 @@ void PlayState::onEnter() {
 
 	//Meshes
 	shared_ptr<Mesh> meshPtr(new Mesh);
+	shared_ptr<Mesh> meshPtr2(new Mesh);
 	shared_ptr<Mesh> skyMesh(new Mesh);
 	glm::vec3 min;
     glm::vec3 max;
 
 	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj",min, max);
+	MeshUtils::Sphere(*meshPtr2);
 
 	std::cout <<"Min: x " <<min.x << " y "<< min.y << " z "<< min.z <<std::endl;
     std::cout <<"Max: x " <<max.x << " y "<< max.y << " z "<< max.z <<std::endl;
@@ -77,6 +80,8 @@ void PlayState::onEnter() {
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
 	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 10 }, {0, 0, 0 }, { 1,1,1 });
+	camTransformPtr->update();
+
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
 	world.push_back(mainCamera);
 
@@ -84,12 +89,18 @@ void PlayState::onEnter() {
 
 	//Creating entities
 	shared_ptr<Entity> mainChar(new Entity);
+	shared_ptr<Entity> entity3(new Entity);
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
-	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 7 }, {3.14, 3.14, 3.14 }, { 0.5, 0.5, 0.5 });
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 7.5 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
+	mainTransformPtr->update();
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
 
-
+	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
+	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
+	entity3->getComp<Transform>()->update();
+    entity3->addComp<RenderState,bool>(true);
+	world.push_back(entity3);
 	//Make camera follow Main character
      camTransformPtr->set_parent(mainTransformPtr);
 	 mainTransformPtr->add_child(camTransformPtr);

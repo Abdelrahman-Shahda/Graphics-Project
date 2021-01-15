@@ -1,10 +1,14 @@
 #include  <systems/renderingSystem.hpp>
+#include <glm/gtx/string_cast.hpp>
+
 
 void RenderingSystem::calculateCameraTransform()
 {
     if (ctptr->get_parent()!=nullptr)
     {
-    glm::mat4 transform_matrix = ctptr->get_parent()->get_transform() * ctptr->get_transform();
+         std::cout << glm::to_string(ctptr->get_transform()) << std::endl;
+
+    glm::mat4 transform_matrix =ctptr->get_parent()->get_transform() * ctptr->get_transform();
     ctptr->set_transform(transform_matrix);
     cptr->setEyePosition(glm::vec3(ctptr->get_transform()[3]));
     cptr->setUp(glm::vec3(ctptr->get_transform()[1]));
@@ -39,10 +43,10 @@ void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, con
 
 void RenderingSystem::updateCameraPosition(double delta_time)
 {
+ 	ccptr->update(delta_time);
     cptr->setEyePosition(glm::vec3(ctptr->get_transform()[3]));
     cptr->setUp(glm::vec3(ctptr->get_transform()[1]));
     cptr->setDirection(glm::vec3(ctptr->get_transform()[0]));
- 	ccptr->update(delta_time);
 }
 
 void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time,std::shared_ptr<Entity> skyLight ){
@@ -85,7 +89,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     }
     std::sort(std::begin(objects), std::end(objects));
 
-    this->setLightParamters(meshRenderers,glm::vec3(ctptr->get_position()[3]),viewProjection,sky_light,lights);
+    this->setLightParamters(meshRenderers,glm::vec3(ctptr->get_transform()[3]),viewProjection,sky_light,lights);
 
 	//Start Drawing the screen
 	//clear screen to draw next frame
@@ -105,7 +109,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         std::shared_ptr<Material> materialPtr = meshRenderer->getMaterial();
         std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
         glUseProgram(*shaderProgram);
-        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
+        shaderProgram->set("camera_position", glm::vec3(ctptr->get_transform()[3]));
         shaderProgram->set("view_projection",viewProjection);
         skyLight->getComp<RenderState>()->culled_face=GL_FRONT;
         skyLight->getComp<RenderState>()->update();
@@ -122,7 +126,7 @@ void RenderingSystem::setLightParamters(const std::vector<std::shared_ptr<MeshRe
         std::shared_ptr<Material> materialPtr = meshRenderers[i]->getMaterial();
         std::shared_ptr<ShaderProgram> shaderProgram = materialPtr->getShaderProgram();
         glUseProgram(*shaderProgram);
-        shaderProgram->set("camera_position", glm::vec3(ctptr->get_position()[3]));
+        shaderProgram->set("camera_position", glm::vec3(ctptr->get_transform()[3]));
         shaderProgram->set("view_projection",viewProjection);
         
         // We will go through all the lights and send the enabled ones to the shader.
