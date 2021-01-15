@@ -87,11 +87,9 @@
             if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * ((float)delta_time * current_sensitivity.x);
             if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * ((float)delta_time * current_sensitivity.x);
 
-           //camera->setDirection(glm::vec3(glm::cos(yaw), 0, -glm::sin(yaw)) * glm::cos(pitch) + glm::vec3(0, glm::sin(pitch), 0));
            transform->set_position(position);
-           transform->set_rotation(glm::vec3(0,yaw,pitch));
+           transform->set_rotation(glm::vec3(glm::cos(yaw), 0, -glm::sin(yaw)) * glm::cos(pitch) + glm::vec3(0, glm::sin(pitch), 0));
            transform->update();
-           //camera->setEyePosition(position);
         }
 
         [[nodiscard]] float getYaw() const {return yaw;}

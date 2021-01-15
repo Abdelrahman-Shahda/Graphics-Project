@@ -1,19 +1,23 @@
 #include  <systems/renderingSystem.hpp>
 
+void RenderingSystem::calculateCameraTransform()
+{
+    if (ctptr->get_parent()!=nullptr)
+    {
+    glm::mat4 transform_matrix = ctptr->get_parent()->get_transform() * ctptr->get_transform();
+    ctptr->set_transform(transform_matrix);
+    }
+}
 void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, const std::shared_ptr<Transform> &node,
                                         const glm::mat4 &parent_transform_matrix,const glm::mat4& cameraVPMatrix) {
 
     //getting current entity
     std::shared_ptr<Entity> entity = node->getEntity();
     glm::mat4 transform_matrix = parent_transform_matrix * node->get_transform();
-    //if child is a camera
-        if (entity->hasComps<Camera>())
+
+    //if child is not a camera
+        if (entity->hasComps<MeshRenderer>())
         {
-            node->set_transform(transform_matrix);
-        }
-        else
-        {
-        
     std::shared_ptr<MeshRenderer> meshRenderer = entity->getComp<MeshRenderer>();
     glm::vec4 transformed_origin = cameraVPMatrix* transform_matrix * glm::vec4(0, 0, 0, 1);
     float depth = transformed_origin.z / transformed_origin.w;
@@ -22,7 +26,7 @@ void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, con
         depth,
         transform_matrix,
     });
-        }
+    }
     //Calling function on children of current entity
     std::vector<std::shared_ptr<Transform>> childern = node->get_children();
     for(int i =0;i<childern.size();i++){
@@ -32,9 +36,21 @@ void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, con
 
 void RenderingSystem::updateCameraPosition(double delta_time)
 {
-    cptr->setEyePosition(glm::vec3(ctptr->get_position()[3]));
+    cptr->setEyePosition(glm::vec3(ctptr->get_transform()[3]));
     cptr->setUp(glm::vec3(ctptr->get_transform()[1]));
-    cptr->setDirection(glm::vec3(ctptr->get_rotation()[0]));
+    float x = length(ctptr->get_transform()[0]); //x
+    float y = length(ctptr->get_transform()[1]); //y
+    float z = length(ctptr->get_transform()[2]); //z
+    //Extract Rotation Matrix
+    glm::mat4 transform = ctptr->get_transform();
+    transform[0]=transform[0]/x;
+    transform[1]=transform[1]/y;
+    transform[2]=transform[2]/z;
+    transform[3]= glm::vec4(0,0,0,1);
+    y = atan2(transform[0][1],transform[0][0]);
+    x = atan2(-transform[0][2],length(glm::vec2(transform[1][2],transform[2][2])));
+    z = atan2(transform[1][2],transform[2][2]);
+    cptr->setDirection(glm::vec3(x,y,z));
  	ccptr->update(delta_time);
 }
 
@@ -62,6 +78,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     ccptr = cameraEntities[0]->getComp<FlyCameraController>();
 
     //Updating Camera position and Getting view Projection
+    this->calculateCameraTransform();
     this->updateCameraPosition(delta_time);
 	glm::mat4 viewProjection = cptr->getVPMatrix();
 
