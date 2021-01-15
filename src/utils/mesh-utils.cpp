@@ -25,7 +25,7 @@
 
 using namespace Resources;
 
-bool MeshUtils::loadOBJ(Mesh &mesh, const char* filename) {
+bool MeshUtils::loadOBJ(Mesh &mesh, const char* filename,glm::vec3 &minVec, glm::vec3 &maxVec) {
 
     // We get the parent path since we would like to see if contains any ".mtl" file that define the object materials
     auto parent_path_string = std::filesystem::path(filename).parent_path().string();
@@ -56,15 +56,28 @@ bool MeshUtils::loadOBJ(Mesh &mesh, const char* filename) {
     // An obj file can have multiple shapes where each shape can have its own material
     // Ideally, we would load each shape into a separate mesh or store the start and end of it in the element buffer to be able to draw each shape separately
     // But we ignored this fact since we don't plan to use multiple materials in the examples
+    minVec.x = maxVec.x = attrib.vertices[3*shapes[0].mesh.indices[0].vertex_index+0];
+    minVec.y = maxVec.y = attrib.vertices[3*shapes[0].mesh.indices[0].vertex_index+1];
+    minVec.z = maxVec.z = attrib.vertices[3*shapes[0].mesh.indices[0].vertex_index+2];
+
     for (const auto &shape : shapes) {
         for (const auto &index : shape.mesh.indices) {
             Vertex vertex = {};
 
+            float x = attrib.vertices[3 * index.vertex_index + 0];
+            float y = attrib.vertices[3 * index.vertex_index + 1];
+            float z = attrib.vertices[3 * index.vertex_index + 2];
+            if (x < minVec.x) minVec.x = x;
+            if (x > maxVec.x) maxVec.x = x;
+            if (y < minVec.y) minVec.y = y;
+            if (y > maxVec.y) maxVec.y = y;
+            if (z < minVec.z) minVec.z = z;
+            if (z > maxVec.z) maxVec.z = z;
             // Read the data for a vertex from the "attrib" object
             vertex.position = {
-                    attrib.vertices[3 * index.vertex_index + 0],
-                    attrib.vertices[3 * index.vertex_index + 1],
-                    attrib.vertices[3 * index.vertex_index + 2]
+                    x,
+                    y,
+                    z
             };
 
             vertex.normal = {

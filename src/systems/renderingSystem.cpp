@@ -74,6 +74,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         if(tptr->get_parent() == nullptr)
             this->calculateDistance(objects,tptr,glm::mat4(1.0f),viewProjection);
     }
+
     std::sort(std::begin(objects), std::end(objects));
 
     this->setLightParamters(meshRenderers,glm::vec3(ctptr->get_position()[3]),viewProjection,sky_light,lights);

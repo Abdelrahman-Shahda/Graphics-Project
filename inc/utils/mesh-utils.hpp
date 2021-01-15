@@ -8,7 +8,7 @@
 namespace MeshUtils {
 
     // Load an ".obj" file into the mesh
-    bool loadOBJ(Resources::Mesh & mesh, const char* filename);
+    bool loadOBJ(Resources::Mesh & mesh, const char* filename, glm::vec3 &minVec, glm::vec3 &maxVec);
 
     void Cuboid(Resources::Mesh & mesh, bool colored_faces = false,
                 const glm::vec3& center = {0,0,0},
