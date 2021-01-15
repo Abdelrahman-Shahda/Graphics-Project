@@ -6,6 +6,9 @@ void RenderingSystem::calculateCameraTransform()
     {
     glm::mat4 transform_matrix = ctptr->get_parent()->get_transform() * ctptr->get_transform();
     ctptr->set_transform(transform_matrix);
+    cptr->setEyePosition(glm::vec3(ctptr->get_transform()[3]));
+    cptr->setUp(glm::vec3(ctptr->get_transform()[1]));
+    cptr->setDirection(glm::vec3(ctptr->get_transform()[0]));
     }
 }
 void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, const std::shared_ptr<Transform> &node,
@@ -38,19 +41,7 @@ void RenderingSystem::updateCameraPosition(double delta_time)
 {
     cptr->setEyePosition(glm::vec3(ctptr->get_transform()[3]));
     cptr->setUp(glm::vec3(ctptr->get_transform()[1]));
-    float x = length(ctptr->get_transform()[0]); //x
-    float y = length(ctptr->get_transform()[1]); //y
-    float z = length(ctptr->get_transform()[2]); //z
-    //Extract Rotation Matrix
-    glm::mat4 transform = ctptr->get_transform();
-    transform[0]=transform[0]/x;
-    transform[1]=transform[1]/y;
-    transform[2]=transform[2]/z;
-    transform[3]= glm::vec4(0,0,0,1);
-    y = atan2(transform[0][1],transform[0][0]);
-    x = atan2(-transform[0][2],length(glm::vec2(transform[1][2],transform[2][2])));
-    z = atan2(transform[1][2],transform[2][2]);
-    cptr->setDirection(glm::vec3(x,y,z));
+    cptr->setDirection(glm::vec3(ctptr->get_transform()[0]));
  	ccptr->update(delta_time);
 }
 
@@ -78,8 +69,9 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     ccptr = cameraEntities[0]->getComp<FlyCameraController>();
 
     //Updating Camera position and Getting view Projection
-    this->calculateCameraTransform();
     this->updateCameraPosition(delta_time);
+    //check if camera has parent and update transform accordingly
+    this->calculateCameraTransform();
 	glm::mat4 viewProjection = cptr->getVPMatrix();
 
 	//Creating rendering objects and arranging them according distance
@@ -91,7 +83,6 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
         if(tptr->get_parent() == nullptr)
             this->calculateDistance(objects,tptr,glm::mat4(1.0f),viewProjection);
     }
-
     std::sort(std::begin(objects), std::end(objects));
 
     this->setLightParamters(meshRenderers,glm::vec3(ctptr->get_position()[3]),viewProjection,sky_light,lights);
