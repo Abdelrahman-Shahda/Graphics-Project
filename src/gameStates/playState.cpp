@@ -25,9 +25,9 @@ void PlayState::onEnter() {
 	skyProgram->link();
 
 	//Meshes
-	shared_ptr<Mesh> meshPtr4(new Mesh);
+	shared_ptr<Mesh> meshPtr(new Mesh);
 	shared_ptr<Mesh> skyMesh(new Mesh);
-	MeshUtils::loadOBJ(*meshPtr4,ASSETS_DIR"/models/Santa Claus/santa.obj");
+	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
 	MeshUtils::Cuboid(*skyMesh);
 
 	//Sky entity
@@ -59,25 +59,31 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Texture> specularTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa_spec.jpg"));
 	
 	//Material classes
-	shared_ptr<Resources::Material> material4(new Material(shaderProgram));
-	material4->addTexture(santaTexture, customizedSampler);
-	material4->addShaderParameter(skyLightTopColor);
-	material4->addShaderParameter(skyLightMiddleColor);
-	material4->addShaderParameter(skyLightBottomColor);
+	shared_ptr<Resources::Material> material(new Material(shaderProgram));
+	material->addTexture(santaTexture, customizedSampler);
+	material->addShaderParameter(skyLightTopColor);
+	material->addShaderParameter(skyLightMiddleColor);
+	material->addShaderParameter(skyLightBottomColor);
 	
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
-	std::shared_ptr<Transform> transformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 10 }, {0, 0, 0 }, { 1,1,1 });
-	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,transformPtr);
+	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 10 }, {0, 0, 0 }, { 1,1,1 });
+	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
 	world.push_back(mainCamera);
 
+
+
 	//Creating entities
-	shared_ptr<Entity> entity4(new Entity);
-	entity4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr4, material4);
-	entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 7 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
-    entity4->addComp<RenderState>();
-	world.push_back(entity4);
+	shared_ptr<Entity> mainChar(new Entity);
+	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 7 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
+    mainChar->addComp<RenderState>();
+	world.push_back(mainChar);
+
+
+	//Make camera follow Main character
+     camTransformPtr->set_parent(mainTransformPtr);
 
 	//Creating lights components
 	shared_ptr<Entity> directionalLight(new Entity);

@@ -15,11 +15,11 @@ Transform::Transform(std::weak_ptr<Entity> entity,glm::vec3 p, glm::vec3 r, glm:
     parent = nullptr;
 }
 
-void Transform::set_parent(Transform* transformComponent) {parent=transformComponent;}
+void Transform::set_parent(std::shared_ptr<Transform> transformComponent) {parent=transformComponent;}
 void Transform::set_position(glm::vec3 v) {position= glm::translate(glm::mat4(1.0f),v);}
 void Transform::set_scale(glm::vec3 v) {scale=glm::scale(glm::mat4(1.0f),v);}
 void Transform::set_rotation(glm::vec3 v) {rotation=v;}
-Transform * Transform::get_parent(){return parent;}
+std::shared_ptr<Transform> Transform::get_parent(){return parent;}
 std::vector<std::shared_ptr<Transform>> Transform::get_children(){return children;}
 glm::mat4 Transform::get_transform() {return position*glm::yawPitchRoll(rotation.y,rotation.x,rotation.z)*scale;}
 glm::mat4 Transform::get_position() { return position;}

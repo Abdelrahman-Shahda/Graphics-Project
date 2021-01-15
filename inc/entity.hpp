@@ -1,7 +1,6 @@
 #ifndef ENTITY___H
 #define ENTITY___H
 
-
 #include "components/component.h"
 #include "utils/ComponentLookUp.h"
 #include <memory>
@@ -34,6 +33,7 @@ public:
     template<class T>
     std::shared_ptr<T> getComp();
 
+
 };
 
 
@@ -41,6 +41,7 @@ template<class T>
 bool Entity::hasComps() {
     return isComps.test(ComponentLookUp::lookUp<T>());
 }
+
 
 template<class T1, class T2, class ...Rest>
 bool Entity::hasComps(){

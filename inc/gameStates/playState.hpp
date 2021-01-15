@@ -19,7 +19,7 @@
 class PlayState : public GameState {
 public:
 	PlayState(Application* app) :GameState(app) {};
-
+    
 	void onEnter() override;
 	void onDraw(double deltaTime) override;
     void onExit() override {
