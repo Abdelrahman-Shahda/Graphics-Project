@@ -25,13 +25,9 @@ void PlayState::onEnter() {
 	skyProgram->link();
 
 	//Meshes
-	shared_ptr<Mesh> meshPtr1(new Mesh);
-	shared_ptr<Mesh> meshPtr2(new Mesh);
-    shared_ptr<Mesh> meshPtr3(new Mesh);
+	shared_ptr<Mesh> meshPtr4(new Mesh);
 	shared_ptr<Mesh> skyMesh(new Mesh);
-	MeshUtils::Cuboid(*meshPtr1, true);
-	MeshUtils::Sphere(*meshPtr2);
-	MeshUtils::loadOBJ(*meshPtr3,ASSETS_DIR"/models/Batman/batman.obj");
+	MeshUtils::loadOBJ(*meshPtr4,ASSETS_DIR"/models/Santa Claus/santa.obj");
 	MeshUtils::Cuboid(*skyMesh);
 
 	//Sky entity
@@ -59,26 +55,15 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());
 	shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
 
-	shared_ptr<Resources::Texture> albedoTexture(new Texture("albedo",ASSETS_DIR"/image/material/albedo.jpg"));
-    shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/specular.jpg"));
-    shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/emissive.jpg"));
+	shared_ptr<Resources::Texture> santaTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
+	shared_ptr<Resources::Texture> specularTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa_spec.jpg"));
 	
 	//Material classes
-	shared_ptr<Resources::Material> material(new Material(shaderProgram));
-	material->addTexture(albedoTexture, defaultSampler);
-    material->addTexture(specularTexture, defaultSampler);
-    material->addTexture(emissiveTexture, defaultSampler);
-	material->addShaderParameter(skyLightTopColor);
-	material->addShaderParameter(skyLightMiddleColor);
-	material->addShaderParameter(skyLightBottomColor);
-	
-	shared_ptr<Resources::Material> material2(new Material(shaderProgram));
-	material2->addTexture(albedoTexture, customizedSampler);
-	material2->addTexture(specularTexture, customizedSampler);
-	material2->addTexture(emissiveTexture, customizedSampler);
-	material2->addShaderParameter(skyLightTopColor);
-	material2->addShaderParameter(skyLightMiddleColor);
-	material2->addShaderParameter(skyLightBottomColor);
+	shared_ptr<Resources::Material> material4(new Material(shaderProgram));
+	material4->addTexture(santaTexture, customizedSampler);
+	material4->addShaderParameter(skyLightTopColor);
+	material4->addShaderParameter(skyLightMiddleColor);
+	material4->addShaderParameter(skyLightBottomColor);
 	
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
@@ -88,21 +73,10 @@ void PlayState::onEnter() {
 	world.push_back(mainCamera);
 
 	//Creating entities
-	shared_ptr<Entity> entity2(new Entity);
-    shared_ptr<Entity> entity3(new Entity);
 	shared_ptr<Entity> entity4(new Entity);
-
-	entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material2);
-	entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10,10, 8 }, { 0, 0,  0 }, { 1,1,1});
-    entity2->addComp<RenderState>();
-	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
-	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 5, 10, 8 }, { 0, 0, 0 }, { 1, 1,  1 });
-    entity3->addComp<RenderState,bool>(true);
-	entity4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr3, material);
-	entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 15, 10, 8 }, {0, 0, 0 }, { 1, 1, 1 });
+	entity4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr4, material4);
+	entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 7 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
     entity4->addComp<RenderState>();
-	world.push_back(entity2);
-	world.push_back(entity3);
 	world.push_back(entity4);
 
 	//Creating lights components
