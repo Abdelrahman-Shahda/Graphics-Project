@@ -84,7 +84,7 @@ void PlayState::onEnter() {
 	//Creating entities
 	shared_ptr<Entity> mainChar(new Entity);
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
-	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 7 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 7 }, {3.14, 3.14, 3.14 }, { 0.5, 0.5, 0.5 });
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
 
