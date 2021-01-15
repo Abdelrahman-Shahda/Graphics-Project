@@ -32,7 +32,7 @@ void PlayState::onEnter() {
 	glm::vec3 min;
     glm::vec3 max;
 
-	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj",min,max);
+	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
 	MeshUtils::Sphere(*meshPtr2);
 
 	std::cout <<"Min: x " <<min.x << " y "<< min.y << " z "<< min.z <<std::endl;
