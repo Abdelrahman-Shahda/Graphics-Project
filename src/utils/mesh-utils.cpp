@@ -25,7 +25,11 @@
 
 using namespace Resources;
 
-bool MeshUtils::loadOBJ(Mesh &mesh, const char* filename,glm::vec3 &minVec, glm::vec3 &maxVec) {
+bool MeshUtils::loadOBJ(Mesh &mesh, const char* filename) {
+
+	//variables to store min and max variables of bounding box
+	glm::vec3 minVec;
+	glm::vec3 maxVec;
 
     // We get the parent path since we would like to see if contains any ".mtl" file that define the object materials
     auto parent_path_string = std::filesystem::path(filename).parent_path().string();
@@ -119,6 +123,9 @@ bool MeshUtils::loadOBJ(Mesh &mesh, const char* filename,glm::vec3 &minVec, glm:
     mesh.create({setup_buffer_accessors<Vertex>});
     mesh.setVertexData(0, vertices);
     mesh.setElementData(elements);
+
+	mesh.setMaxPoint(maxVec);
+	mesh.setMinPoint(minVec);
     return true;
 }
 
@@ -209,6 +216,9 @@ void MeshUtils::Cuboid(Mesh& mesh,
     mesh.create({setup_buffer_accessors<Vertex>});
     mesh.setVertexData(0, vertices);
     mesh.setElementData(elements);
+
+	mesh.setMaxPoint(corners[0]);
+	mesh.setMinPoint(corners[7]);
 };
 
 void MeshUtils::Sphere(Mesh& mesh, const glm::ivec2& segments, bool colored,
@@ -252,6 +262,9 @@ void MeshUtils::Sphere(Mesh& mesh, const glm::ivec2& segments, bool colored,
     mesh.create({setup_buffer_accessors<Vertex>});
     mesh.setVertexData(0, vertices);
     mesh.setElementData(elements);
+
+	mesh.setMaxPoint(center + radius);
+	mesh.setMinPoint(center - radius);
 }
 
 void MeshUtils::Plane(Mesh& mesh, const glm::ivec2& resolution, bool colored,

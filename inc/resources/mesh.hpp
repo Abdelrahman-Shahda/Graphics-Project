@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <glad/gl.h>
+#include <glm/glm.hpp>
 #include <functional>
 #include <iostream>
 #include <cassert>
@@ -14,6 +15,9 @@ namespace Resources {
 		GLuint vertex_array = 0;
 		GLuint element_buffer = 0;
 		std::vector<GLuint> vertex_buffers;
+
+		glm::vec3 minPoint;
+		glm::vec3 maxPoint;
 
 		// Whether the mesh should be drawn using glDrawElements or just glDrawArrays
 		bool use_elements = false;
@@ -38,6 +42,14 @@ namespace Resources {
 
 		// Destroy the OpenGL objects since we are using the RAII pattern for handling GPU resources
 		~Mesh() { destroy(); }
+
+		//Setting minimum and maximum bounding box used for collision detection
+		void setMinPoint(glm::vec3 min){ minPoint = min; }
+		void setMaxPoint(glm::vec3 max) { maxPoint = max; }
+
+		//Getting minimum and maximum bounding box used for collision detection
+		glm::vec3 getMinPoint() { return minPoint; }
+		glm::vec3 getMaxPoint() { return maxPoint; }
 
 		// The underlying OpenGL objects creator
 		// This receives a list of functions with the signature void(void).
