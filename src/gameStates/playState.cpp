@@ -101,7 +101,6 @@ void PlayState::onEnter() {
 
 	//Creating entities
 	shared_ptr<Entity> mainChar(new Entity("Santa"));
-
 	shared_ptr<Entity> entity3(new Entity("Gift"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
 	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 7, 7.5 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
@@ -109,7 +108,7 @@ void PlayState::onEnter() {
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
 
-	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material2);
+	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
 	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
 	entity3->getComp<Transform>()->update();
     entity3->addComp<RenderState,bool>(true);
