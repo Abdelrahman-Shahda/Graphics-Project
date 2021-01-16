@@ -12,6 +12,7 @@
     GLenum depth_function = GL_LEQUAL;
     bool enable_face_culling = true;
     GLenum culled_face = GL_BACK;
+    bool isVisible;
     GLenum front_face_winding = GL_CCW;
     bool enable_blending;
     GLenum blend_equation = GL_FUNC_ADD;
@@ -29,7 +30,7 @@
         if(enable_face_culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
         glCullFace(culled_face);
         glFrontFace(front_face_winding);
-        
+        isVisible = true;
          if(enable_blending) glEnable(GL_BLEND); else glDisable(GL_BLEND);
         glBlendEquation(blend_equation);
         glBlendFunc(blend_source_function, blend_destination_function);

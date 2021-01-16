@@ -30,6 +30,7 @@ public:
     void set_parent(std::shared_ptr<Transform> transformComponent);
     void add_child(std::shared_ptr<Transform> transformComponent);
     glm::mat4 get_transform();
+    glm::mat4 get_ModalMatrix();
     glm::mat4 get_position();
     glm::mat4 get_rotation();
     glm::vec3 get_rotation_vec();

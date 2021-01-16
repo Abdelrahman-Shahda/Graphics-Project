@@ -98,8 +98,11 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     //Looping on entities to draw the from parent to children nodes
     for (unsigned int x = 0; x < objects.size(); ++x)
 	{
-        objects[x].meshRenderer->getEntity()->getComp<RenderState>()->update();
-        objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
+        if(objects[x].meshRenderer->getEntity()->getComp<RenderState>()->isVisible){
+            objects[x].meshRenderer->getEntity()->getComp<RenderState>()->update();
+            objects[x].meshRenderer->renderMesh(objects[x].transform_matrix);
+        }
+
     }
 
 	//Drawing sky light
