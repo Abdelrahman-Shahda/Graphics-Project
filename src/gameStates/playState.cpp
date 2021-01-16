@@ -31,12 +31,13 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> meshPtr(new Mesh);
 	shared_ptr<Mesh> meshPtr2(new Mesh);
 	shared_ptr<Mesh> skyMesh(new Mesh);
+	shared_ptr<Mesh> iceMesh(new Mesh);
 	glm::vec3 min;
     glm::vec3 max;
 
 	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
-	MeshUtils::Sphere(*meshPtr2);
-
+	MeshUtils::Cuboid(*meshPtr2,true);
+    MeshUtils::Plane(*iceMesh,{1, 1}, false, {0, 0, 0}, {1, 1}, {0, 0}, {100, 100});
 	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
     std::cout <<"Max: x " <<meshPtr->getMaxPoint().x << " y "<< meshPtr->getMaxPoint().y << " z "<< meshPtr->getMaxPoint().z <<std::endl;
 
@@ -46,7 +47,7 @@ void PlayState::onEnter() {
 	//Sky entity
 	shared_ptr<Entity> skyTest(new Entity);
 	shared_ptr<Resources::Material> skyMaterial(new Material(skyProgram));
-	skyTest->addComp<SkyLight, bool, glm::vec3, glm::vec3, glm::vec3>(true, { 0.25, 0.3, 0.5 }, { 0.35, 0.35, 0.4 }, { 0.25, 0.25, 0.25 });
+	skyTest->addComp<SkyLight, bool, glm::vec3, glm::vec3, glm::vec3>(true, { 0.1, 0.1, 0.1 }, { 0.35, 0.35, 0.4 }, { 0.25, 0.25, 0.25 });
 	skyTest->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(skyMesh, skyMaterial);
 	skyTest->addComp<RenderState>();
 	skyLight = skyTest;
@@ -67,18 +68,26 @@ void PlayState::onEnter() {
 	//Textures & Samplers
 	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());
 	shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
-
+    shared_ptr<Resources::Sampler> iceSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
 	shared_ptr<Resources::Texture> santaTexture(new Texture("albedo",ASSETS_DIR"/image/material/santa.jpg"));
 	shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/santa_spec.jpg"));
-	
-	//Material classes
+    shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
+    shared_ptr<Resources::Texture> iceTexture(new Texture("albedo",ASSETS_DIR"/image/material/ice.jpg"));
+
+    //Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
+    shared_ptr<Resources::Material> material2(new Material(shaderProgram));
 	material->addTexture(santaTexture, customizedSampler);
 	material->addTexture(specularTexture,customizedSampler);
+	material->addTexture(emissiveTexture, customizedSampler);
 	material->addShaderParameter(skyLightTopColor);
 	material->addShaderParameter(skyLightMiddleColor);
 	material->addShaderParameter(skyLightBottomColor);
-	
+    material2->addTexture(iceTexture,iceSampler);
+    material2->addShaderParameter(skyLightTopColor);
+    material2->addShaderParameter(skyLightMiddleColor);
+    material2->addShaderParameter(skyLightBottomColor);
+
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
@@ -92,6 +101,7 @@ void PlayState::onEnter() {
 
 	//Creating entities
 	shared_ptr<Entity> mainChar(new Entity("Santa"));
+
 	shared_ptr<Entity> entity3(new Entity("Gift"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
 	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 7, 7.5 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
@@ -99,26 +109,34 @@ void PlayState::onEnter() {
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
 
-	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
+	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material2);
 	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
 	entity3->getComp<Transform>()->update();
     entity3->addComp<RenderState,bool>(true);
 	world.push_back(entity3);
-	//Make camera follow Main character
+
+	//icePlane
+    shared_ptr<Entity> icePlane(new Entity());
+    icePlane->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(iceMesh, material2);
+    std::shared_ptr<Transform> icePtr= icePlane->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 7, 7.5 }, {0, 0, 0 }, { 60, 1, 60 });
+    icePtr->update();
+    icePlane->addComp<RenderState,bool>(true);
+    world.push_back(icePlane);
+    //Make camera follow Main character
      camTransformPtr->set_parent(mainTransformPtr);
 	 mainTransformPtr->add_child(camTransformPtr);
 
 	//Creating lights components
 	shared_ptr<Entity> directionalLight(new Entity);
 	directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  -3 }, { 1,1,1});
-	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.0, 0.0}, true,0.1f,0.0f,0.0f,0.0f,0.0f);
+	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 1.0, 1.0}, true,0.1f,1.0f,0.0f,0.0f,0.0f);
 
     shared_ptr<Entity> pointLight(new Entity);
     pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -10 }, { -1, -1,  -1 }, { 1,1,1});
     pointLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::SPOT,{0.2, 1, 0.5}, true,0.2,0,0.0,0.78539816339,1.57079632679);
 
     world.push_back(directionalLight);
-    world.push_back(pointLight);
+    //world.push_back(pointLight);
 
 	gameSettings.gameSensitivity = 0.1f;
 	gameSettings.jumpAmount = 500;
