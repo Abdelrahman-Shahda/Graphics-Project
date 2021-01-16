@@ -10,7 +10,7 @@ private:
 protected:
 	bool detectCollision(const std::shared_ptr<Entity> gameCharacter, const std::shared_ptr<Entity> gameObject);
 public:
-    void Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time,std::shared_ptr<Entity> skyLight =NULL) override;
+    void Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time,gameSettings cameraSettings,std::shared_ptr<Entity> skyLight =NULL) override;
 
 
 };
