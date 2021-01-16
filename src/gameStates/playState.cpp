@@ -125,10 +125,12 @@ void PlayState::moveChar(double deltaTime)
 {
 	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];
 	glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
+	glm::vec3 up = mainCamera->getComp<Camera>()->getOriginalUp();
+	glm::vec3 normal = glm::cross(direction,up);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) position += direction  * ((float)deltaTime * gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) position -= direction * ((float)deltaTime * gameSensitivity);
-	//if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) position += direction * ((float)deltaTime * gameSensitivity);
-	//if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) position -= direction * ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) position += normal * ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) position -= normal * ((float)deltaTime * gameSensitivity);
 	mainChar->getComp<Transform>()->set_position(position);
 	mainChar->getComp<Transform>()->update();
 }
