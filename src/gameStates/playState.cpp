@@ -29,11 +29,13 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> meshPtr(new Mesh);
 	shared_ptr<Mesh> meshPtr2(new Mesh);
 	shared_ptr<Mesh> skyMesh(new Mesh);
-	glm::vec3 min;
-    glm::vec3 max;
+	
 
 	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
 	MeshUtils::Sphere(*meshPtr2);
+
+	glm::vec3 min=meshPtr->getMinPoint();
+	glm::vec3 max=meshPtr->getMaxPoint();
 
 	std::cout <<"Min: x " <<min.x << " y "<< min.y << " z "<< min.z <<std::endl;
     std::cout <<"Max: x " <<max.x << " y "<< max.y << " z "<< max.z <<std::endl;
