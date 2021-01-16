@@ -2,6 +2,7 @@
 struct gameSettings
 {
 float gameSensitivity;
+float jumpAmount;
 glm::vec3 velocity;
 float friction;
 float gravity;

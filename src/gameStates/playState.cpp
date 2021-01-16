@@ -117,7 +117,8 @@ void PlayState::onEnter() {
     world.push_back(directionalLight);
     world.push_back(pointLight);
 
-	gameSettings.gameSensitivity = 1.0f;
+	gameSettings.gameSensitivity = 0.1f;
+	gameSettings.jumpAmount = 500;
 	gameSettings.friction = 4.0f;
 	gameSettings.gravity = 9.8f;
 	gameSettings.groundLevel = 8;
@@ -146,7 +147,7 @@ void PlayState::moveChar(double deltaTime)
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) gameSettings.velocity.x += ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) gameSettings.velocity.x -= ((float)deltaTime * gameSettings.gameSensitivity);
 	}
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity * 50);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
 
 	//Update Position
 	position += gameSettings.velocity;
