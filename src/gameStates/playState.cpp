@@ -82,7 +82,7 @@ void PlayState::onEnter() {
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
-	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
+	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
 	camTransformPtr->update();
 
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
@@ -120,16 +120,17 @@ void PlayState::onEnter() {
     world.push_back(directionalLight);
     world.push_back(pointLight);
 
-	gameSettings.gameSensitivity = 1.0f;
+	gameSettings.gameSensitivity = 0.1f;
+	gameSettings.jumpAmount = 500;
 	gameSettings.friction = 4.0f;
 	gameSettings.gravity = 9.8f;
 	gameSettings.groundLevel = 8;
 	gameSettings.ceilLevel = 28;
 	gameSettings.rightBound =60 ;
 	gameSettings.leftBound = -40;
-	gameSettings.cameraConstraintFactor = 8;
 	gameSettings.velocity = glm::vec3(0.0f,0.0f,0.0f);
 	gameSettings.cameraZoom = false;
+	gameSettings.cameraRotate = false;
 	gameSettings.cameraPan = false;
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
@@ -137,9 +138,6 @@ void PlayState::onEnter() {
 void PlayState::moveChar(double deltaTime)
 {
 	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];
-	//glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
-	//glm::vec3 up = mainCamera->getComp<Camera>()->getOriginalUp();
-	//glm::vec3 normal = glm::cross(direction,up);
 
 	//Only move if you are on ground level
 	if (!(position.y > 1.2*gameSettings.groundLevel))
@@ -148,8 +146,15 @@ void PlayState::moveChar(double deltaTime)
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) gameSettings.velocity.z += ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) gameSettings.velocity.x += ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) gameSettings.velocity.x -= ((float)deltaTime * gameSettings.gameSensitivity);
+
+	//Rotate Character 45 deg. left and right
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_E))
+	{
+       
 	}
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity * 50);
+    
+	}
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
 
 	//Update Position
 	position += gameSettings.velocity;
