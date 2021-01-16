@@ -79,7 +79,7 @@ void PlayState::onEnter() {
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
-	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 10 }, {0, 0, 0 }, { 1,1,1 });
+	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
 	camTransformPtr->update();
 
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
@@ -117,7 +117,11 @@ void PlayState::onEnter() {
     world.push_back(directionalLight);
     world.push_back(pointLight);
 
-	gameSensitivity = 3.0f;
+	gameSensitivity = 1.0f;
+	friction = 2.0f;
+	gravity = 9.8f;
+	groundLevel = 8;
+	velocity = glm::vec3(0.0f,0.0f,0.0f);
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
 }
@@ -127,10 +131,24 @@ void PlayState::moveChar(double deltaTime)
 	glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
 	glm::vec3 up = mainCamera->getComp<Camera>()->getOriginalUp();
 	glm::vec3 normal = glm::cross(direction,up);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) position += direction  * ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) position -= direction * ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) position += normal * ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) position -= normal * ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) velocity += direction* ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) velocity -= direction* ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) velocity += normal*((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) velocity -= normal* ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE)) velocity += up*  ((float)deltaTime * gameSensitivity);
+
+	//Update Position
+	position += velocity;
+   if (position.y < groundLevel)
+   {
+       position.y = groundLevel;
+       velocity.y = 0; 
+   }
+    //Slow down respective axes
+    velocity *= exp(-friction*deltaTime);
+    velocity.y -= gravity*deltaTime;
+
+
 	mainChar->getComp<Transform>()->set_position(position);
 	mainChar->getComp<Transform>()->update();
 }

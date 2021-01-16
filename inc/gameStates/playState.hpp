@@ -21,6 +21,10 @@ protected:
 std::shared_ptr<Entity> mainChar;
 std::shared_ptr<Entity> mainCamera;
 float gameSensitivity;
+glm::vec3 velocity;
+float friction;
+float gravity;
+int groundLevel;
 public:
 	PlayState(Application* app) :GameState(app) {};
     
