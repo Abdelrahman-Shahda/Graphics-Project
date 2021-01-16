@@ -224,10 +224,14 @@ void PlayState::moveChar(double deltaTime)
 }
 
 void PlayState::onDraw(double deltaTime) {
-	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
-	{
+	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++) {
         moveChar(deltaTime);
-		(*systemIterator)->Run(world, deltaTime,gameSettings,skyLight);
-
+        (*systemIterator)->Run(world, deltaTime, gameSettings, skyLight);
+        glm::vec4 position = mainChar->getComp<Transform>()->get_position()[3];
+		if(position.x < -20.8 || position.x >40.8 || position.z < -24.9 || position.z > 39.8){
+            mainChar->getComp<Transform>()->set_position({10,7,7.5});
+            mainChar->getComp<Transform>()->update();
+		}
+        std::cout << glm::to_string(mainChar->getComp<Transform>()->get_position()[3])<<std::endl;
 	}
 }
