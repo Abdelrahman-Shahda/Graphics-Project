@@ -32,10 +32,15 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> meshPtr2(new Mesh);
 	shared_ptr<Mesh> skyMesh(new Mesh);
 	shared_ptr<Mesh> iceMesh(new Mesh);
+	shared_ptr<Mesh> snowmanMesh(new Mesh);
+	shared_ptr<Mesh> sleighMesh(new Mesh);
 	glm::vec3 min;
     glm::vec3 max;
 
 	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
+	MeshUtils::loadOBJ(*snowmanMesh,ASSETS_DIR"/models/Tree/tree.obj");
+	MeshUtils::loadOBJ(*sleighMesh,ASSETS_DIR"/models/Sleigh/sleigh.obj");
+
 	MeshUtils::Cuboid(*meshPtr2,true);
     MeshUtils::Plane(*iceMesh,{1, 1}, false, {0, 0, 0}, {1, 1}, {0, 0}, {100, 100});
 	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
@@ -121,6 +126,25 @@ void PlayState::onEnter() {
     icePtr->update();
     icePlane->addComp<RenderState,bool>(true);
     world.push_back(icePlane);
+    //Make camera follow Main character
+    camTransformPtr->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child(camTransformPtr);
+
+		//Snowman
+    shared_ptr<Entity> snowMan(new Entity());
+    snowMan->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(snowmanMesh, material2);
+    std::shared_ptr<Transform> snowmanPtr= snowMan->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -10, 8, -10 }, {0, 0, 0 }, { 0.1, 0.1, 0.1 });
+    snowmanPtr->update();
+    snowMan->addComp<RenderState,bool>(true);
+    world.push_back(snowMan);
+     //Santa Sleigh
+	shared_ptr<Entity> sleigh(new Entity());
+    sleigh->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(sleighMesh, material);
+    std::shared_ptr<Transform> sleighPtr= sleigh->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 30, 8, -15 }, {0, 3.14/2, 0 }, { 0.003, 0.003, 0.003 });
+    sleighPtr->update();
+    sleigh->addComp<RenderState,bool>(true);
+    world.push_back(sleigh);
+
     //Make camera follow Main character
     camTransformPtr->set_parent(mainTransformPtr);
     mainTransformPtr->add_child(camTransformPtr);
