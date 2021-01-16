@@ -141,6 +141,7 @@ void PlayState::onEnter() {
 void PlayState::moveChar(double deltaTime)
 {
 	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];
+	int prevOrientation = charOrientation;
 
 	//Only move if you are on ground level
 	if (!(position.y > 1.2*gameSettings.groundLevel))
@@ -149,48 +150,25 @@ void PlayState::moveChar(double deltaTime)
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) gameSettings.velocity.z += ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) gameSettings.velocity.x += ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) gameSettings.velocity.x -= ((float)deltaTime * gameSettings.gameSensitivity);
-
 	//Rotate Character 45 deg. left and right
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_E))
-	{ switch (charOrientation)
-	{
-		case 0:
-		gameSettings.characterRotation = 3.14;
-		charOrientation = 1;
-		break;
-		case 1:
-		gameSettings.characterRotation = 0;
-		charOrientation = 1;
-		break;
-		case -1:
-		gameSettings.characterRotation = 3.14;
-		charOrientation = 0;
-		break;
-	}
-	}
-
-		else if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_Q))
-	{ switch (charOrientation)
-	{
-		case 0:
-		gameSettings.characterRotation = -3.14;
-		charOrientation = -1;
-		break;
-		case 1:
-		gameSettings.characterRotation = -3.14;
-		charOrientation = 0;
-		break;
-		case -1:
-		gameSettings.characterRotation = 0;
-		charOrientation = -1;
-		break;
-	}
-	}
-	else
-	gameSettings.characterRotation = 0.0f;
-    
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_E)) charOrientation = charOrientation++;
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_Q)) charOrientation = charOrientation--;
 	}
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
+
+	//Update Rotation
+	if (charOrientation>1)
+	charOrientation =1;
+	if(charOrientation < -1)
+	charOrientation =-1;
+
+    if (prevOrientation == charOrientation)
+	gameSettings.characterRotation = 0;
+	else if (prevOrientation < charOrientation)
+	gameSettings.characterRotation = 200;
+	else if (charOrientation < prevOrientation)
+	gameSettings.characterRotation = -200;
+
 
 	//Update Position
 	position += gameSettings.velocity;
