@@ -128,14 +128,14 @@ void PlayState::onEnter() {
 void PlayState::moveChar(double deltaTime)
 {
 	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];
-	glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
-	glm::vec3 up = mainCamera->getComp<Camera>()->getOriginalUp();
-	glm::vec3 normal = glm::cross(direction,up);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) velocity += direction* ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) velocity -= direction* ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) velocity += normal*((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) velocity -= normal* ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE)) velocity += up*  ((float)deltaTime * gameSensitivity);
+	//glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
+	//glm::vec3 up = mainCamera->getComp<Camera>()->getOriginalUp();
+	//glm::vec3 normal = glm::cross(direction,up);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) velocity.z -=  ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) velocity.z += ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) velocity.x += ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) velocity.x -= ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE)) velocity.y += ((float)deltaTime * gameSensitivity * 200);
 
 	//Update Position
 	position += velocity;
@@ -145,8 +145,10 @@ void PlayState::moveChar(double deltaTime)
        velocity.y = 0; 
    }
     //Slow down respective axes
-    velocity *= exp(-friction*deltaTime);
-    velocity.y -= gravity*deltaTime;
+	//Friction in all directions except Y
+    velocity *= glm::vec3(1,0,1) *((float) exp(-friction*deltaTime));
+	//Deccelartion in Y direction
+    velocity.y -= ((float)deltaTime*gravity);
 
 
 	mainChar->getComp<Transform>()->set_position(position);
