@@ -68,7 +68,7 @@ void PlayState::onEnter() {
 	//Textures & Samplers
 	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());
 	shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
-    shared_ptr<Resources::Sampler> iceSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
+    shared_ptr<Resources::Sampler> iceSampler(new Sampler(GL_REPEAT, GL_REPEAT, GL_LINEAR, GL_NEAREST));
 	shared_ptr<Resources::Texture> santaTexture(new Texture("albedo",ASSETS_DIR"/image/material/santa.jpg"));
 	shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/santa_spec.jpg"));
     shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
@@ -79,7 +79,7 @@ void PlayState::onEnter() {
     shared_ptr<Resources::Material> material2(new Material(shaderProgram));
 	material->addTexture(santaTexture, customizedSampler);
 	material->addTexture(specularTexture,customizedSampler);
-	material->addTexture(emissiveTexture, customizedSampler);
+	//material2->addTexture(emissiveTexture, customizedSampler);
 	material->addShaderParameter(skyLightTopColor);
 	material->addShaderParameter(skyLightMiddleColor);
 	material->addShaderParameter(skyLightBottomColor);
@@ -122,13 +122,13 @@ void PlayState::onEnter() {
     icePlane->addComp<RenderState,bool>(true);
     world.push_back(icePlane);
     //Make camera follow Main character
-     camTransformPtr->set_parent(mainTransformPtr);
-	 mainTransformPtr->add_child(camTransformPtr);
+    camTransformPtr->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child(camTransformPtr);
 
 	//Creating lights components
 	shared_ptr<Entity> directionalLight(new Entity);
-	directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  -3 }, { 1,1,1});
-	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 1.0, 1.0}, true,0.1f,1.0f,0.0f,0.0f,0.0f);
+	directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, -3 }, { 1, -1,  -3 }, { 1,1,1});
+	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1.0, 1.0, 1.0}, true,0.1f,0.0f,0.0f,0.0f,0.0f);
 
     shared_ptr<Entity> pointLight(new Entity);
     pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -10 }, { -1, -1,  -1 }, { 1,1,1});
