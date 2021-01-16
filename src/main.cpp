@@ -5,6 +5,7 @@
 #include <systems/renderingSystem.hpp>
 #include<gameStates/playState.hpp>
 #include <utils/ComponentLookUp.h>
+#include<gameStates/menuState.hpp>
 #pragma region helper_functions
 
 // Inherting Application class to define our application

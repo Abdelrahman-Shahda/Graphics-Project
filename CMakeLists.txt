@@ -46,6 +46,7 @@ set(COMMON_SOURCES
 		src/resources/texture.cpp
 		src/resources/sampler.cpp
 		src/gameStates/playState.cpp
+		src/gameStates/menuState.cpp
 		src/entity.cpp 
 		src/scene.cpp 
 		)
