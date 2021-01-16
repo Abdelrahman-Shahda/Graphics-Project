@@ -155,7 +155,7 @@ void PlayState::moveChar(double deltaTime)
 	{ switch (charOrientation)
 	{
 		case 0:
-		gameSettings.characterRotation = -0.785;
+		gameSettings.characterRotation = 3.14;
 		charOrientation = 1;
 		break;
 		case 1:
@@ -163,7 +163,7 @@ void PlayState::moveChar(double deltaTime)
 		charOrientation = 1;
 		break;
 		case -1:
-		gameSettings.characterRotation = -0.785;
+		gameSettings.characterRotation = 3.14;
 		charOrientation = 0;
 		break;
 	}
@@ -173,11 +173,11 @@ void PlayState::moveChar(double deltaTime)
 	{ switch (charOrientation)
 	{
 		case 0:
-		gameSettings.characterRotation = 0.785;
+		gameSettings.characterRotation = -3.14;
 		charOrientation = -1;
 		break;
 		case 1:
-		gameSettings.characterRotation = 0.785;
+		gameSettings.characterRotation = -3.14;
 		charOrientation = 0;
 		break;
 		case -1:
