@@ -124,9 +124,9 @@ void PlayState::onEnter() {
 	gameSettings.ceilLevel = 28;
 	gameSettings.rightBound =60 ;
 	gameSettings.leftBound = -40;
-	gameSettings.cameraConstraintFactor = 8;
 	gameSettings.velocity = glm::vec3(0.0f,0.0f,0.0f);
 	gameSettings.cameraZoom = false;
+	gameSettings.cameraRotate = false;
 	gameSettings.cameraPan = false;
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
