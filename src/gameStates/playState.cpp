@@ -117,14 +117,17 @@ void PlayState::onEnter() {
     world.push_back(directionalLight);
     world.push_back(pointLight);
 
-	gameSensitivity = 0.2f;
-	friction = 4.0f;
-	gravity = 9.8f;
-	groundLevel = 8;
-	ceilLevel = 28;
-	rightBound =60 ;
-	leftBound = -40;
-	velocity = glm::vec3(0.0f,0.0f,0.0f);
+	gameSettings.gameSensitivity = 1.0f;
+	gameSettings.friction = 4.0f;
+	gameSettings.gravity = 9.8f;
+	gameSettings.groundLevel = 8;
+	gameSettings.ceilLevel = 28;
+	gameSettings.rightBound =60 ;
+	gameSettings.leftBound = -40;
+	gameSettings.cameraConstraintFactor = 8;
+	gameSettings.velocity = glm::vec3(0.0f,0.0f,0.0f);
+	gameSettings.cameraZoom = false;
+	gameSettings.cameraPan = false;
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
 }
@@ -136,45 +139,45 @@ void PlayState::moveChar(double deltaTime)
 	//glm::vec3 normal = glm::cross(direction,up);
 
 	//Only move if you are on ground level
-	if (!(position.y > 1.2*groundLevel))
+	if (!(position.y > 1.2*gameSettings.groundLevel))
 	{
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) velocity.z -=  ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) velocity.z += ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) velocity.x += ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) velocity.x -= ((float)deltaTime * gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) gameSettings.velocity.z -=  ((float)deltaTime * gameSettings.gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) gameSettings.velocity.z += ((float)deltaTime * gameSettings.gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) gameSettings.velocity.x += ((float)deltaTime * gameSettings.gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) gameSettings.velocity.x -= ((float)deltaTime * gameSettings.gameSensitivity);
 	}
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))velocity.y += ((float)deltaTime * gameSensitivity * 200);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity * 50);
 
 	//Update Position
-	position += velocity;
-   if (position.y < groundLevel)
+	position += gameSettings.velocity;
+   if (position.y < gameSettings.groundLevel)
    {
-       position.y = groundLevel;
-       velocity.y = 0; 
+       position.y = gameSettings.groundLevel;
+       gameSettings.velocity.y = 0; 
    }
-      if (position.y > ceilLevel)
+      if (position.y > gameSettings.ceilLevel)
    {
-       position.y = ceilLevel;
-       velocity.y = 0; 
-   }
-
-	 if (position.x > rightBound)
-   {
-       position.x = rightBound;
-       velocity.x = 0; 
+       position.y = gameSettings.ceilLevel;
+       gameSettings.velocity.y = 0; 
    }
 
-   	 if (position.x < leftBound)
+	 if (position.x > gameSettings.rightBound)
    {
-       position.x = leftBound;
-       velocity.x = 0; 
+       position.x = gameSettings.rightBound;
+       gameSettings.velocity.x = 0; 
+   }
+
+   	 if (position.x < gameSettings.leftBound)
+   {
+       position.x = gameSettings.leftBound;
+       gameSettings.velocity.x = 0; 
    }
 
     //Slow down respective axes
 	//Friction in all directions except Y
-    velocity *= glm::vec3(1,0,1) *((float) exp(-friction*deltaTime));
+    gameSettings.velocity *= glm::vec3(1,0,1) *((float) exp(-gameSettings.friction*deltaTime));
 	//Deccelartion in Y direction
-    velocity.y -= ((float)deltaTime*gravity);
+    gameSettings.velocity.y -= ((float)deltaTime*gameSettings.gravity);
 
 
 	mainChar->getComp<Transform>()->set_position(position);
@@ -184,7 +187,7 @@ void PlayState::moveChar(double deltaTime)
 void PlayState::onDraw(double deltaTime) {
 	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
 	{
-		(*systemIterator)->Run(world, deltaTime, skyLight);
+		(*systemIterator)->Run(world, deltaTime,gameSettings,skyLight);
 		moveChar(deltaTime);
 	}
 }

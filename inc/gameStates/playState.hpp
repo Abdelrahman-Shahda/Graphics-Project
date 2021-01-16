@@ -20,14 +20,7 @@ class PlayState : public GameState {
 protected:
 std::shared_ptr<Entity> mainChar;
 std::shared_ptr<Entity> mainCamera;
-float gameSensitivity;
-glm::vec3 velocity;
-float friction;
-float gravity;
-int groundLevel;
-int ceilLevel;
-int rightBound;
-int leftBound;
+gameSettings gameSettings;
 public:
 	PlayState(Application* app) :GameState(app) {};
     

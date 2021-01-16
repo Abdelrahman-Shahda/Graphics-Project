@@ -40,15 +40,15 @@ void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, con
     }
 }
 
-void RenderingSystem::updateCameraPosition(double delta_time)
+void RenderingSystem::updateCameraPosition(double delta_time,gameSettings cameraSettings)
 {
- 	ccptr->update(delta_time);
+ 	ccptr->update(delta_time,cameraSettings);
     cptr->setEyePosition(glm::vec3(ctptr->get_transform()[3]));
     cptr->setUp(glm::vec3(ctptr->get_transform()[1]));
     cptr->setDirection(glm::vec3(ctptr->get_transform()[0]));
 }
 
-void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time,std::shared_ptr<Entity> skyLight ){
+void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time,gameSettings cameraSettings,std::shared_ptr<Entity> skyLight ){
 
     //Get enitities with mesh Component to render them
     std::vector<std::shared_ptr<Entity>> meshEntities = this->getEntitiesWithComponents<MeshRenderer, Transform>(entities);
@@ -72,7 +72,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     ccptr = cameraEntities[0]->getComp<FlyCameraController>();
 
     //Updating Camera position and Getting view Projection
-    this->updateCameraPosition(delta_time);
+    this->updateCameraPosition(delta_time,cameraSettings);
     //check if camera has parent and update transform accordingly
     this->calculateCameraTransform();
 	glm::mat4 viewProjection = cptr->getVPMatrix();

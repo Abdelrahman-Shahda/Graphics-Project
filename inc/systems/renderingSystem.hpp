@@ -29,7 +29,7 @@ class RenderingSystem : public System
 	//Private Member functions
     void calculateDistance(std::vector<RenderObjects>& objects,const std::shared_ptr<Transform>& node, const glm::mat4& parent_transform_matrix, const glm::mat4& cameraVPMatrix);
     void calculateCameraTransform();
-    void updateCameraPosition(double delta_time);
+    void updateCameraPosition(double delta_time,gameSettings cameraSettings);
     void setLightParamters(const std::vector<std::shared_ptr<MeshRenderer>>& meshRenderers, glm::vec3 cameraPosition,glm::mat4 viewProjection,std::shared_ptr<SkyLight> sky_light,const  std::vector<std::shared_ptr<Entity>> &lights);
 	//Data Members
     std::shared_ptr<MeshRenderer> mcptr;
@@ -40,7 +40,7 @@ class RenderingSystem : public System
     std::shared_ptr<FlyCameraController> ccptr;
 
 public:
-    void Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time,std::shared_ptr<Entity> skyLight =NULL) override;
+    void Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time,gameSettings cameraSettings,std::shared_ptr<Entity> skyLight =NULL) override;
 
 };
 
