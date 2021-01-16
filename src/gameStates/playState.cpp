@@ -6,7 +6,9 @@
 
 void PlayState::onEnter() {
 	shared_ptr<RenderingSystem> RS(new RenderingSystem);
+	shared_ptr<CollisionDetectionSystem> CS(new CollisionDetectionSystem);
 	systems.push_back(RS);
+	systems.push_back(CS);
 
 	//Intializing resources
 	//shaders
@@ -68,12 +70,13 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());
 	shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
 
-	shared_ptr<Resources::Texture> santaTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
-	shared_ptr<Resources::Texture> specularTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa_spec.jpg"));
+	shared_ptr<Resources::Texture> santaTexture(new Texture("albedo",ASSETS_DIR"/image/material/santa.jpg"));
+	shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/santa_spec.jpg"));
 	
 	//Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
 	material->addTexture(santaTexture, customizedSampler);
+	material->addTexture(specularTexture,customizedSampler);
 	material->addShaderParameter(skyLightTopColor);
 	material->addShaderParameter(skyLightMiddleColor);
 	material->addShaderParameter(skyLightBottomColor);
@@ -81,7 +84,7 @@ void PlayState::onEnter() {
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
-	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 10 }, {0, 0, 0 }, { 1,1,1 });
+	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
 	camTransformPtr->update();
 
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
@@ -90,10 +93,10 @@ void PlayState::onEnter() {
 
 
 	//Creating entities
-	shared_ptr<Entity> mainChar(new Entity);
-	shared_ptr<Entity> entity3(new Entity);
+	shared_ptr<Entity> mainChar(new Entity("Santa"));
+	shared_ptr<Entity> entity3(new Entity("Gift"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
-	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 7.5 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 7, 7.5 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
 	mainTransformPtr->update();
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
@@ -109,28 +112,98 @@ void PlayState::onEnter() {
 
 	//Creating lights components
 	shared_ptr<Entity> directionalLight(new Entity);
-	directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  3 }, { 1,1,1});
-	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.8, 0.2}, true,0.0f,0.0f,0.0f,0.0f,0.0f);
+	directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  -3 }, { 1,1,1});
+	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.0, 0.0}, true,0.1f,0.0f,0.0f,0.0f,0.0f);
 
     shared_ptr<Entity> pointLight(new Entity);
-    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 3, 2, 3 }, { -1, -1,  -1 }, { 1,1,1});
+    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -10 }, { -1, -1,  -1 }, { 1,1,1});
     pointLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::SPOT,{0.2, 1, 0.5}, true,0.2,0,0.0,0.78539816339,1.57079632679);
 
     world.push_back(directionalLight);
     world.push_back(pointLight);
 
-	gameSensitivity = 3.0f;
+	gameSettings.gameSensitivity = 0.1f;
+	gameSettings.jumpAmount = 500;
+	gameSettings.friction = 4.0f;
+	gameSettings.gravity = 9.8f;
+	gameSettings.groundLevel = 8;
+	gameSettings.ceilLevel = 28;
+	gameSettings.rightBound =60 ;
+	gameSettings.leftBound = -40;
+	gameSettings.velocity = glm::vec3(0.0f,0.0f,0.0f);
+	gameSettings.cameraZoom = false;
+	gameSettings.cameraRotate = false;
+	gameSettings.cameraPan = false;
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
+	gameSettings.characterRotation = 0.0f;
+	charOrientation = 0;
+
 }
 void PlayState::moveChar(double deltaTime)
 {
 	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];
-	glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) position += direction  * ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) position -= direction * ((float)deltaTime * gameSensitivity);
-	//if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) position += direction * ((float)deltaTime * gameSensitivity);
-	//if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) position -= direction * ((float)deltaTime * gameSensitivity);
+	int prevOrientation = charOrientation;
+
+	//Only move if you are on ground level
+	if (!(position.y > 1.2*gameSettings.groundLevel))
+	{
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) gameSettings.velocity.z -=  ((float)deltaTime * gameSettings.gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) gameSettings.velocity.z += ((float)deltaTime * gameSettings.gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) gameSettings.velocity.x += ((float)deltaTime * gameSettings.gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) gameSettings.velocity.x -= ((float)deltaTime * gameSettings.gameSensitivity);
+	//Rotate Character 45 deg. left and right
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_E)) charOrientation++;
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_Q)) charOrientation--;
+	}
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
+
+	//Update Rotation
+	if (charOrientation>2000)
+	charOrientation =2000;
+	if(charOrientation < -2000)
+	charOrientation =-2000;
+
+    if (prevOrientation == charOrientation)
+	gameSettings.characterRotation = 0;
+	else if (prevOrientation < charOrientation)
+	gameSettings.characterRotation = 0.001f;
+	else if (charOrientation < prevOrientation)
+	gameSettings.characterRotation = -0.001f;
+
+
+	//Update Position
+	position += gameSettings.velocity;
+   if (position.y < gameSettings.groundLevel)
+   {
+       position.y = gameSettings.groundLevel;
+       gameSettings.velocity.y = 0; 
+   }
+      if (position.y > gameSettings.ceilLevel)
+   {
+       position.y = gameSettings.ceilLevel;
+       gameSettings.velocity.y = 0; 
+   }
+
+	 if (position.x > gameSettings.rightBound)
+   {
+       position.x = gameSettings.rightBound;
+       gameSettings.velocity.x = 0; 
+   }
+
+   	 if (position.x < gameSettings.leftBound)
+   {
+       position.x = gameSettings.leftBound;
+       gameSettings.velocity.x = 0; 
+   }
+
+    //Slow down respective axes
+	//Friction in all directions except Y
+    gameSettings.velocity *= glm::vec3(1,0,1) *((float) exp(-gameSettings.friction*deltaTime));
+	//Deccelartion in Y direction
+    gameSettings.velocity.y -= ((float)deltaTime*gameSettings.gravity);
+
+
 	mainChar->getComp<Transform>()->set_position(position);
 	mainChar->getComp<Transform>()->update();
 }
@@ -138,7 +211,8 @@ void PlayState::moveChar(double deltaTime)
 void PlayState::onDraw(double deltaTime) {
 	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
 	{
-		(*systemIterator)->Run(world, deltaTime, skyLight);
-		moveChar(deltaTime);
+        moveChar(deltaTime);
+		(*systemIterator)->Run(world, deltaTime,gameSettings,skyLight);
+
 	}
 }

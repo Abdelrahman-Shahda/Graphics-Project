@@ -7,7 +7,7 @@
 class System
 {
 public:
-    virtual void Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time, std::shared_ptr<Entity> skyLight =NULL)=0;
+    virtual void Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time,gameSettings cameraSettings, std::shared_ptr<Entity> skyLight =NULL)=0;
 
 protected:
     template<class T>
@@ -18,6 +18,11 @@ protected:
 
     template<class T>
     std::vector<std::shared_ptr<T>> getComponentVector(const std::vector<std::shared_ptr<Entity>> &entities);
+
+    std::shared_ptr<Entity> getEntityWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
+
+    std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
+
 };
 
 template<class T>

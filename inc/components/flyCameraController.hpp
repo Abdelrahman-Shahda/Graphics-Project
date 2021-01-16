@@ -9,6 +9,7 @@
 #include <components/component.h>
 #include <components/camera.hpp>
 #include <application.hpp>
+#include <settings/gameSettings.hpp>
 
    // Allows you to control the camera freely in world space
     class FlyCameraController : public Component {
@@ -52,7 +53,7 @@
             }
         }
 
-        void update(double delta_time){
+        void update(double delta_time,gameSettings cameraSettings){
             if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && !mouse_locked){
                 app->getMouse().lockMouse(app->getWindow());
                 mouse_locked = true;
@@ -60,32 +61,41 @@
                 app->getMouse().unlockMouse(app->getWindow());
                 mouse_locked = false;
             }
-
+     if (cameraSettings.cameraPan){
             if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1)){
                 glm::vec2 delta = app->getMouse().getMouseDelta();
                 pitch -= delta.y * pitch_sensitivity;
                 yaw -= delta.x * yaw_sensitivity;
             }
+     }
+     
+             
 
             if(pitch < -glm::half_pi<float>() * 0.99f) pitch = -glm::half_pi<float>() * 0.99f;
             if(pitch >  glm::half_pi<float>() * 0.99f) pitch  = glm::half_pi<float>() * 0.99f;
-            yaw = glm::wrapAngle(yaw);
 
+            yaw = glm::wrapAngle(yaw);
+            
+            if (cameraSettings.cameraZoom){
             float fov = camera->getVerticalFieldOfView() + app->getMouse().getScrollOffset().y * fov_sensitivity;
             fov = glm::clamp(fov, glm::pi<float>() * 0.01f, glm::pi<float>() * 0.99f);
             camera->setVerticalFieldOfView(fov);
+            }
 
             glm::vec3 front = camera->Forward(), up = camera->Up(), right = camera->Right();
 
             glm::vec3 current_sensitivity = this->position_sensitivity;
             if(app->getKeyboard().isPressed(GLFW_KEY_LEFT_SHIFT)) current_sensitivity *= speedup_factor;
-
+            if (cameraSettings.cameraRotate){
             if(app->getKeyboard().isPressed(GLFW_KEY_W)) position += front * ((float)delta_time * current_sensitivity.z);
             if(app->getKeyboard().isPressed(GLFW_KEY_S)) position -= front * ((float)delta_time * current_sensitivity.z);
             if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * ((float)delta_time * current_sensitivity.y);
             if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * ((float)delta_time * current_sensitivity.y);
             if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * ((float)delta_time * current_sensitivity.x);
             if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * ((float)delta_time * current_sensitivity.x);
+            }
+            else
+                position += right * ((float)cameraSettings.characterRotation * current_sensitivity.x);
 
            //camera->setDirection(glm::vec3(glm::cos(yaw), 0, -glm::sin(yaw)) * glm::cos(pitch) + glm::vec3(0, glm::sin(pitch), 0));
            transform->set_position(position);

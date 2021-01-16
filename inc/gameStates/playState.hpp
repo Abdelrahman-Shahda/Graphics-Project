@@ -4,6 +4,7 @@
 #include <gameStates/gameState.hpp>
 #include <application.hpp>
 #include<systems/renderingSystem.hpp>
+#include <systems/collisionDetectionSystem.h>
 #include<utils/mesh-utils.hpp>
 
 #include <components/flyCameraController.hpp>
@@ -20,7 +21,8 @@ class PlayState : public GameState {
 protected:
 std::shared_ptr<Entity> mainChar;
 std::shared_ptr<Entity> mainCamera;
-float gameSensitivity;
+int charOrientation;
+gameSettings gameSettings;
 public:
 	PlayState(Application* app) :GameState(app) {};
     
