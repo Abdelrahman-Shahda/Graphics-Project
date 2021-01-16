@@ -6,7 +6,6 @@ void RenderingSystem::calculateCameraTransform()
 {
     if (ctptr->get_parent()!=nullptr)
     {
-         std::cout << glm::to_string(ctptr->get_transform()) << std::endl;
 
     glm::mat4 transform_matrix =ctptr->get_parent()->get_transform() * ctptr->get_transform();
     ctptr->set_transform(transform_matrix);

@@ -117,8 +117,8 @@ void PlayState::onEnter() {
     world.push_back(directionalLight);
     world.push_back(pointLight);
 
-	gameSensitivity = 1.0f;
-	friction = 2.0f;
+	gameSensitivity = 0.2f;
+	friction = 4.0f;
 	gravity = 9.8f;
 	groundLevel = 8;
 	velocity = glm::vec3(0.0f,0.0f,0.0f);
