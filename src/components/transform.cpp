@@ -29,3 +29,10 @@ glm::mat4 Transform::get_position() { return position;}
 
 glm::mat4 Transform::get_rotation() { return glm::yawPitchRoll(rotation.y,rotation.x,rotation.z);}
 glm::vec3 Transform::get_rotation_vec() {return rotation;}
+
+glm::mat4 Transform::get_ModalMatrix() {
+    if(parent != NULL)
+        return parent->get_ModalMatrix() * transform;
+    else
+        return transform;
+}

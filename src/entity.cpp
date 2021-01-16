@@ -3,8 +3,12 @@
 //
 #include <entity.hpp>
 unsigned int Entity::next_id = 0;
-Entity::Entity() {
+Entity::Entity(std::string tag) {
     this->id = next_id++;
+    this->tag = tag;
+}
+bool Entity::withTag(std::string tag) {
+    return tag == this->tag;
 }
 unsigned int Entity::getId() {
     return this->id;

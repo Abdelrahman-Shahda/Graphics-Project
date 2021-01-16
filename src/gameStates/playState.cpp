@@ -6,7 +6,9 @@
 
 void PlayState::onEnter() {
 	shared_ptr<RenderingSystem> RS(new RenderingSystem);
+	shared_ptr<CollisionDetectionSystem> CS(new CollisionDetectionSystem);
 	systems.push_back(RS);
+	systems.push_back(CS);
 
 	//Intializing resources
 	//shaders
@@ -35,8 +37,8 @@ void PlayState::onEnter() {
 	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
 	MeshUtils::Sphere(*meshPtr2);
 
-	std::cout <<"Min: x " <<min.x << " y "<< min.y << " z "<< min.z <<std::endl;
-    std::cout <<"Max: x " <<max.x << " y "<< max.y << " z "<< max.z <<std::endl;
+	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
+    std::cout <<"Max: x " <<meshPtr->getMaxPoint().x << " y "<< meshPtr->getMaxPoint().y << " z "<< meshPtr->getMaxPoint().z <<std::endl;
 
 
 	MeshUtils::Cuboid(*skyMesh);
@@ -66,12 +68,13 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());
 	shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
 
-	shared_ptr<Resources::Texture> santaTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
-	shared_ptr<Resources::Texture> specularTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa_spec.jpg"));
+	shared_ptr<Resources::Texture> santaTexture(new Texture("albedo",ASSETS_DIR"/image/material/santa.jpg"));
+	shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/santa_spec.jpg"));
 	
 	//Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
 	material->addTexture(santaTexture, customizedSampler);
+	material->addTexture(specularTexture,customizedSampler);
 	material->addShaderParameter(skyLightTopColor);
 	material->addShaderParameter(skyLightMiddleColor);
 	material->addShaderParameter(skyLightBottomColor);
@@ -79,7 +82,7 @@ void PlayState::onEnter() {
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
-	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
+	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
 	camTransformPtr->update();
 
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
@@ -88,10 +91,10 @@ void PlayState::onEnter() {
 
 
 	//Creating entities
-	shared_ptr<Entity> mainChar(new Entity);
-	shared_ptr<Entity> entity3(new Entity);
+	shared_ptr<Entity> mainChar(new Entity("Santa"));
+	shared_ptr<Entity> entity3(new Entity("Gift"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
-	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 7.5 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 7, 7.5 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
 	mainTransformPtr->update();
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
@@ -107,11 +110,11 @@ void PlayState::onEnter() {
 
 	//Creating lights components
 	shared_ptr<Entity> directionalLight(new Entity);
-	directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  3 }, { 1,1,1});
-	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.8, 0.2}, true,0.0f,0.0f,0.0f,0.0f,0.0f);
+	directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  -3 }, { 1,1,1});
+	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.0, 0.0}, true,0.1f,0.0f,0.0f,0.0f,0.0f);
 
     shared_ptr<Entity> pointLight(new Entity);
-    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 3, 2, 3 }, { -1, -1,  -1 }, { 1,1,1});
+    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -10 }, { -1, -1,  -1 }, { 1,1,1});
     pointLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::SPOT,{0.2, 1, 0.5}, true,0.2,0,0.0,0.78539816339,1.57079632679);
 
     world.push_back(directionalLight);
@@ -135,9 +138,6 @@ void PlayState::onEnter() {
 void PlayState::moveChar(double deltaTime)
 {
 	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];
-	//glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
-	//glm::vec3 up = mainCamera->getComp<Camera>()->getOriginalUp();
-	//glm::vec3 normal = glm::cross(direction,up);
 
 	//Only move if you are on ground level
 	if (!(position.y > 1.2*gameSettings.groundLevel))
@@ -146,6 +146,13 @@ void PlayState::moveChar(double deltaTime)
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) gameSettings.velocity.z += ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) gameSettings.velocity.x += ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) gameSettings.velocity.x -= ((float)deltaTime * gameSettings.gameSensitivity);
+
+	//Rotate Character 45 deg. left and right
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_E))
+	{
+       
+	}
+    
 	}
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
 
@@ -188,7 +195,8 @@ void PlayState::moveChar(double deltaTime)
 void PlayState::onDraw(double deltaTime) {
 	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
 	{
+        moveChar(deltaTime);
 		(*systemIterator)->Run(world, deltaTime,gameSettings,skyLight);
-		moveChar(deltaTime);
+
 	}
 }
