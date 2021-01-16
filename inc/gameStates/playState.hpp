@@ -20,6 +20,7 @@ class PlayState : public GameState {
 protected:
 std::shared_ptr<Entity> mainChar;
 std::shared_ptr<Entity> mainCamera;
+int charOrientation;
 gameSettings gameSettings;
 public:
 	PlayState(Application* app) :GameState(app) {};

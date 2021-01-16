@@ -13,4 +13,5 @@ int leftBound;
 int cameraPan;
 bool cameraZoom;
 bool cameraRotate;
+float characterRotation;
 };

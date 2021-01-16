@@ -68,6 +68,12 @@
                 yaw -= delta.x * yaw_sensitivity;
             }
      }
+
+     else
+     {
+         yaw -= cameraSettings.characterRotation * yaw_sensitivity;
+     }
+     
              
 
             if(pitch < -glm::half_pi<float>() * 0.99f) pitch = -glm::half_pi<float>() * 0.99f;

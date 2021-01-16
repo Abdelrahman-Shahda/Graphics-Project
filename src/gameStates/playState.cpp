@@ -131,6 +131,9 @@ void PlayState::onEnter() {
 	gameSettings.cameraPan = false;
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
+	gameSettings.characterRotation = 0.0f;
+	charOrientation = 0;
+
 }
 void PlayState::moveChar(double deltaTime)
 {
@@ -146,9 +149,42 @@ void PlayState::moveChar(double deltaTime)
 
 	//Rotate Character 45 deg. left and right
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_E))
+	{ switch (charOrientation)
 	{
-       
+		case 0:
+		gameSettings.characterRotation = -0.785;
+		charOrientation = 1;
+		break;
+		case 1:
+		gameSettings.characterRotation = 0;
+		charOrientation = 1;
+		break;
+		case -1:
+		gameSettings.characterRotation = -0.785;
+		charOrientation = 0;
+		break;
 	}
+	}
+
+		else if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_Q))
+	{ switch (charOrientation)
+	{
+		case 0:
+		gameSettings.characterRotation = 0.785;
+		charOrientation = -1;
+		break;
+		case 1:
+		gameSettings.characterRotation = 0.785;
+		charOrientation = 0;
+		break;
+		case -1:
+		gameSettings.characterRotation = 0;
+		charOrientation = -1;
+		break;
+	}
+	}
+	else
+	gameSettings.characterRotation = 0.0f;
     
 	}
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
