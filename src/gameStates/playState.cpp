@@ -82,7 +82,7 @@ void PlayState::onEnter() {
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
-	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 10 }, {0, 0, 0 }, { 1,1,1 });
+	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
 	camTransformPtr->update();
 
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
@@ -120,20 +120,69 @@ void PlayState::onEnter() {
     world.push_back(directionalLight);
     world.push_back(pointLight);
 
-	gameSensitivity = 3.0f;
+	gameSettings.gameSensitivity = 1.0f;
+	gameSettings.friction = 4.0f;
+	gameSettings.gravity = 9.8f;
+	gameSettings.groundLevel = 8;
+	gameSettings.ceilLevel = 28;
+	gameSettings.rightBound =60 ;
+	gameSettings.leftBound = -40;
+	gameSettings.cameraConstraintFactor = 8;
+	gameSettings.velocity = glm::vec3(0.0f,0.0f,0.0f);
+	gameSettings.cameraZoom = false;
+	gameSettings.cameraPan = false;
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
 }
 void PlayState::moveChar(double deltaTime)
 {
 	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];
-	glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
-	glm::vec3 up = mainCamera->getComp<Camera>()->getOriginalUp();
-	glm::vec3 normal = glm::cross(direction,up);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) position += direction  * ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) position -= direction * ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) position += normal * ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) position -= normal * ((float)deltaTime * gameSensitivity);
+	//glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
+	//glm::vec3 up = mainCamera->getComp<Camera>()->getOriginalUp();
+	//glm::vec3 normal = glm::cross(direction,up);
+
+	//Only move if you are on ground level
+	if (!(position.y > 1.2*gameSettings.groundLevel))
+	{
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) gameSettings.velocity.z -=  ((float)deltaTime * gameSettings.gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) gameSettings.velocity.z += ((float)deltaTime * gameSettings.gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) gameSettings.velocity.x += ((float)deltaTime * gameSettings.gameSensitivity);
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) gameSettings.velocity.x -= ((float)deltaTime * gameSettings.gameSensitivity);
+	}
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity * 50);
+
+	//Update Position
+	position += gameSettings.velocity;
+   if (position.y < gameSettings.groundLevel)
+   {
+       position.y = gameSettings.groundLevel;
+       gameSettings.velocity.y = 0; 
+   }
+      if (position.y > gameSettings.ceilLevel)
+   {
+       position.y = gameSettings.ceilLevel;
+       gameSettings.velocity.y = 0; 
+   }
+
+	 if (position.x > gameSettings.rightBound)
+   {
+       position.x = gameSettings.rightBound;
+       gameSettings.velocity.x = 0; 
+   }
+
+   	 if (position.x < gameSettings.leftBound)
+   {
+       position.x = gameSettings.leftBound;
+       gameSettings.velocity.x = 0; 
+   }
+
+    //Slow down respective axes
+	//Friction in all directions except Y
+    gameSettings.velocity *= glm::vec3(1,0,1) *((float) exp(-gameSettings.friction*deltaTime));
+	//Deccelartion in Y direction
+    gameSettings.velocity.y -= ((float)deltaTime*gameSettings.gravity);
+
+
 	mainChar->getComp<Transform>()->set_position(position);
 	mainChar->getComp<Transform>()->update();
 }
@@ -141,7 +190,7 @@ void PlayState::moveChar(double deltaTime)
 void PlayState::onDraw(double deltaTime) {
 	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
 	{
-		(*systemIterator)->Run(world, deltaTime, skyLight);
+		(*systemIterator)->Run(world, deltaTime,gameSettings,skyLight);
 		moveChar(deltaTime);
 	}
 }

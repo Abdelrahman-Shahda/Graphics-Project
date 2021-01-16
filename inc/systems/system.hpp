@@ -7,7 +7,7 @@
 class System
 {
 public:
-    virtual void Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time, std::shared_ptr<Entity> skyLight =NULL)=0;
+    virtual void Run(const std::vector<std::shared_ptr<Entity>> &entities,double delta_time,gameSettings cameraSettings, std::shared_ptr<Entity> skyLight =NULL)=0;
 
 protected:
     template<class T>

@@ -21,7 +21,7 @@ class PlayState : public GameState {
 protected:
 std::shared_ptr<Entity> mainChar;
 std::shared_ptr<Entity> mainCamera;
-float gameSensitivity;
+gameSettings gameSettings;
 public:
 	PlayState(Application* app) :GameState(app) {};
     
