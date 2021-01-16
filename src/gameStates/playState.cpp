@@ -78,20 +78,28 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/santa_spec.jpg"));
     shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
     shared_ptr<Resources::Texture> iceTexture(new Texture("albedo",ASSETS_DIR"/image/material/ice.jpg"));
-
-    //Material classes
+	shared_ptr<Resources::Texture> giftTexture(new Texture("albedo", ASSETS_DIR"/image/material/gift2.jpg"));
+    
+	//Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
     shared_ptr<Resources::Material> material2(new Material(shaderProgram));
 	material->addTexture(santaTexture, customizedSampler);
 	material->addTexture(specularTexture,customizedSampler);
-	//material2->addTexture(emissiveTexture, customizedSampler);
 	material->addShaderParameter(skyLightTopColor);
 	material->addShaderParameter(skyLightMiddleColor);
 	material->addShaderParameter(skyLightBottomColor);
+
     material2->addTexture(iceTexture,iceSampler);
     material2->addShaderParameter(skyLightTopColor);
     material2->addShaderParameter(skyLightMiddleColor);
     material2->addShaderParameter(skyLightBottomColor);
+
+	shared_ptr<Resources::Material> giftMaterial(new Material(shaderProgram));
+	giftMaterial->addTexture(giftTexture, customizedSampler);
+	//giftMaterial->addTexture(specularTexture, customizedSampler);
+	giftMaterial->addShaderParameter(skyLightTopColor);
+	giftMaterial->addShaderParameter(skyLightMiddleColor);
+	giftMaterial->addShaderParameter(skyLightBottomColor);
 
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
@@ -102,18 +110,16 @@ void PlayState::onEnter() {
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
 	world.push_back(mainCamera);
 
-
-
 	//Creating entities
 	shared_ptr<Entity> mainChar(new Entity("Santa"));
 	shared_ptr<Entity> entity3(new Entity("Gift"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
-	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 7, 7.5 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 9, 7.5 }, {0, 3.14, 0 }, { 0.2, 0.5, 0.5 });
 	mainTransformPtr->update();
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
 
-	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material);
+	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, giftMaterial);
 	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
 	entity3->getComp<Transform>()->update();
     entity3->addComp<RenderState,bool>(true);
@@ -126,17 +132,19 @@ void PlayState::onEnter() {
     icePtr->update();
     icePlane->addComp<RenderState,bool>(true);
     world.push_back(icePlane);
+
     //Make camera follow Main character
     camTransformPtr->set_parent(mainTransformPtr);
     mainTransformPtr->add_child(camTransformPtr);
 
-		//Snowman
+	//Snowman
     shared_ptr<Entity> snowMan(new Entity());
     snowMan->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(snowmanMesh, material2);
     std::shared_ptr<Transform> snowmanPtr= snowMan->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -10, 8, -10 }, {0, 0, 0 }, { 0.1, 0.1, 0.1 });
     snowmanPtr->update();
     snowMan->addComp<RenderState,bool>(true);
     world.push_back(snowMan);
+
      //Santa Sleigh
 	shared_ptr<Entity> sleigh(new Entity());
     sleigh->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(sleighMesh, material);

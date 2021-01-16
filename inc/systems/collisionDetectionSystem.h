@@ -6,7 +6,7 @@
 class CollisionDetectionSystem : public System
 {
 private:
-	bool areCoordinatesColliding(int min1, int min2, int max2);
+	bool areCoordinatesColliding(int min1, int max1, int min2, int max2);
 protected:
 	bool detectCollision(const std::shared_ptr<Entity> gameCharacter, const std::shared_ptr<Entity> gameObject);
 public:
