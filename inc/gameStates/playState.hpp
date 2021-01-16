@@ -25,6 +25,9 @@ glm::vec3 velocity;
 float friction;
 float gravity;
 int groundLevel;
+int ceilLevel;
+int rightBound;
+int leftBound;
 public:
 	PlayState(Application* app) :GameState(app) {};
     

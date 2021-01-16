@@ -121,6 +121,9 @@ void PlayState::onEnter() {
 	friction = 4.0f;
 	gravity = 9.8f;
 	groundLevel = 8;
+	ceilLevel = 28;
+	rightBound =60 ;
+	leftBound = -40;
 	velocity = glm::vec3(0.0f,0.0f,0.0f);
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
@@ -131,11 +134,16 @@ void PlayState::moveChar(double deltaTime)
 	//glm::vec3 direction = mainCamera->getComp<Camera>()->getDirection();
 	//glm::vec3 up = mainCamera->getComp<Camera>()->getOriginalUp();
 	//glm::vec3 normal = glm::cross(direction,up);
+
+	//Only move if you are on ground level
+	if (!(position.y > 1.2*groundLevel))
+	{
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) velocity.z -=  ((float)deltaTime * gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) velocity.z += ((float)deltaTime * gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) velocity.x += ((float)deltaTime * gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_LEFT)) velocity.x -= ((float)deltaTime * gameSensitivity);
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE)) velocity.y += ((float)deltaTime * gameSensitivity * 200);
+	}
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))velocity.y += ((float)deltaTime * gameSensitivity * 200);
 
 	//Update Position
 	position += velocity;
@@ -144,6 +152,24 @@ void PlayState::moveChar(double deltaTime)
        position.y = groundLevel;
        velocity.y = 0; 
    }
+      if (position.y > ceilLevel)
+   {
+       position.y = ceilLevel;
+       velocity.y = 0; 
+   }
+
+	 if (position.x > rightBound)
+   {
+       position.x = rightBound;
+       velocity.x = 0; 
+   }
+
+   	 if (position.x < leftBound)
+   {
+       position.x = leftBound;
+       velocity.x = 0; 
+   }
+
     //Slow down respective axes
 	//Friction in all directions except Y
     velocity *= glm::vec3(1,0,1) *((float) exp(-friction*deltaTime));
