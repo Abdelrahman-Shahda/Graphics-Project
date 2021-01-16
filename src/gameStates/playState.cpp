@@ -6,7 +6,9 @@
 
 void PlayState::onEnter() {
 	shared_ptr<RenderingSystem> RS(new RenderingSystem);
+	shared_ptr<CollisionDetectionSystem> CS(new CollisionDetectionSystem);
 	systems.push_back(RS);
+	systems.push_back(CS);
 
 	//Intializing resources
 	//shaders
@@ -66,12 +68,13 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Sampler> defaultSampler(new Sampler());
 	shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
 
-	shared_ptr<Resources::Texture> santaTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
-	shared_ptr<Resources::Texture> specularTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa_spec.jpg"));
+	shared_ptr<Resources::Texture> santaTexture(new Texture("albedo",ASSETS_DIR"/image/material/santa.jpg"));
+	shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/santa_spec.jpg"));
 	
 	//Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
 	material->addTexture(santaTexture, customizedSampler);
+	material->addTexture(specularTexture,customizedSampler);
 	material->addShaderParameter(skyLightTopColor);
 	material->addShaderParameter(skyLightMiddleColor);
 	material->addShaderParameter(skyLightBottomColor);
@@ -88,8 +91,8 @@ void PlayState::onEnter() {
 
 
 	//Creating entities
-	shared_ptr<Entity> mainChar(new Entity);
-	shared_ptr<Entity> entity3(new Entity);
+	shared_ptr<Entity> mainChar(new Entity("Santa"));
+	shared_ptr<Entity> entity3(new Entity("Gift"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
 	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 7.5 }, {0, 3.14, 0 }, { 0.5, 0.5, 0.5 });
 	mainTransformPtr->update();
@@ -107,8 +110,8 @@ void PlayState::onEnter() {
 
 	//Creating lights components
 	shared_ptr<Entity> directionalLight(new Entity);
-	directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  3 }, { 1,1,1});
-	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1, 0.8, 0.2}, true,0.0f,0.0f,0.0f,0.0f,0.0f);
+	directionalLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0,1, 3 }, { 0, 1,  -3 }, { 1,1,1});
+	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{0, 0.8, 0.2}, true,0.1f,0.0f,0.0f,0.0f,0.0f);
 
     shared_ptr<Entity> pointLight(new Entity);
     pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 3, 2, 3 }, { -1, -1,  -1 }, { 1,1,1});
