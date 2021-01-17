@@ -58,7 +58,7 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Material> skyMaterial(new Material(skyProgram));
 	skyTest->addComp<SkyLight, bool, glm::vec3, glm::vec3, glm::vec3>(true, { 0.1, 0.1, 0.1 }, { 0.35, 0.35, 0.4 }, { 0.25, 0.25, 0.25 });
 	skyTest->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(skyMesh, skyMaterial);
-	skyTest->addComp<RenderState>();
+	skyTest->addComp<RenderState,bool,bool>(true,true);
 	skyLight = skyTest;
 
 	//Shader Params
@@ -126,7 +126,7 @@ void PlayState::onEnter() {
 	mainChar->addComp<Player>();
 	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, 35}, {0, 3.14, 0 }, { 1, 1, 1 });
 	mainTransformPtr->update();
-    mainChar->addComp<RenderState>();
+    mainChar->addComp<RenderState,bool,bool>(true,true);
 	world.push_back(mainChar);
 
 	    //Make camera follow Main character

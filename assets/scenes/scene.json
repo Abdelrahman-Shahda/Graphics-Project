@@ -87,8 +87,7 @@
         "Camera": {},
         "RenderState": {
           "isVisible": true,
-          "enable_depth_test": true,
-          "depth_function":
+          "enable_depth_test": true
         },
         "MeshRenderer": {
           "mesh": "santa",
