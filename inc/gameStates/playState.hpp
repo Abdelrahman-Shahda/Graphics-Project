@@ -26,7 +26,7 @@ protected:
 	std::shared_ptr<Entity> mainCamera;
 	int charOrientation;
 	gameSettings gameSettings;
-	void intializeGameSetting();
+	void intializeGameSettings();
 public:
 	PlayState(Application* app) :GameState(app) {};
     

@@ -111,7 +111,7 @@ void PlayState::onEnter() {
 	shared_ptr<Entity> entity3(new Entity("Gift"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
 	mainChar->addComp<Player>();
-	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 9, 7.5 }, {0, 3.14, 0 }, { 0.25, 0.5, 0.5 });
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 10 }, {0, 3.14, 0 }, { 1, 1, 1 });
 	mainTransformPtr->update();
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
@@ -173,14 +173,14 @@ void PlayState::onEnter() {
 	systems.push_back(RS);
 	systems.push_back(CS);
 
-	intializeGameSetting();
+	intializeGameSettings();
 
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
 	charOrientation = 0;
 }
 
-void PlayState ::intializeGameSetting()
+void PlayState ::intializeGameSettings()
 {
 	gameSettings.gameSensitivity = 0.1f;
 	gameSettings.jumpAmount = 500;
