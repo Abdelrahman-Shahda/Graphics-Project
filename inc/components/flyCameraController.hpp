@@ -39,8 +39,10 @@
             position_sensitivity = {3.0f, 3.0f, 3.0f};
             fov_sensitivity = glm::pi<float>()/10;
 
-            position = camera->getEyePosition();
-            auto direction = camera->getDirection();
+            position = transform->get_position()[3];
+            auto direction = transform->get_rotation_vec();
+            camera->setEyePosition(position);
+            camera->setDirection(direction);
             yaw = glm::atan(-direction.z, direction.x);
             float base_length = glm::sqrt(direction.x * direction.x + direction.z * direction.z);
             pitch = glm::atan(direction.y, base_length);
@@ -68,6 +70,7 @@
                 yaw -= delta.x * yaw_sensitivity;
             }
      }
+     
              
 
             if(pitch < -glm::half_pi<float>() * 0.99f) pitch = -glm::half_pi<float>() * 0.99f;
@@ -93,12 +96,12 @@
             if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * ((float)delta_time * current_sensitivity.x);
             if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * ((float)delta_time * current_sensitivity.x);
             }
+            else
+                position += right * ((float)cameraSettings.characterRotation * current_sensitivity.x);
 
-           //camera->setDirection(glm::vec3(glm::cos(yaw), 0, -glm::sin(yaw)) * glm::cos(pitch) + glm::vec3(0, glm::sin(pitch), 0));
            transform->set_position(position);
            transform->set_rotation(glm::vec3(0,yaw,pitch));
            transform->update();
-           //camera->setEyePosition(position);
         }
 
         [[nodiscard]] float getYaw() const {return yaw;}

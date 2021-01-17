@@ -1,0 +1,61 @@
+{
+  "resources": {
+    "shaders": {
+      "defaultShader": {
+        "vert": "light_transform.vert",
+        "frag": "light_array.frag"
+      },
+      "skyShader": {
+        "vert": "sky_transform.vert",
+        "frag": "sky.frag"
+      }
+    },
+    "meshes": {
+      "santa": "Santa Claus/santa.obj",
+      "sleigh": "Sleigh/sleigh.obj",
+      "tree": "Tree/tree.obj"
+    },
+    "textures": {
+      "santa": "santa.jpg",
+      "santa_spec": "santa_spec.jpg",
+      "ice": "ice.jpg",
+      "gift": "gift.jpg"
+    },
+    "samplers": {
+      "default": {
+        "wrap_s": "GL_REPEAT",
+        "wrap_t": "GL_REPEAT",
+        "magnificationFilter": "GL_LINEAR",
+        "minificationFilter": "GL_NEAREST"
+      },
+      "santa": {
+        "wrap_s": "GL_CLAMP_TO_EDGE",
+        "wrap_t": "GL_CLAMP_TO_EDGE",
+        "magnificationFilter": "GL_LINEAR",
+        "minificationFilter": "GL_NEAREST"
+      }
+
+    },
+    "materials": {
+      "santaMaterial": {
+        "shader": "defaultShader",
+        "sampler": "santa",
+        "albedo": "santa",
+        "specular": "santa_spec"
+      },
+      "iceMaterial": {
+        "shader": "defaultShader",
+        "sampler": "default",
+        "albedo": "ice"
+      },
+      "giftMaterial": {
+        "shader": "defaultShader",
+        "sampler": "santa",
+        "albedo": "gift"
+      }
+
+
+    }
+
+  }
+}

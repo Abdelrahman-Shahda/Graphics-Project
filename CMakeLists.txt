@@ -37,11 +37,13 @@ set(COMMON_SOURCES
 		src/systems/system.cpp
 		src/systems/renderingSystem.cpp
 		src/systems/collisionDetectionSystem.cpp
+		src/systems/giftCollectionSystem.cpp
 		src/components/component.cpp
 		src/components/lighting.cpp
 		src/components/skylight.cpp
 		src/components/meshRenderer.cpp
 		src/components/transform.cpp
+		src/components/player.cpp
 		src/resources/material.cpp
 		src/resources/shader.cpp
 		src/resources/texture.cpp
@@ -49,8 +51,8 @@ set(COMMON_SOURCES
 		src/gameStates/playState.cpp
 		src/gameStates/menuState.cpp
 		src/entity.cpp 
-		src/scene.cpp 
-		)
+		src/scene.cpp
+        src/utils/sceneLoader.cpp inc/utils/loadingFunction.h)
 
 # Define the directories in which to search for the included headers
 include_directories(
