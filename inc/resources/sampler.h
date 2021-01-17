@@ -12,10 +12,10 @@ namespace Resources {
     class Sampler {
         GLuint sampler;
         // GL_REPEAT OR GL_MIRRORED_REPEAT OR GL_CLAMP_TO_EDGE OR GL_CLAMP_TO_BORDER
-        int wrabS;
-        int wrabT;
-        int magnificationFilter;
-        int minificationFilter;
+		GLenum wrabS;
+		GLenum wrabT;
+		GLenum magnificationFilter;
+		GLenum minificationFilter;
         GLfloat anistropy;
 		GLfloat maxAnistropoy;
 		glm::vec4 borderColor;
@@ -23,10 +23,10 @@ namespace Resources {
 		void passSamplerParams();
 
     public:
-        Sampler(int wrab_s_ = GL_REPEAT, int wrab_t_ = GL_REPEAT, int magnification_filter_ = GL_LINEAR, int minification_filter_ = GL_LINEAR_MIPMAP_LINEAR, glm::vec4 border_color = { 1,1,1,1 }, GLfloat max_anisotropy_upper_bound_ = 1.0f);
+        Sampler(GLenum wrab_s_ = GL_REPEAT, GLenum wrab_t_ = GL_REPEAT, GLenum magnification_filter_ = GL_LINEAR, GLenum minification_filter_ = GL_LINEAR_MIPMAP_LINEAR, glm::vec4 border_color = { 1,1,1,1 }, GLfloat max_anisotropy_upper_bound_ = 1.0f);
         void useSampler(GLuint textureUnit);
         GLuint getSamplerobject() const;
-        void setSamplerParams(int wrab_s_, int wrab_t_ ,int magnification_filter_,int minification_filter_, glm::vec4 border_color,GLfloat anistropy_);
+        void setSamplerParams(GLenum wrab_s_, GLenum wrab_t_ , GLenum magnification_filter_, GLenum minification_filter_, glm::vec4 border_color,GLfloat anistropy_);
         ~Sampler();
 
 		Sampler(Sampler const &) = delete;

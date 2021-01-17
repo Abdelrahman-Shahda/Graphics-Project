@@ -7,6 +7,17 @@
 #ifndef GRAPHICSPROJECT_LOADINGFUNCTION_H
 #define GRAPHICSPROJECT_LOADINGFUNCTION_H
 
+#include <resources/shader.hpp>
+#include <resources/sampler.h>
+
+#include <glm/glm.hpp>
+#include <json/json.hpp>
+
+using std::shared_ptr;
+using std::string;
+using namespace Resources;
+
+
 
 namespace glm {
     template<length_t L, typename T, qualifier Q>
@@ -16,12 +27,4 @@ namespace glm {
     }
 }
 
-void from_json(const nlohmann::json& j, Entity &entity){
-
-
-
-
-
-//    entity->setTag(tag);
-}
 #endif //GRAPHICSPROJECT_LOADINGFUNCTION_H
