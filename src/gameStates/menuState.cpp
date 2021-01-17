@@ -42,7 +42,7 @@ void menuState::onEnter() {
     shared_ptr<Resources::Material> skyMaterial(new Material(skyProgram));
     skyTest->addComp<SkyLight, bool, glm::vec3, glm::vec3, glm::vec3>(true, { 0.25, 0.3, 0.5 }, { 0.35, 0.35, 0.4 }, { 0.25, 0.25, 0.25 });
     skyTest->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(skyMesh, skyMaterial);
-    skyTest->addComp<RenderState>();
+    skyTest->addComp<RenderState,bool,bool>(true,true);
     skyLight = skyTest;
 
     //Shader Params
@@ -108,7 +108,7 @@ void menuState::onEnter() {
     entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material);
     entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0,10, -8}, { 0,0,  3.14/2 }, { 2,2,2});
     entity2->getComp<Transform>()->update();
-    entity2->addComp<RenderState,bool>(true);
+    entity2->addComp<RenderState,bool,bool>(true,true);
 
 
 
@@ -126,7 +126,7 @@ void menuState::onEnter() {
 
 
     gameSettings.cameraZoom = false;
-    // gameSettings.cameraRotate = false;
+    //gameSettings.cameraRotate = false;
     gameSettings.cameraPan = false;
 
 }

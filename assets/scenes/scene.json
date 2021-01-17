@@ -55,21 +55,23 @@
     "materials": {
       "santaMaterial": {
         "shader": "defaultShader",
-        "sampler": "santa",
-        "albedo": "santa",
-        "specular": "santa_spec"
+        "textures": {
+          "santa": "santa",
+          "santa_spec": "santa"
+        }
       },
       "iceMaterial": {
         "shader": "defaultShader",
-        "sampler": "default",
-        "albedo": "ice"
+        "textures": {
+          "ice": "deafult"
+        }
       },
       "giftMaterial": {
         "shader": "defaultShader",
-        "sampler": "santa",
-        "albedo": "gift"
+        "textures": {
+          "gift": "santa"
+        }
       }
-
 
     }
 
@@ -82,6 +84,12 @@
           "position": [ 0, 10, 35],
           "rotation": [0, 3.14, 0 ],
           "scale": [1,1,1]
+        },
+        "Player": {},
+        "Camera": {},
+        "RenderState": {
+          "isVisible": true,
+          "enable_depth_test": true
         },
         "MeshRenderer": {
           "mesh": "santa",

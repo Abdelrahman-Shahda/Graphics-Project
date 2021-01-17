@@ -33,6 +33,7 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> iceMesh(new Mesh);
 	shared_ptr<Mesh> treeMesh(new Mesh);
 	shared_ptr<Mesh> sleighMesh(new Mesh);
+	shared_ptr<Mesh> snowMesh(new Mesh);
 	shared_ptr<Mesh> heartMesh_1(new Mesh);
 	shared_ptr<Mesh> heartMesh_2(new Mesh);
 	shared_ptr<Mesh> heartMesh_3(new Mesh);
@@ -43,6 +44,7 @@ void PlayState::onEnter() {
 	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
 	MeshUtils::loadOBJ(*treeMesh,ASSETS_DIR"/models/Tree/tree.obj");
 	MeshUtils::loadOBJ(*sleighMesh,ASSETS_DIR"/models/Sleigh/sleigh.obj");
+	MeshUtils::Sphere(*snowMesh,glm::vec2{32,16},false);
 	MeshUtils::loadOBJ(*heartMesh_1,ASSETS_DIR"/models/Heart/heart.obj");
 	MeshUtils::loadOBJ(*heartMesh_2,ASSETS_DIR"/models/Heart/heart.obj");
 	MeshUtils::loadOBJ(*heartMesh_3,ASSETS_DIR"/models/Heart/heart.obj");
@@ -60,7 +62,7 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Material> skyMaterial(new Material(skyProgram));
 	skyTest->addComp<SkyLight, bool, glm::vec3, glm::vec3, glm::vec3>(true, { 0.1, 0.1, 0.1 }, { 0.35, 0.35, 0.4 }, { 0.25, 0.25, 0.25 });
 	skyTest->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(skyMesh, skyMaterial);
-	skyTest->addComp<RenderState>();
+	skyTest->addComp<RenderState,bool,bool>(true,true);
 	skyLight = skyTest;
 
 	//Shader Params
@@ -86,30 +88,40 @@ void PlayState::onEnter() {
     shared_ptr<Resources::Texture> iceTexture(new Texture("albedo",ASSETS_DIR"/image/material/ice.jpg"));
     shared_ptr<Resources::Texture> giftTexture(new Texture("albedo",ASSETS_DIR"/image/material/gift.jpg"));
 	shared_ptr<Resources::Texture> heartTexture(new Texture("albedo",ASSETS_DIR"/image/material/heart.jpg"));
+
     shared_ptr<Resources::Texture> elfTexture(new Texture("albedo",ASSETS_DIR"/image/material/gift.jpg"));
 
+	shared_ptr<Resources::Texture> sleighTexture(new Texture("albedo",ASSETS_DIR"/image/material/heart.jpg"));
+	shared_ptr<Resources::Texture> snowTexture(new Texture("albedo",ASSETS_DIR"/image/material/snow.jpg"));
+	shared_ptr<Resources::Texture> treeTexture(new Texture("albedo",ASSETS_DIR"/image/material/tree.jpg"));
+
+
     //Material classes
-	shared_ptr<Resources::Material> material(new Material(shaderProgram));
+	shared_ptr<Resources::Material> santaMaterial(new Material(shaderProgram));
 	shared_ptr<Resources::Material> heartMaterial(new Material(shaderProgram));
-    shared_ptr<Resources::Material> material2(new Material(shaderProgram));
+	shared_ptr<Resources::Material> sleighMaterial(new Material(shaderProgram));
+	shared_ptr<Resources::Material> snowMaterial(new Material(shaderProgram));
+	shared_ptr<Resources::Material> treeMaterial(new Material(shaderProgram));
+    shared_ptr<Resources::Material> iceMaterial(new Material(shaderProgram));
+
 
 	heartMaterial->addTexture(heartTexture,customizedSampler);
+	treeMaterial->addTexture(treeTexture,customizedSampler);
+	sleighMaterial->addTexture(sleighTexture,customizedSampler);
+	snowMaterial->addTexture(snowTexture,customizedSampler);
+	santaMaterial->addTexture(santaTexture, customizedSampler);
+	santaMaterial->addTexture(specularTexture,customizedSampler);
+	santaMaterial->addShaderParameter(skyLightTopColor);
+	santaMaterial->addShaderParameter(skyLightMiddleColor);
+	santaMaterial->addShaderParameter(skyLightBottomColor);
 
-	material->addTexture(santaTexture, customizedSampler);
-	material->addTexture(specularTexture,customizedSampler);
-	//material2->addTexture(emissiveTexture, customizedSampler);
-	material->addShaderParameter(skyLightTopColor);
-	material->addShaderParameter(skyLightMiddleColor);
-	material->addShaderParameter(skyLightBottomColor);
-
-    material2->addTexture(iceTexture,iceSampler);
-    material2->addShaderParameter(skyLightTopColor);
-    material2->addShaderParameter(skyLightMiddleColor);
-    material2->addShaderParameter(skyLightBottomColor);
+    iceMaterial->addTexture(iceTexture,iceSampler);
+    iceMaterial->addShaderParameter(skyLightTopColor);
+    iceMaterial->addShaderParameter(skyLightMiddleColor);
+    iceMaterial->addShaderParameter(skyLightBottomColor);
 
 	shared_ptr<Resources::Material> giftMaterial(new Material(shaderProgram));
 	giftMaterial->addTexture(giftTexture, customizedSampler);
-	//giftMaterial->addTexture(specularTexture, customizedSampler);
 	giftMaterial->addShaderParameter(skyLightTopColor);
 	giftMaterial->addShaderParameter(skyLightMiddleColor);
 	giftMaterial->addShaderParameter(skyLightBottomColor);
@@ -133,16 +145,32 @@ void PlayState::onEnter() {
 
 	//Creating entities
 	shared_ptr<Entity> mainChar(new Entity("Santa"));
-	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
+	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, santaMaterial);
 	mainChar->addComp<Player>();
 	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, 35}, {0, 3.14, 0 }, { 1, 1, 1 });
 	mainTransformPtr->update();
-    mainChar->addComp<RenderState>();
+    mainChar->addComp<RenderState,bool,bool>(true,true);
 	world.push_back(mainChar);
 
 	    //Make camera follow Main character
     camTransformPtr->set_parent(mainTransformPtr);
     mainTransformPtr->add_child(camTransformPtr);
+
+
+	//snow
+	for (int i=30;i>0;i=i-10)
+		for (int j=-50;j<50;j=j+10)
+			for (int k=-15;k<45;k=k+10)
+	{
+	shared_ptr<Entity> snow(new Entity("Snow"));
+	snow->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(snowMesh, snowMaterial);
+	snow->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ j, i, k }, { 0, 0, 0 }, { 0.5, 0.5,  0.5 });
+	snow->getComp<Transform>()->update();
+    snow->addComp<RenderState,bool>(true);
+	snow->getComp<RenderState>()->enable_blending = true;
+	snow->getComp<RenderState>()->update();
+	world.push_back(snow);
+	}
 
 	//gift
 	shared_ptr<Entity> gift(new Entity("Gift"));
@@ -153,15 +181,19 @@ void PlayState::onEnter() {
     gift->addComp<RenderState,bool>(true);
 	world.push_back(gift);
 
-    shared_ptr<Entity> elf_entity(new Entity("Gift"));
+
+    shared_ptr<Entity> elf_entity(new Entity("Elf"));
     elf_entity->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(elf, elfMaterial);
     elf_entity->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -8 }, { 0, 0, 0 }, { 1, 1,  1 });
     elf_entity->getComp<Transform>()->update();
-    elf_entity->addComp<Gift, int>(100);
+    elf_entity->addComp<Elf, int>(100);
     elf_entity->addComp<RenderState,bool>(true);
     world.push_back(elf_entity);
 
 //hearts
+
+    //hearts
+
 	shared_ptr<Entity> heart_1(new Entity("Life"));
 	heart_1->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_1, heartMaterial);
 	heart_1->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -35, 60, 50 }, { 3*3.14/2,0 , 0 }, { 0.05, 0.05,  0.05 });
@@ -193,7 +225,7 @@ void PlayState::onEnter() {
 
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());
-    icePlane->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(iceMesh, material2);
+    icePlane->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(iceMesh, iceMaterial);
     std::shared_ptr<Transform> icePtr= icePlane->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, 7.5 }, {0, 0, 0 }, { 60, 1, 60 });
     icePtr->update();
     icePlane->addComp<RenderState,bool>(true);
@@ -201,7 +233,7 @@ void PlayState::onEnter() {
 
 	//Tree
     shared_ptr<Entity> tree(new Entity());
-    tree->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(treeMesh, material2);
+    tree->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(treeMesh, treeMaterial);
     std::shared_ptr<Transform> treePtr= tree->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -20, 10, -10 }, {0, 0, 0 }, { 0.1, 0.1, 0.1 });
     treePtr->update();
     tree->addComp<RenderState,bool>(true);
@@ -209,7 +241,7 @@ void PlayState::onEnter() {
 
      //Santa Sleigh
 	shared_ptr<Entity> sleigh(new Entity());
-    sleigh->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(sleighMesh, material);
+    sleigh->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(sleighMesh, sleighMaterial);
     std::shared_ptr<Transform> sleighPtr= sleigh->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 20, 10, -15 }, {0, 3.14/2, 0 }, { 0.003, 0.003, 0.003 });
     sleighPtr->update();
     sleigh->addComp<RenderState,bool>(true);
@@ -230,8 +262,10 @@ void PlayState::onEnter() {
 	//Intializing systems
 	shared_ptr<RenderingSystem> RS(new RenderingSystem);
 	shared_ptr<CollisionDetectionSystem> CS(new GiftCollectionSystem(mainChar));
+    shared_ptr<CollisionDetectionSystem> ES(new elfCollisionSystem(mainChar));
 	systems.push_back(RS);
 	systems.push_back(CS);
+    systems.push_back(ES);
 
 	intializeGameSettings();
     this->elf_entity=elf_entity;
@@ -245,10 +279,10 @@ void PlayState ::intializeGameSettings()
 	gameSettings.gameSensitivity = 1.0f;
 	gameSettings.jumpAmount = 500;
 	gameSettings.friction = 4.0f;
-	gameSettings.gravity = 9.8f;
+	gameSettings.gravity = 98.0f;
 	gameSettings.groundLevel = 0;
 	gameSettings.planeLevel = 10;
-	gameSettings.ceilLevel = 28;
+	gameSettings.ceilLevel = 30;
 	gameSettings.rightBound = 50;
 	gameSettings.leftBound = -50;
 	gameSettings.velocity = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -275,11 +309,8 @@ void PlayState::moveChar(double deltaTime)
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_E)) charOrientation++;
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_Q)) charOrientation--;
 
-	//Only jump if you are on ground level
-	if (!(position.y > 1.2*(gameSettings.planeLevel)))
-	{
+	//Only jump if you are on g level
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
-    }
 	//Update Rotation
 	if (charOrientation>50)
 	charOrientation =50;
@@ -348,11 +379,15 @@ void PlayState::moveChar(double deltaTime)
 }
 
 void PlayState::onDraw(double deltaTime) {
-	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++) 
+	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
         (*systemIterator)->Run(world, deltaTime, gameSettings, skyLight);
 
 		moveChar(deltaTime);
+
 		moveelf(deltaTime);
+
+		moveSnow(deltaTime);
+
 }
 
 bool PlayState::checkGameOver()
@@ -410,6 +445,7 @@ std::vector<std::shared_ptr<Entity>> PlayState::getEntitiesWithTag(const std::ve
     return temp;
 }
 
+
 void PlayState::moveelf(double deltaTime) {
     const int range_from  = 0;
     const int range_to    = 3;
@@ -429,3 +465,21 @@ void PlayState::moveelf(double deltaTime) {
     }
 
 }
+
+void PlayState::moveSnow(double deltaTime)
+{
+	glm::vec3 position; 
+  	std::vector<std::shared_ptr<Entity>> snow = getEntitiesWithTag(world,"Snow");
+	  for (int i=0;i<snow.size();i++)
+	  {
+		  position = snow[i]->getComp<Transform>()->get_position()[3];
+		  position.y -= ((float)deltaTime*gameSettings.gravity);
+		  if (position.y < gameSettings.groundLevel)
+		  position.y = gameSettings.ceilLevel;
+
+		 snow[i]->getComp<Transform>()->set_position(position);
+		 snow[i]->getComp<Transform>()->update();
+
+	  }
+}
+

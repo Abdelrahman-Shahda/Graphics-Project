@@ -7,6 +7,7 @@
 
 #include<systems/renderingSystem.hpp>
 #include <systems/giftCollectionSystem.h>
+#include <systems/elfCollisionSystem.h>
 
 #include <components/flyCameraController.hpp>
 #include <components/camera.hpp>
@@ -14,6 +15,7 @@
 #include <components/lighting.h>
 #include <components/player.hpp>
 #include <components/gift.hpp>
+#include <components/elf.hpp>
 
 #include <resources/material.h>
 #include <resources/shader.hpp>
@@ -38,6 +40,7 @@ public:
 	bool checkGameOver();
 	void updateLives();
 	void moveelf(double deltaTime);
+	void moveSnow(double deltaTime);
 	std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
 };
 #endif
