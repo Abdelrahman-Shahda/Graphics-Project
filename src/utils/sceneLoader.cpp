@@ -76,6 +76,7 @@ shared_ptr<ShaderProgram> SceneLoader:: loadShader(const nlohmann::json& j)
 
 	//string dir = ASSETS_DIR;
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new ShaderProgram);
+	shaderProgram->create();
 	shaderProgram->attach(vertexShaderPath, GL_VERTEX_SHADER);
 	shaderProgram->attach(fragmentShaderPath, GL_FRAGMENT_SHADER);
 	shaderProgram->link();
