@@ -32,12 +32,15 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> iceMesh(new Mesh);
 	shared_ptr<Mesh> treeMesh(new Mesh);
 	shared_ptr<Mesh> sleighMesh(new Mesh);
+	shared_ptr<Mesh> heartMesh(new Mesh);
+
 	glm::vec3 min;
     glm::vec3 max;
 
 	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
 	MeshUtils::loadOBJ(*treeMesh,ASSETS_DIR"/models/Tree/tree.obj");
 	MeshUtils::loadOBJ(*sleighMesh,ASSETS_DIR"/models/Sleigh/sleigh.obj");
+	MeshUtils::loadOBJ(*heartMesh,ASSETS_DIR"/models/Heart/Heart.obj");
 
 	MeshUtils::Cuboid(*meshPtr2,false);
     MeshUtils::Plane(*iceMesh,{1, 1}, false, {0, 0, 0}, {1, 1}, {0, 0}, {100, 100});
@@ -126,6 +129,14 @@ void PlayState::onEnter() {
 	gift->addComp<Gift, int>(100);
     gift->addComp<RenderState,bool>(true);
 	world.push_back(gift);
+
+	//heart
+	shared_ptr<Entity> heart(new Entity());
+	heart->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh, giftMaterial);
+	heart->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -12 }, { 0, 0, 0 }, { 1, 1,  1 });
+	heart->getComp<Transform>()->update();
+    heart->addComp<RenderState,bool>(true);
+	world.push_back(heart);
 
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());
