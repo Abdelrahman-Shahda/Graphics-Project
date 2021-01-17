@@ -13,6 +13,7 @@ private:
 public:
 	Player(std::weak_ptr<Entity> entity);
 	unsigned int getLives();
+    unsigned int getScore();
 	void incrementScore(int value);
 	void decrementLives();
 };

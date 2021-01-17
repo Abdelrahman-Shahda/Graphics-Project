@@ -24,19 +24,20 @@
 
 class PlayState : public GameState {
 protected:
-	std::shared_ptr<Entity> mainChar;
-	std::shared_ptr<Entity> mainCamera;
-	int charOrientation;
+    std::shared_ptr<Entity> mainChar;
+    std::shared_ptr<Entity> mainCamera;
+    int charOrientation;
 public:
-	PlayState(StateManagerApplication* app) :GameState(app) {};
-	void onEnter() override;
-	void onDraw(double deltaTime) override;
+    PlayState(StateManagerApplication* app) :GameState(app) {};
+    void onEnter() override;
+    void onDraw(double deltaTime) override;
     void onExit() override {}
-	void moveChar(double deltaTime);
-	bool checkGameOver();
-	void updateLives();
-	void moveSnow(double deltaTime);
-	std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
+    void moveChar(double deltaTime);
+    bool checkGameOver();
+    void updateLives();
+    void updateScore();
+    void moveSnow(double deltaTime);
+    std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
     std::shared_ptr<Entity> getEntityWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
 };
 
