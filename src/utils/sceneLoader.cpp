@@ -6,12 +6,11 @@
 SceneLoader::SceneLoader(std::string scenePath) {
 
     std::ifstream file_in(scenePath);
-    nlohmann::json json;
     file_in >> json;
     file_in.close();
-//    std::cout << json.dump(4) << std::endl;
+    std::cout << json.dump(4) << std::endl;
 //	loadMaterial();
-    loadEntites(json["Scene"]);
+//    loadEntites(json["Scene"]);
 }
 
 void SceneLoader::loadMaterial()
@@ -55,7 +54,7 @@ void SceneLoader::loadMaterial()
 		std::cout << text["mipmap"];
 		std::cout << text["mipmap"].get<bool>();
 		bool mipmap = text.value("mipmap", true);
-		string name = text.value("type", "albedo");
+		string name232 = text.value("type", "albedo");
 		path = ASSETS_DIR"/image/material/" + path;
 		shared_ptr<Texture> textureObject (new Texture(name,path.c_str(),mipmap));
 		texturesMap[name] = textureObject;
@@ -73,7 +72,7 @@ void SceneLoader::loadMaterial()
 	}
 
 }
-void SceneLoader::loadComponent(std::string component, nlohmann::json &json, std::shared_ptr<Entity> en) {
+void SceneLoader::loadComponent(std::string component, nlohmann::json &json, std::shared_ptr<Entity> en,Application* application) {
 
 
     if(component == "Transform"){
@@ -87,19 +86,23 @@ void SceneLoader::loadComponent(std::string component, nlohmann::json &json, std
     }else if(component == "MeshRenderer"){
 
     }else if(component == "Player"){
+        en->addComp<Player>();
+    }else if(component == "Camera"){
+        std::shared_ptr<Camera> cameraPtr = en->addComp<Camera>();
+        en->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(application,cameraPtr,en->getComp<Transform>());
 
     }
 
 }
-void SceneLoader::loadEntites(nlohmann::json &json) {
+void SceneLoader::loadEntites(Application* application) {
 
-    for(auto& [name, j]: json.items()){
+    for(auto& [name, j]: json["Scene"].items()){
 
         std::shared_ptr<Entity> entity(new Entity);
         std::string tag = j.value<std::string>("tag", "");
         entity->setTag(tag);
         for(auto&[component, js]:j["components"].items() ){
-            loadComponent(component, js, entity);
+            loadComponent(component, js, entity,application);
         }
 
 

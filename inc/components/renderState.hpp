@@ -20,21 +20,11 @@
 
     glm::vec4 blend_constant_color = {1.0f,1.0f,1.0f,1.0f};
         //Default OpenGL Rendering Settings
-        RenderState(std::weak_ptr<Entity> entity, bool blendingEnabled = false) :Component(entity)
+        RenderState(std::weak_ptr<Entity> entity,bool isVisible, bool blendingEnabled = false) :Component(entity)
 	    {
             enable_blending = blendingEnabled;
 		    type = RENDERSTATE;
-        if(enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
-        glDepthFunc(depth_function);
-
-        if(enable_face_culling) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
-        glCullFace(culled_face);
-        glFrontFace(front_face_winding);
-        isVisible = true;
-         if(enable_blending) glEnable(GL_BLEND); else glDisable(GL_BLEND);
-        glBlendEquation(blend_equation);
-        glBlendFunc(blend_source_function, blend_destination_function);
-        glBlendColor(blend_constant_color.r, blend_constant_color.g, blend_constant_color.b, blend_constant_color.a);
+            this->isVisible = isVisible;
         }
 
         void update()

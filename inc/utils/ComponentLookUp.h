@@ -9,6 +9,8 @@
 #include <components/lighting.h>
 #include "components/skyLight.h"
 #include <components/renderState.hpp>
+#include <components/player.hpp>
+#include <components/gift.hpp>
 
 #include <unordered_map>
 #include <typeindex>

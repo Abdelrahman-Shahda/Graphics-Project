@@ -10,6 +10,7 @@
 
 #include <resources/material.h>
 #include <resources/mesh.hpp>
+#include <components/player.hpp>
 
 #include <utils/loadingFunction.h>
 #include <utils/mesh-utils.hpp>
@@ -38,8 +39,8 @@ class SceneLoader {
 public:
     SceneLoader(std::string scenePath);
 
-    void loadEntites( nlohmann::json& json);
-    void loadComponent(std::string component,nlohmann::json& json, std::shared_ptr<Entity> en);
+    void loadEntites( Application* application);
+    void loadComponent(std::string component,nlohmann::json& json, std::shared_ptr<Entity> en,Application* application);
 
 };
 #endif //GRAPHICSPROJECT_SCENELOADER_H

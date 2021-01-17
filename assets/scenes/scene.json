@@ -34,7 +34,7 @@
       "gift": {
         "type": "albedo",
         "path": "gift.jpg",
-        "mipmap": "true"
+        "mipmap": true
       }
     },
     "samplers": {
@@ -83,9 +83,12 @@
           "rotation": [0, 3.14, 0 ],
           "scale": [1,1,1]
         },
-        "Player": {
-          "lives": 3,
-          "score":0
+        "Player": {},
+        "Camera": {},
+        "RenderState": {
+          "isVisible": true,
+          "enable_depth_test": true,
+          "depth_function":
         },
         "MeshRenderer": {
           "mesh": "santa",
