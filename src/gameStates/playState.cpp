@@ -28,13 +28,13 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> meshPtr2(new Mesh);
 	shared_ptr<Mesh> skyMesh(new Mesh);
 	shared_ptr<Mesh> iceMesh(new Mesh);
-	shared_ptr<Mesh> snowmanMesh(new Mesh);
+	shared_ptr<Mesh> treeMesh(new Mesh);
 	shared_ptr<Mesh> sleighMesh(new Mesh);
 	glm::vec3 min;
     glm::vec3 max;
 
 	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
-	MeshUtils::loadOBJ(*snowmanMesh,ASSETS_DIR"/models/Tree/tree.obj");
+	MeshUtils::loadOBJ(*treeMesh,ASSETS_DIR"/models/Tree/tree.obj");
 	MeshUtils::loadOBJ(*sleighMesh,ASSETS_DIR"/models/Sleigh/sleigh.obj");
 
 	MeshUtils::Cuboid(*meshPtr2,true);
@@ -99,7 +99,7 @@ void PlayState::onEnter() {
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
-	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
+	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 8, -12 }, {0, 0, 1 }, { 1,1,1 });
 	camTransformPtr->update();
 
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
@@ -109,7 +109,7 @@ void PlayState::onEnter() {
 	shared_ptr<Entity> mainChar(new Entity("Santa"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
 	mainChar->addComp<Player>();
-	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 7.5, 10 }, {0, 3.14, 0 }, { 1, 1, 1 });
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 7, 7.5 }, {0, 3.14, 0 }, { 1, 1, 1 });
 	mainTransformPtr->update();
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
@@ -117,7 +117,7 @@ void PlayState::onEnter() {
 	//gift
 	shared_ptr<Entity> gift(new Entity("Gift"));
 	gift->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, giftMaterial);
-	gift->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
+	gift->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
 	gift->getComp<Transform>()->update();
 	gift->addComp<Gift, int>(100);
     gift->addComp<RenderState,bool>(true);
@@ -126,7 +126,7 @@ void PlayState::onEnter() {
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());
     icePlane->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(iceMesh, material2);
-    std::shared_ptr<Transform> icePtr= icePlane->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 7, 7.5 }, {0, 0, 0 }, { 60, 1, 60 });
+    std::shared_ptr<Transform> icePtr= icePlane->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 7, 7.5 }, {0, 0, 0 }, { 60, 1, 60 });
     icePtr->update();
     icePlane->addComp<RenderState,bool>(true);
     world.push_back(icePlane);
@@ -135,18 +135,18 @@ void PlayState::onEnter() {
     camTransformPtr->set_parent(mainTransformPtr);
     mainTransformPtr->add_child(camTransformPtr);
 
-	//Snowman
-    shared_ptr<Entity> snowMan(new Entity());
-    snowMan->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(snowmanMesh, material2);
-    std::shared_ptr<Transform> snowmanPtr= snowMan->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -10, 8, -10 }, {0, 0, 0 }, { 0.1, 0.1, 0.1 });
-    snowmanPtr->update();
-    snowMan->addComp<RenderState,bool>(true);
-    world.push_back(snowMan);
+	//Tree
+    shared_ptr<Entity> tree(new Entity());
+    tree->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(treeMesh, material2);
+    std::shared_ptr<Transform> treePtr= tree->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -20, 8, -10 }, {0, 0, 0 }, { 0.1, 0.1, 0.1 });
+    treePtr->update();
+    tree->addComp<RenderState,bool>(true);
+    world.push_back(tree);
 
      //Santa Sleigh
 	shared_ptr<Entity> sleigh(new Entity());
     sleigh->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(sleighMesh, material);
-    std::shared_ptr<Transform> sleighPtr= sleigh->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 30, 8, -15 }, {0, 3.14/2, 0 }, { 0.003, 0.003, 0.003 });
+    std::shared_ptr<Transform> sleighPtr= sleigh->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 20, 8, -15 }, {0, 3.14/2, 0 }, { 0.003, 0.003, 0.003 });
     sleighPtr->update();
     sleigh->addComp<RenderState,bool>(true);
     world.push_back(sleigh);
@@ -188,8 +188,8 @@ void PlayState ::intializeGameSettings()
 	gameSettings.gravity = 9.8f;
 	gameSettings.groundLevel = 8;
 	gameSettings.ceilLevel = 28;
-	gameSettings.rightBound = 60;
-	gameSettings.leftBound = -40;
+	gameSettings.rightBound = 50;
+	gameSettings.leftBound = -50;
 	gameSettings.velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	gameSettings.cameraZoom = false;
 	gameSettings.cameraRotate = false;
@@ -273,7 +273,7 @@ void PlayState::onDraw(double deltaTime) {
         (*systemIterator)->Run(world, deltaTime, gameSettings, skyLight);
         glm::vec4 position = mainChar->getComp<Transform>()->get_position()[3];
 		if(position.x < -20.8 || position.x >40.8 || position.z < -24.9 || position.z > 39.8){
-            mainChar->getComp<Transform>()->set_position({10,7,7.5});
+            mainChar->getComp<Transform>()->set_position({0,7,7.5});
             mainChar->getComp<Transform>()->update();
 		}
         std::cout << glm::to_string(mainChar->getComp<Transform>()->get_position()[3])<<std::endl;
