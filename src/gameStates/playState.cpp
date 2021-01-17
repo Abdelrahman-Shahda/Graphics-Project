@@ -143,7 +143,7 @@ void PlayState::onEnter() {
 	world.push_back(gift);
 
 //hearts
-	shared_ptr<Entity> heart_1(new Entity());
+	shared_ptr<Entity> heart_1(new Entity("Life"));
 	heart_1->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_1, heartMaterial);
 	heart_1->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -35, 60, 50 }, { 3*3.14/2,0 , 0 }, { 0.05, 0.05,  0.05 });
 	heart_1->getComp<Transform>()->update();
@@ -319,6 +319,7 @@ void PlayState::moveChar(double deltaTime)
 		mainChar->getComp<Transform>()->set_position(gameSettings.spawnPosition);
 		std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
 		playerComp->decrementLives();
+		updateLives();
 	}
 	else
 		mainChar->getComp<Transform>()->set_position(position);
