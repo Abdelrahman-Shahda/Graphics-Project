@@ -116,7 +116,7 @@ public:
         std::shared_ptr<Transform> transformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
         transformPtr->update();
         mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,transformPtr);
-        world_menu.push_back(mainCamera);
+        world.push_back(mainCamera);
 
         //Creating entities
         shared_ptr<Entity> entity2(new Entity);
@@ -138,7 +138,7 @@ public:
           entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 9, -7 }, {0, 0, 3.14/2  }, { 1, 1, 1 });
           entity4->getComp<Transform>()->update();
           entity4->addComp<RenderState>();*/
-        world_menu.push_back(entity2);
+        world.push_back(entity2);
         //world.push_back(entity3);
         //world.push_back(entity4);
 
@@ -166,13 +166,13 @@ public:
         }
     }
     void onDraw(double deltaTime) override
-    {{
+    {
             for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++) {
                 detectchoice(deltaTime);
-                (*systemIterator)->Run(world_menu, deltaTime, gameSettings, skyLight);
+                (*systemIterator)->Run(world, deltaTime, gameSettings, skyLight);
             }
 
-        }
+        
     }
 
     void onExit() override{}

@@ -98,7 +98,7 @@ void menuState::onEnter() {
     std::shared_ptr<Transform> transformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
     transformPtr->update();
     mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,transformPtr);
-    world_menu.push_back(mainCamera);
+    world.push_back(mainCamera);
 
     //Creating entities
     shared_ptr<Entity> entity2(new Entity);
@@ -108,7 +108,7 @@ void menuState::onEnter() {
     entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material);
     entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0,10, -8}, { 0,0,  3.14/2 }, { 2,2,2});
     entity2->getComp<Transform>()->update();
-    entity2->addComp<RenderState,bool,bool>(true,true);
+    entity2->addComp<RenderState,bool>(true);
 
 
 
@@ -120,14 +120,14 @@ void menuState::onEnter() {
       entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 9, -7 }, {0, 0, 3.14/2  }, { 1, 1, 1 });
       entity4->getComp<Transform>()->update();
       entity4->addComp<RenderState>();*/
-     world_menu.push_back(entity2);
+    world.push_back(entity2);
     //world.push_back(entity3);
     //world.push_back(entity4);
 
 
-    gameSettings.cameraZoom = false;
-    //gameSettings.cameraRotate = false;
-    gameSettings.cameraPan = false;
+    this->gameSettings.cameraZoom = false;
+    // gameSettings.cameraRotate = false;
+    this->gameSettings.cameraPan = false;
 
 }
 
@@ -140,7 +140,8 @@ void menuState::detectchoice(double deltaTime){
 
         if(applicationPtr->getMouse().getMousePosition().x>=b1.x&&applicationPtr->getMouse().getMousePosition().x<=b2.x&&applicationPtr->getMouse().getMousePosition().y>=b1.y && applicationPtr->getMouse().getMousePosition().y<=b2.y)
         {
-            current=1;
+            GameState* nextState = new PlayState(applicationPtr);
+            applicationPtr->setNextState(nextState);
         }
 
 
@@ -151,7 +152,7 @@ void menuState::detectchoice(double deltaTime){
 void menuState::onDraw(double deltaTime) {
     for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++) {
         detectchoice(deltaTime);
-        (*systemIterator)->Run(world_menu, deltaTime, gameSettings, skyLight);
+        (*systemIterator)->Run(world, deltaTime, gameSettings, skyLight);
     }
 }
 

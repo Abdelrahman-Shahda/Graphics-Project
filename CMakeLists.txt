@@ -52,6 +52,7 @@ set(COMMON_SOURCES
 		src/gameStates/menuState.cpp
 		src/entity.cpp 
 		src/scene.cpp
+		src/stateManager.cpp
         src/utils/sceneLoader.cpp 
 		src/utils/loadingFunctions.cpp)
 

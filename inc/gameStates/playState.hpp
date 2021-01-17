@@ -2,7 +2,7 @@
 #define GRAPHICSPROJECT_PLAY_STATE_HPP
 
 #include <gameStates/gameState.hpp>
-#include <application.hpp>
+#include <stateManager.h>
 #include<utils/mesh-utils.hpp>
 
 #include<systems/renderingSystem.hpp>
@@ -23,16 +23,15 @@
 #include <resources/sampler.h>
 
 #include <utils/sceneLoader.h>
+
 class PlayState : public GameState {
 protected:
 	std::shared_ptr<Entity> mainChar;
     std::shared_ptr<Entity> elf_entity;
 	std::shared_ptr<Entity> mainCamera;
 	int charOrientation;
-	gameSettings gameSettings;
-	void intializeGameSettings();
 public:
-	PlayState(Application* app) :GameState(app) {};
+	PlayState(StateManagerApplication* app) :GameState(app) {};
 	void onEnter() override;
 	void onDraw(double deltaTime) override;
     void onExit() override {}
