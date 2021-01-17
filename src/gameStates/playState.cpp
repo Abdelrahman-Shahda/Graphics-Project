@@ -86,16 +86,22 @@ void PlayState::onEnter() {
     shared_ptr<Resources::Texture> iceTexture(new Texture("albedo",ASSETS_DIR"/image/material/ice.jpg"));
     shared_ptr<Resources::Texture> giftTexture(new Texture("albedo",ASSETS_DIR"/image/material/gift.jpg"));
 	shared_ptr<Resources::Texture> heartTexture(new Texture("albedo",ASSETS_DIR"/image/material/heart.jpg"));
+	shared_ptr<Resources::Texture> sleighTexture(new Texture("albedo",ASSETS_DIR"/image/material/heart.jpg"));
 	shared_ptr<Resources::Texture> snowTexture(new Texture("albedo",ASSETS_DIR"/image/material/snow.jpg"));
+	shared_ptr<Resources::Texture> treeTexture(new Texture("albedo",ASSETS_DIR"/image/material/tree.jpg"));
 
     //Material classes
 	shared_ptr<Resources::Material> santaMaterial(new Material(shaderProgram));
 	shared_ptr<Resources::Material> heartMaterial(new Material(shaderProgram));
+	shared_ptr<Resources::Material> sleighMaterial(new Material(shaderProgram));
 	shared_ptr<Resources::Material> snowMaterial(new Material(shaderProgram));
-    shared_ptr<Resources::Material> material2(new Material(shaderProgram));
+	shared_ptr<Resources::Material> treeMaterial(new Material(shaderProgram));
+    shared_ptr<Resources::Material> iceMaterial(new Material(shaderProgram));
 
 
 	heartMaterial->addTexture(heartTexture,customizedSampler);
+	treeMaterial->addTexture(treeTexture,customizedSampler);
+	sleighMaterial->addTexture(sleighTexture,customizedSampler);
 	snowMaterial->addTexture(snowTexture,customizedSampler);
 	santaMaterial->addTexture(santaTexture, customizedSampler);
 	santaMaterial->addTexture(specularTexture,customizedSampler);
@@ -103,14 +109,13 @@ void PlayState::onEnter() {
 	santaMaterial->addShaderParameter(skyLightMiddleColor);
 	santaMaterial->addShaderParameter(skyLightBottomColor);
 
-    material2->addTexture(iceTexture,iceSampler);
-    material2->addShaderParameter(skyLightTopColor);
-    material2->addShaderParameter(skyLightMiddleColor);
-    material2->addShaderParameter(skyLightBottomColor);
+    iceMaterial->addTexture(iceTexture,iceSampler);
+    iceMaterial->addShaderParameter(skyLightTopColor);
+    iceMaterial->addShaderParameter(skyLightMiddleColor);
+    iceMaterial->addShaderParameter(skyLightBottomColor);
 
 	shared_ptr<Resources::Material> giftMaterial(new Material(shaderProgram));
 	giftMaterial->addTexture(giftTexture, customizedSampler);
-	//giftMaterial->addTexture(specularTexture, customizedSampler);
 	giftMaterial->addShaderParameter(skyLightTopColor);
 	giftMaterial->addShaderParameter(skyLightMiddleColor);
 	giftMaterial->addShaderParameter(skyLightBottomColor);
@@ -194,7 +199,7 @@ void PlayState::onEnter() {
 
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());
-    icePlane->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(iceMesh, material2);
+    icePlane->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(iceMesh, iceMaterial);
     std::shared_ptr<Transform> icePtr= icePlane->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, 7.5 }, {0, 0, 0 }, { 60, 1, 60 });
     icePtr->update();
     icePlane->addComp<RenderState,bool>(true);
@@ -202,7 +207,7 @@ void PlayState::onEnter() {
 
 	//Tree
     shared_ptr<Entity> tree(new Entity());
-    tree->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(treeMesh, material2);
+    tree->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(treeMesh, treeMaterial);
     std::shared_ptr<Transform> treePtr= tree->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -20, 10, -10 }, {0, 0, 0 }, { 0.1, 0.1, 0.1 });
     treePtr->update();
     tree->addComp<RenderState,bool>(true);
@@ -210,7 +215,7 @@ void PlayState::onEnter() {
 
      //Santa Sleigh
 	shared_ptr<Entity> sleigh(new Entity());
-    sleigh->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(sleighMesh, santaMaterial);
+    sleigh->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(sleighMesh, sleighMaterial);
     std::shared_ptr<Transform> sleighPtr= sleigh->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 20, 10, -15 }, {0, 3.14/2, 0 }, { 0.003, 0.003, 0.003 });
     sleighPtr->update();
     sleigh->addComp<RenderState,bool>(true);
