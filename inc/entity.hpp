@@ -18,6 +18,7 @@ class Entity: public std::enable_shared_from_this<Entity>
     Entity& operator=(const Entity&);//disallow assignment
 public:
     Entity(std::string tag = "");
+    void setTag(std::string tag);
     bool withTag(std::string tag);
     unsigned int getId();
     template<class T>

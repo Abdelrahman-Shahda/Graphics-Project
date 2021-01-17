@@ -13,6 +13,7 @@ class SceneLoader {
 public:
     SceneLoader(std::string scenePath);
 
+    void loadEntites( nlohmann::json& json);
 
 
 };
