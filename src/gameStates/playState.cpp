@@ -272,17 +272,16 @@ void PlayState::moveChar(double deltaTime)
     gameSettings.velocity.y -= ((float)deltaTime*gameSettings.gravity);
 
 
-
-
-
-   	if(fallen)
-            mainChar->getComp<Transform>()->set_position(gameSettings.spawnPosition);
+	if (fallen)
+	{
+		mainChar->getComp<Transform>()->set_position(gameSettings.spawnPosition);
+		std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
+		playerComp->decrementLives();
+	}
 	else
-			mainChar->getComp<Transform>()->set_position(position);
+		mainChar->getComp<Transform>()->set_position(position);
 
-			 mainChar->getComp<Transform>()->update();
-
-		
+	mainChar->getComp<Transform>()->update();
 
 }
 
@@ -291,4 +290,12 @@ void PlayState::onDraw(double deltaTime) {
          moveChar(deltaTime);
         (*systemIterator)->Run(world, deltaTime, gameSettings, skyLight);
 	}
+}
+
+bool PlayState::checkGameOver()
+{
+	std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
+	if (playerComp->getLives() == 0)
+		return true;
+	return false;
 }

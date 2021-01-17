@@ -11,10 +11,9 @@ private:
 	unsigned int score;
 
 public:
-	Player(std::weak_ptr<Entity> entity) :Component(entity) {
-		lives = 3;
-		score = 0;
-		type = PLAYER;
-	}
+	Player(std::weak_ptr<Entity> entity);
+	unsigned int getLives();
+	void incrementScore(int value);
+	void decrementLives();
 };
 #endif // !PLAYER__H

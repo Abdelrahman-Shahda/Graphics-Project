@@ -29,11 +29,10 @@ protected:
 	void intializeGameSettings();
 public:
 	PlayState(Application* app) :GameState(app) {};
-    
 	void onEnter() override;
 	void onDraw(double deltaTime) override;
-    void onExit() override {
-    }
+    void onExit() override {}
 	void moveChar(double deltaTime);
+	bool checkGameOver();
 };
 #endif

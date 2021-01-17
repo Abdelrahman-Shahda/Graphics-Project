@@ -43,6 +43,7 @@ set(COMMON_SOURCES
 		src/components/skylight.cpp
 		src/components/meshRenderer.cpp
 		src/components/transform.cpp
+		src/components/player.cpp
 		src/resources/material.cpp
 		src/resources/shader.cpp
 		src/resources/texture.cpp

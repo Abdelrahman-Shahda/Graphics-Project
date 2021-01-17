@@ -3,6 +3,7 @@
 
 #include <systems/collisionDetectionSystem.h>
 #include <components/gift.hpp>
+#include <components/player.hpp>
 
 class GiftCollectionSystem :public CollisionDetectionSystem
 {
