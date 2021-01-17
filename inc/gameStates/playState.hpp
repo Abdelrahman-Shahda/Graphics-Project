@@ -37,5 +37,7 @@ public:
 	bool checkGameOver();
 	void updateLives();
 	std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
+    std::shared_ptr<Entity> getEntityWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
 };
+
 #endif

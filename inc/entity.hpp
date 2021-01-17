@@ -12,11 +12,12 @@ class Entity: public std::enable_shared_from_this<Entity>
     std::bitset<ComponentType::COUNT> isComps;
     static unsigned int next_id;
     unsigned int id;
-    std::string tag;
+
     std::vector<std::shared_ptr<Component>> comps;
     Entity(const Entity&); //disallow copy constructor
     Entity& operator=(const Entity&);//disallow assignment
 public:
+    std::string tag;
     Entity(std::string tag = "");
     void setTag(std::string tag);
     bool withTag(std::string tag);

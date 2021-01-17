@@ -13,7 +13,10 @@
     "meshes": {
       "santa": "Santa Claus/santa.obj",
       "sleigh": "Sleigh/sleigh.obj",
-      "tree": "Tree/tree.obj"
+      "tree": "Tree/tree.obj",
+      "heart": "Heart/Heart.obj",
+      "cuboid": "cuboid",
+      "plane": "plane"
     },
     "textures": {
       "santa": {
@@ -34,6 +37,11 @@
       "gift": {
         "type": "albedo",
         "path": "gift.jpg",
+        "mipmap": true
+      },
+      "heart": {
+        "type":"albedo",
+        "path": "heart.jpg",
         "mipmap": true
       }
     },
@@ -63,7 +71,7 @@
       "iceMaterial": {
         "shader": "defaultShader",
         "textures": {
-          "ice": "deafult"
+          "ice": "default"
         }
       },
       "giftMaterial": {
@@ -71,6 +79,15 @@
         "textures": {
           "gift": "santa"
         }
+      },
+      "heartMaterial": {
+        "shader": "defaultShader",
+        "textures": {
+          "heart": "santa"
+        }
+      },
+      "skyMaterial": {
+        "shader": "skyShader"
       }
 
     }
@@ -79,24 +96,118 @@
   "Scene": {
     "santa": {
       "tag": "Santa",
+      "position": [ 0, 10, 35],
+      "rotation": [0, 3.14, 0 ],
+      "scale": [1,1,1],
       "components": {
-        "Transform": {
-          "position": [ 0, 10, 35],
-          "rotation": [0, 3.14, 0 ],
-          "scale": [1,1,1]
-        },
         "Player": {},
-        "Camera": {},
         "RenderState": {
           "isVisible": true,
-          "enable_depth_test": true
+          "blendingEnabled": true
         },
         "MeshRenderer": {
           "mesh": "santa",
           "material": "santaMaterial"
         }
 
+      },
+      "children": {
+        "Camera": {
+          "tag": "Camera",
+          "position": [ 0, 8, -10 ],
+          "rotation": [0, 0, 1 ],
+          "scale": [1,1,1],
+          "components": {
+
+            "Camera": {}
+          }
+
+        }
+      }
+    },
+    "plane": {
+
+"position": [ 0, 10, 7.5],
+"rotation": [0, 0, 0 ],
+"scale": [ 60, 1, 60],
+      "components": {
+        "RenderState": {
+          "isVisible": true,
+          "blendingEnabled": true
+        },
+        "MeshRenderer": {
+          "mesh": "plane",
+          "material": "iceMaterial"
+        }
+      }
+},
+    "sleigh": {
+
+    "position": [ 20, 10, -15],
+    "rotation": [0, 1.57, 0 ],
+    "scale": [ 0.003, 0.003, 0.003],
+      "components": {
+        "RenderState": {
+          "isVisible": true,
+          "blendingEnabled": true
+        },
+        "MeshRenderer": {
+          "mesh": "sleigh",
+          "material": "santaMaterial"
+        }
+      }
+},
+    "Tree": {
+      "position": [ -20, 10, -10],
+      "rotation": [0, 0, 0 ],
+      "scale": [ 0.1, 0.1, 0.1],
+      "components": {
+        "RenderState": {
+          "isVisible": true,
+          "blendingEnabled": true
+        },
+        "MeshRenderer": {
+          "mesh": "tree",
+          "material": "iceMaterial"
+        }
+      }
+    },
+    "light": {
+      "position": [  0,1, -3 ],
+      "rotation": [1, -1,  -3],
+      "scale": [1,1,1],
+      "components": {
+        "Light":{
+          "type": "directional",
+          "color": [1, 0.8, 0.2],
+          "direction": [-1, -1, -1]
+        }
+      }
+    },
+    "gift": {
+      "tag": "Gift",
+      "position": [  0, 10, -12 ],
+      "rotation": [0, 0, 0 ],
+      "scale": [1,1,1],
+      "components": {
+
+        "Gift": {
+          "points": 30
+        },
+        "RenderState": {
+          "isVisible": true,
+          "blendingEnabled": true
+        },
+        "MeshRenderer": {
+          "mesh": "cuboid",
+          "material": "giftMaterial"
+        }
       }
     }
+  },
+  "SkyLight": {
+    "top_color": [0.1, 0.1, 0.1],
+    "middle_color": [0.35, 0.35, 0.4],
+    "bottom_color": [0.25, 0.25, 0.25]
   }
 }
