@@ -20,7 +20,6 @@ void SceneLoader::loadMaterial()
 	//Materials maps
 	unordered_map<string, shared_ptr<Resources::ShaderProgram>> shadersMap;
 	unordered_map<string, shared_ptr<Resources::Sampler>> samplersMap;
-	unordered_map<string, shared_ptr<Resources::Mesh>> meshesMap;
 	unordered_map<string, shared_ptr<Resources::Texture>> texturesMap;
 
 	//loading shaders

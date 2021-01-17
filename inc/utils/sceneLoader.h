@@ -29,6 +29,7 @@ class SceneLoader {
 
     nlohmann::json json;
 	unordered_map<string, shared_ptr<Resources::Material>> materialsMap;
+	unordered_map<string, shared_ptr<Resources::Mesh>> meshesMap;
 
 	void loadMaterial();
 	shared_ptr<ShaderProgram> loadShader(const nlohmann::json& j);
