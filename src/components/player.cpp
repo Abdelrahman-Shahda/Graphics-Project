@@ -20,10 +20,7 @@ void Player::incrementScore(int value)
 {
 	score += value;
 }
-unsigned int Player::getScore()
-{
-    return score;
-}
+
 void Player::decrementLives()
 {
 	lives--;
