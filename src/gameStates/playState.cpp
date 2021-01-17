@@ -233,25 +233,7 @@ std::shared_ptr<Entity> PlayState::getEntityWithTag(const std::vector<std::share
     }
     return NULL;
 }
-void PlayState ::intializeGameSettings()
-{
-	gameSettings.gameSensitivity = 1.0f;
-	gameSettings.jumpAmount = 500;
-	gameSettings.friction = 4.0f;
-	gameSettings.gravity = 9.8f;
-	gameSettings.groundLevel = 0;
-	gameSettings.planeLevel = 10;
-	gameSettings.ceilLevel = 28;
-	gameSettings.rightBound = 50;
-	gameSettings.leftBound = -50;
-	gameSettings.velocity = glm::vec3(0.0f, 0.0f, 0.0f);
-	gameSettings.cameraZoom = false;
-	gameSettings.cameraRotate = false;
-	gameSettings.cameraPan = false;
-	gameSettings.spawnPosition = {0,10,35};
-	gameSettings.characterRotation = 0.0f;
 
-}
 
 void PlayState::moveChar(double deltaTime)
 {
@@ -399,4 +381,21 @@ std::vector<std::shared_ptr<Entity>> PlayState::getEntitiesWithTag(const std::ve
         }
     }
     return temp;
+}
+
+void PlayState::moveSnow(double deltaTime)
+{
+	glm::vec3 position;
+  	std::vector<std::shared_ptr<Entity>> snow = getEntitiesWithTag(world,"Snow");
+	  for (int i=0;i<snow.size();i++)
+	  {
+		  position = snow[i]->getComp<Transform>()->get_position()[3];
+		  position.y -= ((float)deltaTime*gameSettings.gravity);
+		  if (position.y < gameSettings.groundLevel)
+		  position.y = gameSettings.ceilLevel;
+
+		 snow[i]->getComp<Transform>()->set_position(position);
+		 snow[i]->getComp<Transform>()->update();
+
+	  }
 }
