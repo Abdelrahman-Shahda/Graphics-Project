@@ -72,7 +72,6 @@ void PlayState::onEnter() {
     shared_ptr<Resources::Sampler> iceSampler(new Sampler(GL_REPEAT, GL_REPEAT, GL_LINEAR, GL_NEAREST));
 	shared_ptr<Resources::Texture> santaTexture(new Texture("albedo",ASSETS_DIR"/image/material/santa.jpg"));
 	shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/santa_spec.jpg"));
-    shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
     shared_ptr<Resources::Texture> iceTexture(new Texture("albedo",ASSETS_DIR"/image/material/ice.jpg"));
 	shared_ptr<Resources::Texture> giftTexture(new Texture("albedo", ASSETS_DIR"/image/material/gift2.jpg"));
     
@@ -108,7 +107,6 @@ void PlayState::onEnter() {
 
 	//Creating entities
 	shared_ptr<Entity> mainChar(new Entity("Santa"));
-	shared_ptr<Entity> entity3(new Entity("Gift"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
 	mainChar->addComp<Player>();
 	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, 10 }, {0, 3.14, 0 }, { 1, 1, 1 });
@@ -116,12 +114,14 @@ void PlayState::onEnter() {
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
 
-	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, giftMaterial);
-	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
-	entity3->getComp<Transform>()->update();
-	entity3->addComp<Gift, int>(100);
-    entity3->addComp<RenderState,bool>(true);
-	world.push_back(entity3);
+	//gift
+	shared_ptr<Entity> gift(new Entity("Gift"));
+	gift->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, giftMaterial);
+	gift->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
+	gift->getComp<Transform>()->update();
+	gift->addComp<Gift, int>(100);
+    gift->addComp<RenderState,bool>(true);
+	world.push_back(gift);
 
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());
