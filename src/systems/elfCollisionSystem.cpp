@@ -3,7 +3,7 @@
 //
 #include <systems/elfCollisionSystem.h>
 
-void elfCollisionSystem::Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time, gameSettings cameraSettings, std::shared_ptr<Entity> skyLight) override {
+void elfCollisionSystem::Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time, gameSettings cameraSettings, std::shared_ptr<Entity> skyLight)  {
 	std::vector<std::shared_ptr<Entity>> elves = getEntitiesWithComponent<Elf>(enitities);
 	std::shared_ptr<Player> playerComp = player->getComp<Player>();
 
