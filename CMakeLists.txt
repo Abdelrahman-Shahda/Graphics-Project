@@ -52,7 +52,8 @@ set(COMMON_SOURCES
 		src/gameStates/menuState.cpp
 		src/entity.cpp 
 		src/scene.cpp
-        src/utils/sceneLoader.cpp inc/utils/loadingFunction.h)
+        src/utils/sceneLoader.cpp 
+		src/utils/loadingFunctions.cpp)
 
 # Define the directories in which to search for the included headers
 include_directories(

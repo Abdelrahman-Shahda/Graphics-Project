@@ -4,7 +4,7 @@
 #include <resources/sampler.h>
 using namespace Resources;
 
-Sampler::Sampler(int wrab_s_, int wrab_t_, int magnification_filter_, int minification_filter_, glm::vec4 border_color, GLfloat anistropy_)
+Sampler::Sampler(GLenum wrab_s_ , GLenum wrab_t_ , GLenum magnification_filter_ , GLenum minification_filter_ , glm::vec4 border_color , GLfloat anistropy_ )
 {
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnistropoy);
 	glGenSamplers(1,&sampler);
@@ -26,7 +26,7 @@ void Sampler::useSampler(GLuint textureUnit) {
     glBindSampler(textureUnit, sampler);
 }
 
-void Sampler::setSamplerParams(int wrab_s_, int wrab_t_, int magnification_filter_, int minification_filter_, glm::vec4 border_color, GLfloat anistropy_)
+void Sampler::setSamplerParams(GLenum wrab_s_, GLenum wrab_t_, GLenum magnification_filter_, GLenum minification_filter_, glm::vec4 border_color, GLfloat anistropy_)
 {
     wrabS=wrab_s_;
     wrabT=wrab_t_;

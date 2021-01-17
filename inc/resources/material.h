@@ -17,8 +17,8 @@ namespace Resources {
 	{
 		std::vector<std::shared_ptr<ShaderParameterBaseClass>> shaderParameters;
 		std::shared_ptr<ShaderProgram> shaderPtr;
-
 		bool transparent;
+
 		//Textures
 		GLint currentTextureUnit;
 		GLint maxTextureUnit;
