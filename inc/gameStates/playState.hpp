@@ -3,14 +3,17 @@
 
 #include <gameStates/gameState.hpp>
 #include <application.hpp>
-#include<systems/renderingSystem.hpp>
-#include <systems/collisionDetectionSystem.h>
 #include<utils/mesh-utils.hpp>
+
+#include<systems/renderingSystem.hpp>
+#include <systems/giftCollectionSystem.h>
 
 #include <components/flyCameraController.hpp>
 #include <components/camera.hpp>
 #include <components/transform.h>
 #include <components/lighting.h>
+#include <components/player.h>
+#include <components/gift.hpp>
 
 #include <resources/material.h>
 #include <resources/shader.hpp>
@@ -19,10 +22,11 @@
 
 class PlayState : public GameState {
 protected:
-std::shared_ptr<Entity> mainChar;
-std::shared_ptr<Entity> mainCamera;
-int charOrientation;
-gameSettings gameSettings;
+	std::shared_ptr<Entity> mainChar;
+	std::shared_ptr<Entity> mainCamera;
+	int charOrientation;
+	gameSettings gameSettings;
+	void intializeGameSetting();
 public:
 	PlayState(Application* app) :GameState(app) {};
     

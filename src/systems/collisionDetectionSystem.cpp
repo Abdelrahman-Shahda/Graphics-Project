@@ -27,10 +27,8 @@ bool CollisionDetectionSystem::detectCollision(const std::shared_ptr<Entity> gam
 		areCoordinatesColliding(minBoundingBox1.z, maxBoundingBox1.z, minBoundingBox2.z, maxBoundingBox2.z))
 	||
 		*/
-//    std::cout << "Charcter Modal "<< glm::to_string(gameCharacter->getComp<Transform>()->get_ModalMatrix()) << std::endl;
-//    std::cout << "Gift Max: " << glm::to_string(maxBoundingBox2) <<" Min: " << glm::to_string(minBoundingBox2)<<std::endl;
-//    std::cout << "Char Max: " << glm::to_string(maxBoundingBox1) <<" Min: " << glm::to_string(minBoundingBox1)<<std::endl;
-	//Comparing coordinates to detect collision
+	
+		//Comparing coordinates to detect collision
     return(
             maxBoundingBox1.x > minBoundingBox2.x &&
             minBoundingBox1.x < maxBoundingBox2.x &&
@@ -46,20 +44,5 @@ bool CollisionDetectionSystem::detectCollision(const std::shared_ptr<Entity> gam
                     maxBoundingBox1.z > maxBoundingBox2.z &&
                     minBoundingBox1.z < minBoundingBox2.z
                     );
-
-}
-
-void CollisionDetectionSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities, double delta_time,gameSettings cameraSettings,std::shared_ptr<Entity> skyLight) {
-
-    std::shared_ptr<Entity> mainChar = this->getEntityWithTag(entities,"Santa");
-    std::vector<std::shared_ptr<Entity>> gifts = this->getEntitiesWithTag(entities, "Gift");
-
-    for(int i = 0 ; i< gifts.size();i++){
-
-        if(detectCollision(mainChar, gifts[i])){
-            std::cout << "Ana hena\n";
-            gifts[i]->getComp<RenderState>()->isVisible = false;
-        }
-    }
 
 }

@@ -13,6 +13,8 @@ typedef enum{
 	RENDERSTATE,
 	LIGHT,
 	SKYLIGHT,
+	PLAYER,
+	GIFT,
 	COUNT,
 }  ComponentType;
 

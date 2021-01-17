@@ -37,6 +37,7 @@ set(COMMON_SOURCES
 		src/systems/system.cpp
 		src/systems/renderingSystem.cpp
 		src/systems/collisionDetectionSystem.cpp
+		src/systems/giftCollectionSystem.cpp
 		src/components/component.cpp
 		src/components/lighting.cpp
 		src/components/skylight.cpp

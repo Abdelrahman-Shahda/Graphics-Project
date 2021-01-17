@@ -5,10 +5,6 @@
 #include <glm/gtx/string_cast.hpp>
 
 void PlayState::onEnter() {
-	shared_ptr<RenderingSystem> RS(new RenderingSystem);
-	shared_ptr<CollisionDetectionSystem> CS(new CollisionDetectionSystem);
-	systems.push_back(RS);
-	systems.push_back(CS);
 
 	//Intializing resources
 	//shaders
@@ -114,7 +110,8 @@ void PlayState::onEnter() {
 	shared_ptr<Entity> mainChar(new Entity("Santa"));
 	shared_ptr<Entity> entity3(new Entity("Gift"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
-	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 9, 7.5 }, {0, 3.14, 0 }, { 0.2, 0.5, 0.5 });
+	mainChar->addComp<Player>();
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 9, 7.5 }, {0, 3.14, 0 }, { 0.25, 0.5, 0.5 });
 	mainTransformPtr->update();
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
@@ -122,6 +119,7 @@ void PlayState::onEnter() {
 	entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, giftMaterial);
 	entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
 	entity3->getComp<Transform>()->update();
+	entity3->addComp<Gift, int>(100);
     entity3->addComp<RenderState,bool>(true);
 	world.push_back(entity3);
 
@@ -169,24 +167,38 @@ void PlayState::onEnter() {
     world.push_back(directionalLight);
     //world.push_back(pointLight);
 
+	//Intializing systems
+	shared_ptr<RenderingSystem> RS(new RenderingSystem);
+	shared_ptr<CollisionDetectionSystem> CS(new GiftCollectionSystem(mainChar));
+	systems.push_back(RS);
+	systems.push_back(CS);
+
+	intializeGameSetting();
+
+	this->mainCamera = mainCamera;
+	this->mainChar = mainChar;
+	charOrientation = 0;
+}
+
+void PlayState ::intializeGameSetting()
+{
 	gameSettings.gameSensitivity = 0.1f;
 	gameSettings.jumpAmount = 500;
 	gameSettings.friction = 4.0f;
 	gameSettings.gravity = 9.8f;
 	gameSettings.groundLevel = 8;
 	gameSettings.ceilLevel = 28;
-	gameSettings.rightBound =60 ;
+	gameSettings.rightBound = 60;
 	gameSettings.leftBound = -40;
-	gameSettings.velocity = glm::vec3(0.0f,0.0f,0.0f);
+	gameSettings.velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	gameSettings.cameraZoom = false;
 	gameSettings.cameraRotate = false;
 	gameSettings.cameraPan = false;
-	this->mainCamera = mainCamera;
-	this->mainChar = mainChar;
+	
 	gameSettings.characterRotation = 0.0f;
-	charOrientation = 0;
-
+	
 }
+
 void PlayState::moveChar(double deltaTime)
 {
 	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];

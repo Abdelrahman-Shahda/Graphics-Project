@@ -9,10 +9,6 @@ private:
 	bool areCoordinatesColliding(int min1, int max1, int min2, int max2);
 protected:
 	bool detectCollision(const std::shared_ptr<Entity> gameCharacter, const std::shared_ptr<Entity> gameObject);
-public:
-    void Run(const std::vector<std::shared_ptr<Entity>> &enitities, double delta_time,gameSettings cameraSettings,std::shared_ptr<Entity> skyLight =NULL) override;
-
-
 };
 
 #endif // !COLLISION_DS_I
