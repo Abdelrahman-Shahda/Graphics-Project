@@ -9,7 +9,6 @@ void PlayState::onEnter() {
 	//Intializing resources
 	//shaders
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
-    std::cout << "Anaaa henaaa\n";
 //	SceneLoader * sceneLoader = new SceneLoader(ASSETS_DIR"/scenes/scene.json");
 
 	//Light shaders
@@ -84,10 +83,15 @@ void PlayState::onEnter() {
     shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
     shared_ptr<Resources::Texture> iceTexture(new Texture("albedo",ASSETS_DIR"/image/material/ice.jpg"));
     shared_ptr<Resources::Texture> giftTexture(new Texture("albedo",ASSETS_DIR"/image/material/gift.jpg"));
+	shared_ptr<Resources::Texture> heartTexture(new Texture("albedo",ASSETS_DIR"/image/material/heart.jpg"));
 
     //Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
+	shared_ptr<Resources::Material> heartMaterial(new Material(shaderProgram));
     shared_ptr<Resources::Material> material2(new Material(shaderProgram));
+
+	heartMaterial->addTexture(heartTexture,customizedSampler);
+
 	material->addTexture(santaTexture, customizedSampler);
 	material->addTexture(specularTexture,customizedSampler);
 	//material2->addTexture(emissiveTexture, customizedSampler);
@@ -140,22 +144,22 @@ void PlayState::onEnter() {
 
 //hearts
 	shared_ptr<Entity> heart_1(new Entity());
-	heart_1->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_1, material);
-	heart_1->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 60, 50 }, { 0, 3*3.14/2, 0 }, { 0.05, 0.05,  0.05 });
+	heart_1->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_1, heartMaterial);
+	heart_1->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -35, 60, 50 }, { 3*3.14/2,0 , 0 }, { 0.05, 0.05,  0.05 });
 	heart_1->getComp<Transform>()->update();
     heart_1->addComp<RenderState,bool>(true);
 	world.push_back(heart_1);
 
 	shared_ptr<Entity> heart_2(new Entity());
-	heart_2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_2, material);
-	heart_2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -30, 60, 50 }, { 0, 3*3.14/2, 0 }, { 0.05, 0.05,  0.05 });
+	heart_2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_2, heartMaterial);
+	heart_2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 60, 50 }, { 3*3.14/2, 0, 0 }, { 0.05, 0.05,  0.05 });
 	heart_2->getComp<Transform>()->update();
     heart_2->addComp<RenderState,bool>(true);
 	world.push_back(heart_2);
 
 	shared_ptr<Entity> heart_3(new Entity());
-	heart_3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_3, material);
-	heart_3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -50, 60, 50 }, { 0, 3*3.14/2, 0 }, { 0.05, 0.05,  0.05 });
+	heart_3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_3, heartMaterial);
+	heart_3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -45, 60, 50 }, { 3*3.14/2,0 , 0 }, { 0.05, 0.05,  0.05 });
 	heart_3->getComp<Transform>()->update();
     heart_3->addComp<RenderState,bool>(true);
 	world.push_back(heart_3);
