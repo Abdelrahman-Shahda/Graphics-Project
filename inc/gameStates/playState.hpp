@@ -20,6 +20,7 @@
 #include <resources/texture.h>
 #include <resources/sampler.h>
 
+#include <utils/sceneLoader.h>
 class PlayState : public GameState {
 protected:
 	std::shared_ptr<Entity> mainChar;

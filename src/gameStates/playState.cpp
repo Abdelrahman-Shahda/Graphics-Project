@@ -10,6 +10,8 @@ void PlayState::onEnter() {
 	//shaders
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
 
+	SceneLoader * sceneLoader = new SceneLoader(ASSETS_DIR"/scenes/scene.json");
+
 	//Light shaders
 	shaderProgram->create();
 	shaderProgram->attach(ASSETS_DIR"/shaders/light_transform.vert", GL_VERTEX_SHADER);
@@ -93,7 +95,7 @@ void PlayState::onEnter() {
 
 	shared_ptr<Resources::Material> giftMaterial(new Material(shaderProgram));
 	giftMaterial->addTexture(giftTexture, customizedSampler);
-	giftMaterial->addTexture(specularTexture, customizedSampler);
+	//giftMaterial->addTexture(specularTexture, customizedSampler);
 	giftMaterial->addShaderParameter(skyLightTopColor);
 	giftMaterial->addShaderParameter(skyLightMiddleColor);
 	giftMaterial->addShaderParameter(skyLightBottomColor);

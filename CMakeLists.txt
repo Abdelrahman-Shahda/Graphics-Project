@@ -50,8 +50,8 @@ set(COMMON_SOURCES
 		src/resources/sampler.cpp
 		src/gameStates/playState.cpp
 		src/entity.cpp 
-		src/scene.cpp 
-		)
+		src/scene.cpp
+        src/utils/sceneLoader.cpp inc/utils/loadingFunction.h)
 
 # Define the directories in which to search for the included headers
 include_directories(
