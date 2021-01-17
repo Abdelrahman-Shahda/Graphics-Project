@@ -35,7 +35,16 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> heartMesh_1(new Mesh);
 	shared_ptr<Mesh> heartMesh_2(new Mesh);
 	shared_ptr<Mesh> heartMesh_3(new Mesh);
+	shared_ptr<Mesh> scoreMesh_0(new Mesh);
 	shared_ptr<Mesh> scoreMesh_1(new Mesh);
+	shared_ptr<Mesh> scoreMesh_2(new Mesh);
+	shared_ptr<Mesh> scoreMesh_3(new Mesh);
+	shared_ptr<Mesh> scoreMesh_4(new Mesh);
+	shared_ptr<Mesh> scoreMesh_5(new Mesh);
+	shared_ptr<Mesh> scoreMesh_6(new Mesh);
+	shared_ptr<Mesh> scoreMesh_7(new Mesh);
+	shared_ptr<Mesh> scoreMesh_8(new Mesh);
+	shared_ptr<Mesh> scoreMesh_9(new Mesh);
 
 
 	glm::vec3 min;
@@ -48,7 +57,16 @@ void PlayState::onEnter() {
 	MeshUtils::loadOBJ(*heartMesh_1,ASSETS_DIR"/models/Heart/heart.obj");
 	MeshUtils::loadOBJ(*heartMesh_2,ASSETS_DIR"/models/Heart/heart.obj");
 	MeshUtils::loadOBJ(*heartMesh_3,ASSETS_DIR"/models/Heart/heart.obj");
-	MeshUtils::loadOBJ(*heartMesh_3,ASSETS_DIR"/models/Numbers/1.obj");
+	MeshUtils::loadOBJ(*scoreMesh_0,ASSETS_DIR"/models/Numbers/0.obj");
+	MeshUtils::loadOBJ(*scoreMesh_1,ASSETS_DIR"/models/Numbers/1.obj");
+	MeshUtils::loadOBJ(*scoreMesh_2,ASSETS_DIR"/models/Numbers/2.obj");
+	MeshUtils::loadOBJ(*scoreMesh_3,ASSETS_DIR"/models/Numbers/3.obj");
+	MeshUtils::loadOBJ(*scoreMesh_4,ASSETS_DIR"/models/Numbers/4.obj");
+	MeshUtils::loadOBJ(*scoreMesh_5,ASSETS_DIR"/models/Numbers/5.obj");
+	MeshUtils::loadOBJ(*scoreMesh_6,ASSETS_DIR"/models/Numbers/6.obj");
+	MeshUtils::loadOBJ(*scoreMesh_7,ASSETS_DIR"/models/Numbers/7.obj");
+	MeshUtils::loadOBJ(*scoreMesh_8,ASSETS_DIR"/models/Numbers/8.obj");
+	MeshUtils::loadOBJ(*scoreMesh_9,ASSETS_DIR"/models/Numbers/9.obj");
 
 	MeshUtils::Cuboid(*meshPtr2,false);
     MeshUtils::Plane(*iceMesh,{1, 1}, false, {0, 0, 0}, {1, 1}, {0, 0}, {100, 100});
@@ -167,18 +185,102 @@ void PlayState::onEnter() {
 	gift->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, giftMaterial);
 	gift->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -12 }, { 0, 0, 0 }, { 1, 1,  1 });
 	gift->getComp<Transform>()->update();
-	gift->addComp<Gift, int>(100);
+	gift->addComp<Gift, int>(1);
     gift->addComp<RenderState,bool>(true);
 	world.push_back(gift);
 
 	//score
+	shared_ptr<Entity> score_0(new Entity("Score"));
+	score_0->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_0, scoreMaterial);
+	score_0->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
+	score_0->getComp<Transform>()->update();
+    score_0->addComp<RenderState,bool>(true);
+	world.push_back(score_0);
+
 	shared_ptr<Entity> score_1(new Entity("Score"));
 	score_1->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_1, scoreMaterial);
-	score_1->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -12 }, { 0, 0, 3.14/2 }, { 1, 1,  1 });
+	score_1->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
 	score_1->getComp<Transform>()->update();
     score_1->addComp<RenderState,bool>(true);
 	world.push_back(score_1);
 
+	shared_ptr<Entity> score_2(new Entity("Score"));
+	score_2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_2, scoreMaterial);
+	score_2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
+	score_2->getComp<Transform>()->update();
+    score_2->addComp<RenderState,bool>(true);
+	world.push_back(score_2);
+
+		shared_ptr<Entity> score_3(new Entity("Score"));
+	score_3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_3, scoreMaterial);
+	score_3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
+	score_3->getComp<Transform>()->update();
+    score_3->addComp<RenderState,bool>(true);
+	world.push_back(score_3);
+
+		shared_ptr<Entity> score_4(new Entity("Score"));
+	score_4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_4, scoreMaterial);
+	score_4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
+	score_4->getComp<Transform>()->update();
+    score_4->addComp<RenderState,bool>(true);
+	world.push_back(score_4);
+
+		shared_ptr<Entity> score_5(new Entity("Score"));
+	score_5->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_5, scoreMaterial);
+	score_5->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
+	score_5->getComp<Transform>()->update();
+    score_5->addComp<RenderState,bool>(true);
+	world.push_back(score_5);
+
+			shared_ptr<Entity> score_6(new Entity("Score"));
+	score_6->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_6, scoreMaterial);
+	score_6->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
+	score_6->getComp<Transform>()->update();
+    score_6->addComp<RenderState,bool>(true);
+	world.push_back(score_6);
+
+		shared_ptr<Entity> score_7(new Entity("Score"));
+	score_7->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_7, scoreMaterial);
+	score_7->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
+	score_7->getComp<Transform>()->update();
+    score_7->addComp<RenderState,bool>(true);
+	world.push_back(score_7);
+
+		shared_ptr<Entity> score_8(new Entity("Score"));
+	score_8->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_8, scoreMaterial);
+	score_8->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
+	score_8->getComp<Transform>()->update();
+    score_8->addComp<RenderState,bool>(true);
+	world.push_back(score_8);
+
+	shared_ptr<Entity> score_9(new Entity("Score"));
+	score_9->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_9, scoreMaterial);
+	score_9->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 50, 50 }, { 3*3.14/2, 3.14, 0 }, { 0.5, 0.5,  0.5 });
+	score_9->getComp<Transform>()->update();
+    score_9->addComp<RenderState,bool>(true);
+	world.push_back(score_9);
+
+	//Make score follow Main character
+    score_0->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_0->getComp<Transform>());
+	    score_1->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_1->getComp<Transform>());
+	    score_2->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_2->getComp<Transform>());
+	    score_3->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_3->getComp<Transform>());
+	    score_4->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_4->getComp<Transform>());
+	    score_5->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_5->getComp<Transform>());
+	    score_6->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_6->getComp<Transform>());
+	    score_7->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_7->getComp<Transform>());
+	    score_8->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_8->getComp<Transform>());
+	    score_9->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( score_9->getComp<Transform>());
     //hearts
 	shared_ptr<Entity> heart_1(new Entity("Life"));
 	heart_1->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_1, heartMaterial);
@@ -331,6 +433,7 @@ void PlayState::moveChar(double deltaTime)
 
 	if (fallen)
 	{
+
 		mainChar->getComp<Transform>()->set_position(gameSettings.spawnPosition);
 		std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
 		playerComp->decrementLives();
@@ -349,6 +452,7 @@ void PlayState::onDraw(double deltaTime) {
 
 		moveChar(deltaTime);
 		moveSnow(deltaTime);
+		updateScore();
 }
 
 bool PlayState::checkGameOver()
@@ -359,6 +463,16 @@ bool PlayState::checkGameOver()
 	return false;
 }
 
+void PlayState::updateScore()
+{
+	std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
+	std::vector<std::shared_ptr<Entity>> scores = getEntitiesWithTag(world,"Score");
+	for (int i=0;i<scores.size();i++)
+	 if (i==playerComp->getScore())
+	 scores[i]->getComp<RenderState>()->isVisible = true;
+	 else
+	 scores[i]->getComp<RenderState>()->isVisible = false;
+}
 void PlayState::updateLives()
 {
 	std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
