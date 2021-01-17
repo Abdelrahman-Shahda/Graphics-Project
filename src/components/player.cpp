@@ -11,6 +11,11 @@ unsigned int Player::getLives()
 	return lives;
 }
 
+unsigned int Player::getScore()
+{
+	return score;
+}
+
 void Player::incrementScore(int value)
 {
 	score += value;
