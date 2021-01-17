@@ -40,21 +40,43 @@ void SceneLoader::loadMaterial()
 	for (auto &[name, mesh] : resources["meshes"].items())
 	{
 		std::cout << mesh;
-		/*
-		string path=ASSETS_DIR"/models/"+mesh.value("")
-		shared_ptr<Sampler> meshObject(new Mesh);
-		MeshUtils::loadOBJ(meshObject,)
+		shared_ptr<Mesh> meshObject = loadMesh(mesh);
 		meshesMap[name] = meshObject;
-		*/
+	}
+
+	//loading shader parameters
+
+
+	//loading material
+	for (auto &[name, materialCotent] : resources["materials"].items())
+	{
+		string shaderName = materialCotent.value("shader", "defaultShader");
+		shared_ptr<Material> materialPtr(new Material(shadersMap[shaderName]));
+
+
 	}
 
 }
 
 shared_ptr<Mesh> SceneLoader::loadMesh(const nlohmann::json&j)
 {
-	//string meshPath=j.value("")
-	return NULL;
+	shared_ptr<Mesh> meshObject(new Mesh);
+	if (j == "cubiod")
+		MeshUtils::Cuboid(*meshObject, false);
+
+	else if (j == "sphere")
+		MeshUtils::Sphere(*meshObject);
+
+	//If a path is given, load obj file
+	else
+	{
+		string path = ASSETS_DIR"/models/" + j;
+		MeshUtils::loadOBJ(*meshObject, path.c_str());
+	}
+
+	return meshObject;
 }
+
 shared_ptr<Sampler> SceneLoader::loadSampler(const nlohmann::json& j)
 {
 	GLenum wrap_s = enumsTable.find(j.value("wrap_s", "GL_REPEAT"))->second;
