@@ -139,7 +139,7 @@ void PlayState::onEnter() {
 
 
 	//snow
-	for (int i=30;i>0;i=i-5)
+	for (int i=30;i>0;i=i-10)
 		for (int j=-50;j<50;j=j+10)
 			for (int k=-15;k<45;k=k+10)
 	{
@@ -243,10 +243,10 @@ void PlayState::onEnter() {
 
 void PlayState ::intializeGameSettings()
 {
-	gameSettings.gameSensitivity = 0.1f;
+	gameSettings.gameSensitivity = 1.0f;
 	gameSettings.jumpAmount = 500;
 	gameSettings.friction = 4.0f;
-	gameSettings.gravity = 9.8f;
+	gameSettings.gravity = 98.0f;
 	gameSettings.groundLevel = 0;
 	gameSettings.planeLevel = 10;
 	gameSettings.ceilLevel = 30;
