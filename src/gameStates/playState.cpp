@@ -133,7 +133,7 @@ void PlayState::onEnter() {
 	//heart
 	shared_ptr<Entity> heart(new Entity());
 	heart->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh, giftMaterial);
-	heart->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 20, -2 }, { 0, 0, 0 }, { 1000, 1000,  1000 });
+	heart->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 20, -2 }, { 0, 0, 0 }, { 100000, 100000,  100000 });
 	heart->getComp<Transform>()->update();
     heart->addComp<RenderState,bool>(true);
 	world.push_back(heart);
@@ -167,8 +167,8 @@ void PlayState::onEnter() {
     world.push_back(sleigh);
 
     //Make camera follow Main character
-    camTransformPtr->set_parent(mainTransformPtr);
-    mainTransformPtr->add_child(camTransformPtr);
+    //camTransformPtr->set_parent(mainTransformPtr);
+    //mainTransformPtr->add_child(camTransformPtr);
 
 	//Creating lights components
 	shared_ptr<Entity> directionalLight(new Entity);
