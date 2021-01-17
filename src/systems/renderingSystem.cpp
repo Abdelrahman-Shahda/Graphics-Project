@@ -21,7 +21,7 @@ void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, con
     std::shared_ptr<Entity> entity = node->getEntity();
     glm::mat4 transform_matrix = parent_transform_matrix * node->get_transform();
 
-    //if child is not a camera
+        //if child is not a camera
         if (entity->hasComps<MeshRenderer>())
         {
     std::shared_ptr<MeshRenderer> meshRenderer = entity->getComp<MeshRenderer>();
@@ -82,8 +82,8 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     for (unsigned int x = 0; x < meshRenderers.size(); ++x)
     {
         std:: shared_ptr<Transform> tptr = meshRenderers[x]->getEntity()->getComp<Transform>();
-        //Call this recursive function only on parent nodes
-        if(tptr->get_parent() == nullptr)
+        //Call this recursive function only on parent nodes or children of camera
+        if(tptr->get_parent() == nullptr || tptr->get_parent()==ctptr)
             this->calculateDistance(objects,tptr,glm::mat4(1.0f),viewProjection);
     }
     std::sort(std::begin(objects), std::end(objects));
