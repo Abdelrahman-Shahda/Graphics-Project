@@ -220,17 +220,17 @@ void PlayState::moveChar(double deltaTime)
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
 
 	//Update Rotation
-	if (charOrientation>2000)
-	charOrientation =2000;
-	if(charOrientation < -2000)
-	charOrientation =-2000;
+	if (charOrientation>1000)
+	charOrientation =1000;
+	if(charOrientation < -1000)
+	charOrientation =-1000;
 
     if (prevOrientation == charOrientation)
 	gameSettings.characterRotation = 0;
 	else if (prevOrientation < charOrientation)
-	gameSettings.characterRotation = 0.001f;
+	gameSettings.characterRotation = 0.0075f;
 	else if (charOrientation < prevOrientation)
-	gameSettings.characterRotation = -0.001f;
+	gameSettings.characterRotation = -0.0075f;
 
 
 	//Update Position
