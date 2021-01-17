@@ -145,7 +145,7 @@ void PlayState::onEnter() {
 
 	//Make heart follow Camera
     heart->getComp<Transform>()->set_parent(camTransformPtr);
-   camTransformPtr->add_child(heart->getComp<Transform>());
+    camTransformPtr->add_child(heart->getComp<Transform>());
 
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());

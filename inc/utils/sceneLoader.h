@@ -9,7 +9,10 @@
 #include <fstream>
 
 #include <resources/material.h>
+#include <resources/mesh.hpp>
+
 #include <utils/loadingFunction.h>
+#include <utils/mesh-utils.hpp>
 
 using std::string;
 using std::unordered_map;
@@ -30,6 +33,7 @@ class SceneLoader {
 	void loadMaterial();
 	shared_ptr<ShaderProgram> loadShader(const nlohmann::json& j);
 	shared_ptr<Sampler> loadSampler(const nlohmann::json& j);
+	shared_ptr<Mesh> loadMesh(const nlohmann::json&j);
 
 public:
     SceneLoader(std::string scenePath);
