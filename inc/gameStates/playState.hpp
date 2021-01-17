@@ -12,7 +12,7 @@
 #include <components/camera.hpp>
 #include <components/transform.h>
 #include <components/lighting.h>
-#include <components/player.h>
+#include <components/player.hpp>
 #include <components/gift.hpp>
 
 #include <resources/material.h>

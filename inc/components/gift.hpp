@@ -8,6 +8,6 @@ class Gift : public Component
 private:
 	int points;
 public:
-	Gift(std::weak_ptr<Entity> entity, int points): Component(entity), points(points){}
+	Gift(std::weak_ptr<Entity> entity, int points): Component(entity), points(points){type = GIFT;}
 };
 #endif // !GIFT__H
