@@ -33,6 +33,7 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> treeMesh(new Mesh);
 	shared_ptr<Mesh> sleighMesh(new Mesh);
 	shared_ptr<Mesh> heartMesh(new Mesh);
+	shared_ptr<Mesh> shaimaaMesh(new Mesh);
 
 	glm::vec3 min;
     glm::vec3 max;
@@ -121,6 +122,10 @@ void PlayState::onEnter() {
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
 
+	    //Make camera follow Main character
+    camTransformPtr->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child(camTransformPtr);
+
 	//gift
 	shared_ptr<Entity> gift(new Entity("Gift"));
 	gift->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, giftMaterial);
@@ -132,11 +137,15 @@ void PlayState::onEnter() {
 
 	//heart
 	shared_ptr<Entity> heart(new Entity());
-	heart->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh, giftMaterial);
-	heart->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 20, -2 }, { 0, 0, 0 }, { 100000, 100000,  100000 });
+	heart->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh, material);
+	heart->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 50, 60, -20 }, { 3*3.14/2, 0, 0 }, { 0.05, 0.05,  0.05 });
 	heart->getComp<Transform>()->update();
     heart->addComp<RenderState,bool>(true);
 	world.push_back(heart);
+
+	//Make heart follow Camera
+    heart->getComp<Transform>()->set_parent(camTransformPtr);
+   camTransformPtr->add_child(heart->getComp<Transform>());
 
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());
@@ -145,10 +154,6 @@ void PlayState::onEnter() {
     icePtr->update();
     icePlane->addComp<RenderState,bool>(true);
     world.push_back(icePlane);
-
-    //Make camera follow Main character
-    camTransformPtr->set_parent(mainTransformPtr);
-    mainTransformPtr->add_child(camTransformPtr);
 
 	//Tree
     shared_ptr<Entity> tree(new Entity());
@@ -165,10 +170,6 @@ void PlayState::onEnter() {
     sleighPtr->update();
     sleigh->addComp<RenderState,bool>(true);
     world.push_back(sleigh);
-
-    //Make camera follow Main character
-    //camTransformPtr->set_parent(mainTransformPtr);
-    //mainTransformPtr->add_child(camTransformPtr);
 
 	//Creating lights components
 	shared_ptr<Entity> directionalLight(new Entity);
