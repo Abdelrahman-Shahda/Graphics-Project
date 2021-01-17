@@ -34,7 +34,7 @@
       "gift": {
         "type": "albedo",
         "path": "gift.jpg",
-        "mipmap": "true"
+        "mipmap": true
       }
     },
     "samplers": {

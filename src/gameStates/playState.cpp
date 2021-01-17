@@ -9,7 +9,7 @@ void PlayState::onEnter() {
 	//Intializing resources
 	//shaders
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
-//	SceneLoader * sceneLoader = new SceneLoader(ASSETS_DIR"/scenes/scene.json");
+	SceneLoader * sceneLoader = new SceneLoader(ASSETS_DIR"/scenes/scene.json");
 
 	//Light shaders
 	shaderProgram->create();

@@ -6,7 +6,6 @@
 SceneLoader::SceneLoader(std::string scenePath) {
 
     std::ifstream file_in(scenePath);
-    nlohmann::json json;
     file_in >> json;
     file_in.close();
     std::cout << json.dump(4) << std::endl;
@@ -54,9 +53,9 @@ void SceneLoader::loadMaterial()
 		std::cout << text["mipmap"];
 		std::cout << text["mipmap"].get<bool>();
 		bool mipmap = text.value("mipmap", true);
-		string name = text.value("type", "albedo");
+		string type = text.value("type", "albedo");
 		path = ASSETS_DIR"/image/material/" + path;
-		shared_ptr<Texture> textureObject (new Texture(name,path.c_str(),mipmap));
+		shared_ptr<Texture> textureObject (new Texture(type,path.c_str(),mipmap));
 		texturesMap[name] = textureObject;
 	}
 
