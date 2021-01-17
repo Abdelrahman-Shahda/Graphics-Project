@@ -60,6 +60,8 @@ private:
             if(current_state->getcurrent()==1){
                 next_state=new PlayState(static_cast<Application*>(this));
                 goToState(next_state,current_state);
+                current_state = next_state;
+                current_state->setcurrent(4);
             }
             else if(current_state->getcurrent()==2){
                 glfwWindowShouldClose(window);

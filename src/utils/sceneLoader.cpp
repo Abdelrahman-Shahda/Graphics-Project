@@ -30,17 +30,6 @@ void SceneLoader::loadMaterial()
 		shadersMap[name] = shaderProgram;
 	}
 
-void SceneLoader::loadEntites(nlohmann::json &json) {
-
-    for(auto& [name, child]: json.items()){
-
-        std::shared_ptr<Entity> entity(new Entity);
-        std::string tag = child.value<std::string>("tag", "");
-        entity->setTag(tag);
-        std::cout << entity->withTag("Santa")<<std::endl;
-    }
-
-}
 	//loading samplers
 	for (auto &[name, sampler] : resources["samplers"].items())
 	{
@@ -62,6 +51,17 @@ void SceneLoader::loadEntites(nlohmann::json &json) {
 
 }
 
+void SceneLoader::loadEntites(nlohmann::json &json) {
+
+    for(auto& [name, child]: json.items()){
+
+        std::shared_ptr<Entity> entity(new Entity);
+        std::string tag = child.value<std::string>("tag", "");
+        entity->setTag(tag);
+        std::cout << entity->withTag("Santa")<<std::endl;
+    }
+
+}
 shared_ptr<Mesh> SceneLoader::loadMesh(const nlohmann::json&j)
 {
 	//string meshPath=j.value("")

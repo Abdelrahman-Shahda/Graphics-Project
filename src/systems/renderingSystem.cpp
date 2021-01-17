@@ -24,14 +24,14 @@ void RenderingSystem::calculateDistance(std::vector<RenderObjects> &objects, con
         //if child is not a camera
         if (entity->hasComps<MeshRenderer>())
         {
-    std::shared_ptr<MeshRenderer> meshRenderer = entity->getComp<MeshRenderer>();
-    glm::vec4 transformed_origin = cameraVPMatrix* transform_matrix * glm::vec4(0, 0, 0, 1);
-    float depth = transformed_origin.z / transformed_origin.w;
-    objects.push_back({
-        meshRenderer,
-        depth,
-        transform_matrix,
-    });
+        std::shared_ptr<MeshRenderer> meshRenderer = entity->getComp<MeshRenderer>();
+        glm::vec4 transformed_origin = cameraVPMatrix* transform_matrix * glm::vec4(0, 0, 0, 1);
+        float depth = transformed_origin.z / transformed_origin.w;
+        objects.push_back({
+            meshRenderer,
+            depth,
+            transform_matrix,
+        });
     }
     //Calling function on children of current entity
     std::vector<std::shared_ptr<Transform>> childern = node->get_children();
@@ -88,7 +88,7 @@ void RenderingSystem::Run(const std::vector<std::shared_ptr<Entity>> &entities,d
     }
     std::sort(std::begin(objects), std::end(objects));
 
-    this->setLightParamters(meshRenderers,glm::vec3(ctptr->get_transform()[3]),viewProjection,sky_light,lights);
+    this->setLightParamters(meshRenderers,glm::vec3(ctptr->get_ModalMatrix()[3]),viewProjection,sky_light,lights);
 
 	//Start Drawing the screen
 	//clear screen to draw next frame

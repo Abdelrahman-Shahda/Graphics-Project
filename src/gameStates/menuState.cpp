@@ -28,13 +28,13 @@ void menuState::onEnter() {
 
     //Meshes
     shared_ptr<Mesh> meshPtr1(new Mesh);
-    shared_ptr<Mesh> meshPtr2(new Mesh);
-    shared_ptr<Mesh> meshPtr3(new Mesh);
+    //shared_ptr<Mesh> meshPtr2(new Mesh);
+    //shared_ptr<Mesh> meshPtr3(new Mesh);
     shared_ptr<Mesh> skyMesh(new Mesh);
 
     MeshUtils::Cuboid(*meshPtr1);
-    MeshUtils::Cuboid(*meshPtr2);
-    MeshUtils::Cuboid(*meshPtr3);
+    //MeshUtils::Cuboid(*meshPtr2);
+    // MeshUtils::Cuboid(*meshPtr3);
     MeshUtils::Cuboid(*skyMesh);
 
     //Sky entity
@@ -96,63 +96,62 @@ void menuState::onEnter() {
     shared_ptr<Entity> mainCamera(new Entity);
     std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
     std::shared_ptr<Transform> transformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
+    transformPtr->update();
     mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,transformPtr);
-    world.push_back(mainCamera);
+    world_menu.push_back(mainCamera);
 
     //Creating entities
     shared_ptr<Entity> entity2(new Entity);
-  //  shared_ptr<Entity> entity3(new Entity);
-  ///  shared_ptr<Entity> entity4(new Entity);
+    //  shared_ptr<Entity> entity3(new Entity);
+    ///  shared_ptr<Entity> entity4(new Entity);
 
     entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material);
-    entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0,10, -7 }, { 0,0 ,  3.14/2 }, { 3,3,3});
+    entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0,10, -8}, { 0,0,  3.14/2 }, { 2,2,2});
     entity2->getComp<Transform>()->update();
-    entity2->addComp<RenderState>();
+    entity2->addComp<RenderState,bool>(true);
 
 
-  /*  entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material2);
-    entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -7 }, { 0, 0, 3.14/2  }, { 1, 1,  1 });
-    entity3->getComp<Transform>()->update();
-    entity3->addComp<RenderState,bool>(true);
-    entity4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr3, material3);
-    entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 9, -7 }, {0, 0, 3.14/2  }, { 1, 1, 1 });
-    entity4->getComp<Transform>()->update();
-    entity4->addComp<RenderState>();*/
-    world.push_back(entity2);
+
+    /*  entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material2);
+      entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -7 }, { 0, 0, 3.14/2  }, { 1, 1,  1 });
+      entity3->getComp<Transform>()->update();
+      entity3->addComp<RenderState,bool>(true);
+      entity4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr3, material3);
+      entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 9, -7 }, {0, 0, 3.14/2  }, { 1, 1, 1 });
+      entity4->getComp<Transform>()->update();
+      entity4->addComp<RenderState>();*/
+    world_menu.push_back(entity2);
     //world.push_back(entity3);
     //world.push_back(entity4);
 
 
     gameSettings.cameraZoom = false;
-    gameSettings.cameraRotate = false;
+    // gameSettings.cameraRotate = false;
     gameSettings.cameraPan = false;
 
 }
 
 void menuState::detectchoice(double deltaTime){
-    glm::vec2 b1,b2,b3,b4;
-    if(applicationPtr->getMouse().isPressed(GLFW_MOUSE_BUTTON_LEFT)){
-        b1.x=applicationPtr->getMouse().getMousePosition().x;
-        std::cout<<applicationPtr->getMouse().getMousePosition().x<<"x point1"<< std::endl;
-        b1.y=applicationPtr->getMouse().getMousePosition().y;
-        std::cout<<applicationPtr->getMouse().getMousePosition().y<<"y point1"<< std::endl;
+    glm::vec2 b2({798,594});
+    glm::vec2 b1({481,515});
 
-   /*     if(applicationPtr->getMouse().getMousePosition().x>=b1.x&&applicationPtr->getMouse().getMousePosition().x<=b2.x&&applicationPtr->getMouse().getMousePosition().y<=b1.y && applicationPtr->getMouse().getMousePosition().y>=b2.y)
+
+    if(applicationPtr->getMouse().isPressed(GLFW_MOUSE_BUTTON_LEFT)){
+
+        if(applicationPtr->getMouse().getMousePosition().x>=b1.x&&applicationPtr->getMouse().getMousePosition().x<=b2.x&&applicationPtr->getMouse().getMousePosition().y>=b1.y && applicationPtr->getMouse().getMousePosition().y<=b2.y)
         {
             current=1;
         }
-        else if(applicationPtr->getMouse().getMousePosition().x>=b3.x&&applicationPtr->getMouse().getMousePosition().x<=b4.x&&applicationPtr->getMouse().getMousePosition().y<=b3.y && applicationPtr->getMouse().getMousePosition().y>=b4.y)
 
-        {
-            current=2;
-        }
-*/
+
     }
 
 }
 
 void menuState::onDraw(double deltaTime) {
-    for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
-        (*systemIterator)->Run(world, deltaTime,gameSettings, skyLight);
+    for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++) {
+        detectchoice(deltaTime);
+        (*systemIterator)->Run(world_menu, deltaTime, gameSettings, skyLight);
+    }
 }
 

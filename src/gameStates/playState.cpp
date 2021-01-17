@@ -9,8 +9,8 @@ void PlayState::onEnter() {
 	//Intializing resources
 	//shaders
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
-
-	SceneLoader * sceneLoader = new SceneLoader(ASSETS_DIR"/scenes/scene.json");
+    std::cout << "Anaaa henaaa\n";
+//	SceneLoader * sceneLoader = new SceneLoader(ASSETS_DIR"/scenes/scene.json");
 
 	//Light shaders
 	shaderProgram->create();
@@ -45,8 +45,8 @@ void PlayState::onEnter() {
 
 	MeshUtils::Cuboid(*meshPtr2,false);
     MeshUtils::Plane(*iceMesh,{1, 1}, false, {0, 0, 0}, {1, 1}, {0, 0}, {100, 100});
-	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
-    std::cout <<"Max: x " <<meshPtr->getMaxPoint().x << " y "<< meshPtr->getMaxPoint().y << " z "<< meshPtr->getMaxPoint().z <<std::endl;
+//	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
+//    std::cout <<"Max: x " <<meshPtr->getMaxPoint().x << " y "<< meshPtr->getMaxPoint().y << " z "<< meshPtr->getMaxPoint().z <<std::endl;
 
 
 	MeshUtils::Cuboid(*skyMesh);
@@ -138,14 +138,14 @@ void PlayState::onEnter() {
 	//heart
 	shared_ptr<Entity> heart(new Entity());
 	heart->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh, material);
-	heart->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 50, 60, -20 }, { 3*3.14/2, 0, 0 }, { 0.05, 0.05,  0.05 });
+	heart->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 10, 10, 10 }, { 3*3.14/2, 0, 0 }, { 0.05, 0.05,  0.05 });
 	heart->getComp<Transform>()->update();
     heart->addComp<RenderState,bool>(true);
 	world.push_back(heart);
 
 	//Make heart follow Camera
-    heart->getComp<Transform>()->set_parent(camTransformPtr);
-    camTransformPtr->add_child(heart->getComp<Transform>());
+    heart->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child(heart->getComp<Transform>());
 
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());
@@ -297,7 +297,7 @@ void PlayState::moveChar(double deltaTime)
 	else
 		mainChar->getComp<Transform>()->set_position(position);
 
-	mainChar->getComp<Transform>()->update();
+	    mainChar->getComp<Transform>()->update();
 
 }
 
