@@ -67,6 +67,10 @@
           "rotation": [0, 3.14, 0 ],
           "scale": [1,1,1]
         },
+        "Player": {
+          "lives": 3,
+          "score":0
+        },
         "MeshRenderer": {
           "mesh": "santa",
           "material": "santaMaterial"

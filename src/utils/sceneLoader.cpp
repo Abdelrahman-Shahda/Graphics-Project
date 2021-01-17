@@ -9,8 +9,9 @@ SceneLoader::SceneLoader(std::string scenePath) {
     nlohmann::json json;
     file_in >> json;
     file_in.close();
-    std::cout << json.dump(4) << std::endl;
-	loadMaterial();
+//    std::cout << json.dump(4) << std::endl;
+//	loadMaterial();
+    loadEntites(json["Scene"]);
 }
 
 void SceneLoader::loadMaterial()
@@ -50,15 +51,36 @@ void SceneLoader::loadMaterial()
 	}
 
 }
+void SceneLoader::loadComponent(std::string component, nlohmann::json &json, std::shared_ptr<Entity> en) {
 
+
+    if(component == "Transform"){
+
+        std::cout<<json.dump(4)<<std::endl;
+        glm::vec3 position = json.value<glm::vec3>("position", {0.0,0.0,0.0});
+        glm::vec3 rotation = json.value<glm::vec3>("rotation", {0.0,0.0,0.0});
+        glm::vec3 scale = json.value<glm::vec3>("scale", {0.0,0.0,0.0});
+        en->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>(position,rotation,scale)->update();
+        std::cout<<en->getComp<Transform>()->get_position()[3].y<<std::endl;
+    }else if(component == "MeshRenderer"){
+
+    }else if(component == "Player"){
+
+    }
+
+}
 void SceneLoader::loadEntites(nlohmann::json &json) {
 
-    for(auto& [name, child]: json.items()){
+    for(auto& [name, j]: json.items()){
 
         std::shared_ptr<Entity> entity(new Entity);
-        std::string tag = child.value<std::string>("tag", "");
+        std::string tag = j.value<std::string>("tag", "");
         entity->setTag(tag);
-        std::cout << entity->withTag("Santa")<<std::endl;
+        for(auto&[component, js]:j["components"].items() ){
+            loadComponent(component, js, entity);
+        }
+
+
     }
 
 }

@@ -39,7 +39,7 @@ public:
     SceneLoader(std::string scenePath);
 
     void loadEntites( nlohmann::json& json);
-
+    void loadComponent(std::string component,nlohmann::json& json, std::shared_ptr<Entity> en);
 
 };
 #endif //GRAPHICSPROJECT_SCENELOADER_H
