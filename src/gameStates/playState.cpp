@@ -9,7 +9,6 @@ void PlayState::onEnter() {
 	//Intializing resources
 	//shaders
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
-    std::cout << "Anaaa henaaa\n";
 	SceneLoader * sceneLoader = new SceneLoader(ASSETS_DIR"/scenes/scene.json");
 
 	//Light shaders
@@ -151,14 +150,14 @@ void PlayState::onEnter() {
     heart_1->addComp<RenderState,bool>(true);
 	world.push_back(heart_1);
 
-	shared_ptr<Entity> heart_2(new Entity());
+	shared_ptr<Entity> heart_2(new Entity("Life"));
 	heart_2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_2, heartMaterial);
 	heart_2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 60, 50 }, { 3*3.14/2, 0, 0 }, { 0.05, 0.05,  0.05 });
 	heart_2->getComp<Transform>()->update();
     heart_2->addComp<RenderState,bool>(true);
 	world.push_back(heart_2);
 
-	shared_ptr<Entity> heart_3(new Entity());
+	shared_ptr<Entity> heart_3(new Entity("Life"));
 	heart_3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_3, heartMaterial);
 	heart_3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -45, 60, 50 }, { 3*3.14/2,0 , 0 }, { 0.05, 0.05,  0.05 });
 	heart_3->getComp<Transform>()->update();
@@ -224,7 +223,7 @@ void PlayState::onEnter() {
 
 void PlayState ::intializeGameSettings()
 {
-	gameSettings.gameSensitivity = 0.1f;
+	gameSettings.gameSensitivity = 1.0f;
 	gameSettings.jumpAmount = 500;
 	gameSettings.friction = 4.0f;
 	gameSettings.gravity = 9.8f;
@@ -248,9 +247,7 @@ void PlayState::moveChar(double deltaTime)
 	int prevOrientation = charOrientation;
 	bool fallen = false;
 
-	//Only jump if you are on ground level
-	if (!(position.y > 1.2*(gameSettings.planeLevel)))
-	{
+
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) gameSettings.velocity.z -=  ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) gameSettings.velocity.z += ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_RIGHT)) gameSettings.velocity.x += ((float)deltaTime * gameSettings.gameSensitivity);
@@ -258,21 +255,24 @@ void PlayState::moveChar(double deltaTime)
 	//Rotate Character 45 deg. left and right
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_E)) charOrientation++;
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_Q)) charOrientation--;
-	}
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
 
+	//Only jump if you are on ground level
+	if (!(position.y > 1.2*(gameSettings.planeLevel)))
+	{
+	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
+    }
 	//Update Rotation
-	if (charOrientation>1000)
-	charOrientation =1000;
-	if(charOrientation < -1000)
-	charOrientation =-1000;
+	if (charOrientation>50)
+	charOrientation =50;
+	if(charOrientation < -50)
+	charOrientation =-50;
 
     if (prevOrientation == charOrientation)
 	gameSettings.characterRotation = 0;
 	else if (prevOrientation < charOrientation)
-	gameSettings.characterRotation = 0.0075f;
+	gameSettings.characterRotation = 0.05f;
 	else if (charOrientation < prevOrientation)
-	gameSettings.characterRotation = -0.0075f;
+	gameSettings.characterRotation = -0.05f;
 
 
 	//Update Position
@@ -328,10 +328,10 @@ void PlayState::moveChar(double deltaTime)
 }
 
 void PlayState::onDraw(double deltaTime) {
-	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++) {
-         moveChar(deltaTime);
+	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++)
         (*systemIterator)->Run(world, deltaTime, gameSettings, skyLight);
-	}
+
+		moveChar(deltaTime);
 }
 
 bool PlayState::checkGameOver()
@@ -340,4 +340,51 @@ bool PlayState::checkGameOver()
 	if (playerComp->getLives() == 0)
 		return true;
 	return false;
+}
+
+void PlayState::updateLives()
+{
+	std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
+	std::vector<std::shared_ptr<Entity>> lives = getEntitiesWithTag(world,"Life");
+		if (playerComp->getLives() == 3)
+		{
+			lives[0]->getComp<RenderState>()->isVisible = true;
+			lives[1]->getComp<RenderState>()->isVisible = true;
+			lives[2]->getComp<RenderState>()->isVisible = true;
+		}
+		else if (playerComp->getLives() == 2)
+		{
+			lives[0]->getComp<RenderState>()->isVisible = false;
+			lives[1]->getComp<RenderState>()->isVisible = true;
+			lives[2]->getComp<RenderState>()->isVisible = true;
+		}
+		else if (playerComp->getLives() == 1)
+		{
+			lives[0]->getComp<RenderState>()->isVisible = false;
+			lives[1]->getComp<RenderState>()->isVisible = false;
+			lives[2]->getComp<RenderState>()->isVisible = true;
+		}
+		else if (playerComp->getLives() == 0)
+		{
+			lives[0]->getComp<RenderState>()->isVisible = false;
+			lives[1]->getComp<RenderState>()->isVisible = false;
+			lives[2]->getComp<RenderState>()->isVisible = false;
+		}
+			lives[0]->getComp<RenderState>()->update();
+			lives[1]->getComp<RenderState>()->update();
+			lives[2]->getComp<RenderState>()->update();
+
+
+}
+
+std::vector<std::shared_ptr<Entity>> PlayState::getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag) {
+    std::vector<std::shared_ptr<Entity>> temp;
+    for (unsigned int x = 0; x < entities.size(); ++x)
+    {
+        if (entities[x]->withTag(tag))
+        {
+            temp.push_back(entities[x]);
+        }
+    }
+    return temp;
 }

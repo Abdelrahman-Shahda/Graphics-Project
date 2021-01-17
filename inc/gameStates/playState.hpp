@@ -35,5 +35,7 @@ public:
     void onExit() override {}
 	void moveChar(double deltaTime);
 	bool checkGameOver();
+	void updateLives();
+	std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
 };
 #endif
