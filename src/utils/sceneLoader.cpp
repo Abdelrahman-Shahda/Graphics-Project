@@ -152,6 +152,9 @@ void SceneLoader::loadComponent(std::string component, nlohmann::json &json, std
 
         en->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(type,color, enabled,constant,linear,quadratic,inner,outer);
 
+    }else if(component == "Elf"){
+        int points = json.value("points", 10);
+        en->addComp<Elf,int>(points);
     }
 
 }

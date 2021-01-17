@@ -21,25 +21,8 @@ void PlayState::onEnter() {
 	shaderProgram->attach(ASSETS_DIR"/shaders/light_transform.vert", GL_VERTEX_SHADER);
 	shaderProgram->attach(ASSETS_DIR "/shaders/light_array.frag", GL_FRAGMENT_SHADER);
 	shaderProgram->link();
-	//elf
-	elfMaterial->addTexture(elfTexture, customizedSampler);
-	//    //giftMaterial->addTexture(specularTexture, customizedSampler);
-	//    elfMaterial->addShaderParameter(skyLightTopColor);
-	//    elfMaterial->addShaderParameter(skyLightMiddleColor);
-	//    elfMaterial->addShaderParameter(skyLightBottomColor);
-	//
-	shared_ptr<Entity> elf_entity(new Entity("Elf"));
-	elf_entity->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(elf, elfMaterial);
-	shared_ptr<Resources::Material> elfMaterial(new Material(shaderProgram)); ////////////////
-	elfMaterial->addTexture(elfTexture, customizedSampler);
-	//giftMaterial->addTexture(specularTexture, customizedSampler);
-	elfMaterial->addShaderParameter(skyLightTopColor);
-	elfMaterial->addShaderParameter(skyLightMiddleColor);
-	elfMaterial->addShaderParameter(skyLightBottomColor);
-	elf_entity->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -8 }, { 0, 0, 0 }, { 1, 1,  1 });
-	elf_entity->getComp<Transform>()->update();
-	elf_entity->addComp<Elf, int>(100);
-	elf_entity->addComp<RenderState, bool>(true);
+    shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
+
     //snow
     shared_ptr<Mesh> snowMesh(new Mesh);
     MeshUtils::Sphere(*snowMesh,glm::vec2{32,16},false);

@@ -15,5 +15,5 @@ void ComponentLookUp::setUpMap() {
     ComponentLookUp::lookUpMap[typeid(SkyLight)] = ComponentType::SKYLIGHT;
     ComponentLookUp::lookUpMap[typeid(Player)] = ComponentType ::PLAYER;
     ComponentLookUp::lookUpMap[typeid(Gift)] = ComponentType ::GIFT;
-
+    ComponentLookUp::lookUpMap[typeid(Elf)] = ComponentType ::ELF;
 }
