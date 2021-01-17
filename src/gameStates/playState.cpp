@@ -99,7 +99,7 @@ void PlayState::onEnter() {
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
 	std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
-	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 8, -12 }, {0, 0, 1 }, { 1,1,1 });
+	std::shared_ptr<Transform> camTransformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 8, -10 }, {0, 0, 1 }, { 1,1,1 });
 	camTransformPtr->update();
 
 	mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,camTransformPtr);
@@ -109,7 +109,7 @@ void PlayState::onEnter() {
 	shared_ptr<Entity> mainChar(new Entity("Santa"));
 	mainChar->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr, material);
 	mainChar->addComp<Player>();
-	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 7, 7.5 }, {0, 3.14, 0 }, { 1, 1, 1 });
+	std::shared_ptr<Transform> mainTransformPtr= mainChar->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, 35}, {0, 3.14, 0 }, { 1, 1, 1 });
 	mainTransformPtr->update();
     mainChar->addComp<RenderState>();
 	world.push_back(mainChar);
@@ -117,7 +117,7 @@ void PlayState::onEnter() {
 	//gift
 	shared_ptr<Entity> gift(new Entity("Gift"));
 	gift->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, giftMaterial);
-	gift->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 8, -13 }, { 0, 0, 0 }, { 1, 1,  1 });
+	gift->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -12 }, { 0, 0, 0 }, { 1, 1,  1 });
 	gift->getComp<Transform>()->update();
 	gift->addComp<Gift, int>(100);
     gift->addComp<RenderState,bool>(true);
@@ -126,7 +126,7 @@ void PlayState::onEnter() {
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());
     icePlane->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(iceMesh, material2);
-    std::shared_ptr<Transform> icePtr= icePlane->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 7, 7.5 }, {0, 0, 0 }, { 60, 1, 60 });
+    std::shared_ptr<Transform> icePtr= icePlane->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, 7.5 }, {0, 0, 0 }, { 60, 1, 60 });
     icePtr->update();
     icePlane->addComp<RenderState,bool>(true);
     world.push_back(icePlane);
@@ -138,7 +138,7 @@ void PlayState::onEnter() {
 	//Tree
     shared_ptr<Entity> tree(new Entity());
     tree->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(treeMesh, material2);
-    std::shared_ptr<Transform> treePtr= tree->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -20, 8, -10 }, {0, 0, 0 }, { 0.1, 0.1, 0.1 });
+    std::shared_ptr<Transform> treePtr= tree->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -20, 10, -10 }, {0, 0, 0 }, { 0.1, 0.1, 0.1 });
     treePtr->update();
     tree->addComp<RenderState,bool>(true);
     world.push_back(tree);
@@ -146,7 +146,7 @@ void PlayState::onEnter() {
      //Santa Sleigh
 	shared_ptr<Entity> sleigh(new Entity());
     sleigh->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(sleighMesh, material);
-    std::shared_ptr<Transform> sleighPtr= sleigh->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 20, 8, -15 }, {0, 3.14/2, 0 }, { 0.003, 0.003, 0.003 });
+    std::shared_ptr<Transform> sleighPtr= sleigh->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 20, 10, -15 }, {0, 3.14/2, 0 }, { 0.003, 0.003, 0.003 });
     sleighPtr->update();
     sleigh->addComp<RenderState,bool>(true);
     world.push_back(sleigh);
@@ -161,7 +161,7 @@ void PlayState::onEnter() {
 	directionalLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::DIRECTIONAL,{1.0, 1.0, 1.0}, true,0.1f,0.0f,0.0f,0.0f,0.0f);
 
     shared_ptr<Entity> pointLight(new Entity);
-    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 10, 8, -10 }, { -1, -1,  -1 }, { 1,1,1});
+    pointLight->addComp<Transform,glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, { -1, -1,  -1 }, { 1,1,1});
     pointLight->addComp<Light,LightType,glm::vec3, bool,float,float,float,float,float>(LightType::SPOT,{0.2, 1, 0.5}, true,0.2,0,0.0,0.78539816339,1.57079632679);
 
     world.push_back(directionalLight);
@@ -186,7 +186,8 @@ void PlayState ::intializeGameSettings()
 	gameSettings.jumpAmount = 500;
 	gameSettings.friction = 4.0f;
 	gameSettings.gravity = 9.8f;
-	gameSettings.groundLevel = 8;
+	gameSettings.groundLevel = 0;
+	gameSettings.planeLevel = 10;
 	gameSettings.ceilLevel = 28;
 	gameSettings.rightBound = 50;
 	gameSettings.leftBound = -50;
@@ -194,7 +195,7 @@ void PlayState ::intializeGameSettings()
 	gameSettings.cameraZoom = false;
 	gameSettings.cameraRotate = false;
 	gameSettings.cameraPan = false;
-	
+	gameSettings.spawnPosition = {0,10,35};
 	gameSettings.characterRotation = 0.0f;
 	
 }
@@ -203,9 +204,10 @@ void PlayState::moveChar(double deltaTime)
 {
 	glm::vec3 position = mainChar->getComp<Transform>()->get_position()[3];
 	int prevOrientation = charOrientation;
+	bool fallen = false;
 
-	//Only move if you are on ground level
-	if (!(position.y > 1.2*gameSettings.groundLevel))
+	//Only jump if you are on ground level
+	if (!(position.y > 1.2*(gameSettings.planeLevel)))
 	{
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_UP)) gameSettings.velocity.z -=  ((float)deltaTime * gameSettings.gameSensitivity);
 	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_DOWN)) gameSettings.velocity.z += ((float)deltaTime * gameSettings.gameSensitivity);
@@ -233,10 +235,17 @@ void PlayState::moveChar(double deltaTime)
 
 	//Update Position
 	position += gameSettings.velocity;
+	//if on board don't allow falling
+	if(position.x > -32.5 && position.x < 32.5 && position.z > -22.2 && position.z < 42.8 && position.y < gameSettings.planeLevel ) 
+	{
+	   position.y = gameSettings.planeLevel;
+       gameSettings.velocity.y = 0; 
+	}
    if (position.y < gameSettings.groundLevel)
    {
        position.y = gameSettings.groundLevel;
        gameSettings.velocity.y = 0; 
+	   fallen =  true;
    }
       if (position.y > gameSettings.ceilLevel)
    {
@@ -263,19 +272,23 @@ void PlayState::moveChar(double deltaTime)
     gameSettings.velocity.y -= ((float)deltaTime*gameSettings.gravity);
 
 
-	mainChar->getComp<Transform>()->set_position(position);
-	mainChar->getComp<Transform>()->update();
+
+
+
+   	if(fallen)
+            mainChar->getComp<Transform>()->set_position(gameSettings.spawnPosition);
+	else
+			mainChar->getComp<Transform>()->set_position(position);
+
+			 mainChar->getComp<Transform>()->update();
+
+		
+
 }
 
 void PlayState::onDraw(double deltaTime) {
 	for (auto systemIterator = systems.begin(); systemIterator != systems.end(); systemIterator++) {
-        moveChar(deltaTime);
+         moveChar(deltaTime);
         (*systemIterator)->Run(world, deltaTime, gameSettings, skyLight);
-        glm::vec4 position = mainChar->getComp<Transform>()->get_position()[3];
-		if(position.x < -20.8 || position.x >40.8 || position.z < -24.9 || position.z > 39.8){
-            mainChar->getComp<Transform>()->set_position({0,7,7.5});
-            mainChar->getComp<Transform>()->update();
-		}
-        std::cout << glm::to_string(mainChar->getComp<Transform>()->get_position()[3])<<std::endl;
 	}
 }
