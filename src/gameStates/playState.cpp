@@ -35,6 +35,8 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> heartMesh_1(new Mesh);
 	shared_ptr<Mesh> heartMesh_2(new Mesh);
 	shared_ptr<Mesh> heartMesh_3(new Mesh);
+	shared_ptr<Mesh> scoreMesh_1(new Mesh);
+
 
 	glm::vec3 min;
     glm::vec3 max;
@@ -46,12 +48,10 @@ void PlayState::onEnter() {
 	MeshUtils::loadOBJ(*heartMesh_1,ASSETS_DIR"/models/Heart/heart.obj");
 	MeshUtils::loadOBJ(*heartMesh_2,ASSETS_DIR"/models/Heart/heart.obj");
 	MeshUtils::loadOBJ(*heartMesh_3,ASSETS_DIR"/models/Heart/heart.obj");
+	MeshUtils::loadOBJ(*heartMesh_3,ASSETS_DIR"/models/Numbers/1.obj");
 
 	MeshUtils::Cuboid(*meshPtr2,false);
     MeshUtils::Plane(*iceMesh,{1, 1}, false, {0, 0, 0}, {1, 1}, {0, 0}, {100, 100});
-//	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
-//    std::cout <<"Max: x " <<meshPtr->getMaxPoint().x << " y "<< meshPtr->getMaxPoint().y << " z "<< meshPtr->getMaxPoint().z <<std::endl;
-
 
 	MeshUtils::Cuboid(*skyMesh);
 
@@ -89,6 +89,7 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Texture> sleighTexture(new Texture("albedo",ASSETS_DIR"/image/material/heart.jpg"));
 	shared_ptr<Resources::Texture> snowTexture(new Texture("albedo",ASSETS_DIR"/image/material/snow.jpg"));
 	shared_ptr<Resources::Texture> treeTexture(new Texture("albedo",ASSETS_DIR"/image/material/tree.jpg"));
+	shared_ptr<Resources::Texture> scoreTexture(new Texture("albedo",ASSETS_DIR"/image/material/heart.jpg"));
 
     //Material classes
 	shared_ptr<Resources::Material> santaMaterial(new Material(shaderProgram));
@@ -97,9 +98,12 @@ void PlayState::onEnter() {
 	shared_ptr<Resources::Material> snowMaterial(new Material(shaderProgram));
 	shared_ptr<Resources::Material> treeMaterial(new Material(shaderProgram));
     shared_ptr<Resources::Material> iceMaterial(new Material(shaderProgram));
+	shared_ptr<Resources::Material> scoreMaterial(new Material(shaderProgram));
+
 
 
 	heartMaterial->addTexture(heartTexture,customizedSampler);
+	scoreMaterial->addTexture(scoreTexture,customizedSampler);
 	treeMaterial->addTexture(treeTexture,customizedSampler);
 	sleighMaterial->addTexture(sleighTexture,customizedSampler);
 	snowMaterial->addTexture(snowTexture,customizedSampler);
@@ -166,6 +170,14 @@ void PlayState::onEnter() {
 	gift->addComp<Gift, int>(100);
     gift->addComp<RenderState,bool>(true);
 	world.push_back(gift);
+
+	//score
+	shared_ptr<Entity> score_1(new Entity("Score"));
+	score_1->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(scoreMesh_1, scoreMaterial);
+	score_1->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -12 }, { 0, 0, 3.14/2 }, { 1, 1,  1 });
+	score_1->getComp<Transform>()->update();
+    score_1->addComp<RenderState,bool>(true);
+	world.push_back(score_1);
 
     //hearts
 	shared_ptr<Entity> heart_1(new Entity("Life"));
