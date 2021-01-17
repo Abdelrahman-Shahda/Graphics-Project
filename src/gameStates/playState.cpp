@@ -3,7 +3,8 @@
 //
 #include <gameStates/playState.hpp>
 #include <glm/gtx/string_cast.hpp>
-
+#include <time.h>
+#include <random>
 void PlayState::onEnter() {
 
 	//Intializing resources
@@ -25,6 +26,7 @@ void PlayState::onEnter() {
 	skyProgram->link();
 
 	//Meshes
+    shared_ptr<Mesh> elf(new Mesh);
 	shared_ptr<Mesh> meshPtr(new Mesh);
 	shared_ptr<Mesh> meshPtr2(new Mesh);
 	shared_ptr<Mesh> skyMesh(new Mesh);
@@ -44,7 +46,7 @@ void PlayState::onEnter() {
 	MeshUtils::loadOBJ(*heartMesh_1,ASSETS_DIR"/models/Heart/heart.obj");
 	MeshUtils::loadOBJ(*heartMesh_2,ASSETS_DIR"/models/Heart/heart.obj");
 	MeshUtils::loadOBJ(*heartMesh_3,ASSETS_DIR"/models/Heart/heart.obj");
-
+    MeshUtils::Cuboid(*elf);
 	MeshUtils::Cuboid(*meshPtr2,false);
     MeshUtils::Plane(*iceMesh,{1, 1}, false, {0, 0, 0}, {1, 1}, {0, 0}, {100, 100});
 //	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
@@ -84,6 +86,7 @@ void PlayState::onEnter() {
     shared_ptr<Resources::Texture> iceTexture(new Texture("albedo",ASSETS_DIR"/image/material/ice.jpg"));
     shared_ptr<Resources::Texture> giftTexture(new Texture("albedo",ASSETS_DIR"/image/material/gift.jpg"));
 	shared_ptr<Resources::Texture> heartTexture(new Texture("albedo",ASSETS_DIR"/image/material/heart.jpg"));
+    shared_ptr<Resources::Texture> elfTexture(new Texture("albedo",ASSETS_DIR"/image/material/gift.jpg"));
 
     //Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
@@ -110,6 +113,14 @@ void PlayState::onEnter() {
 	giftMaterial->addShaderParameter(skyLightTopColor);
 	giftMaterial->addShaderParameter(skyLightMiddleColor);
 	giftMaterial->addShaderParameter(skyLightBottomColor);
+
+
+    shared_ptr<Resources::Material> elfMaterial(new Material(shaderProgram));
+    elfMaterial->addTexture(elfTexture, customizedSampler);
+    //giftMaterial->addTexture(specularTexture, customizedSampler);
+    elfMaterial->addShaderParameter(skyLightTopColor);
+    elfMaterial->addShaderParameter(skyLightMiddleColor);
+    elfMaterial->addShaderParameter(skyLightBottomColor);
 
 	//Intializing Camera component
 	shared_ptr<Entity> mainCamera(new Entity);
@@ -141,6 +152,14 @@ void PlayState::onEnter() {
 	gift->addComp<Gift, int>(100);
     gift->addComp<RenderState,bool>(true);
 	world.push_back(gift);
+
+    shared_ptr<Entity> elf_entity(new Entity("Gift"));
+    elf_entity->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(elf, elfMaterial);
+    elf_entity->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -8 }, { 0, 0, 0 }, { 1, 1,  1 });
+    elf_entity->getComp<Transform>()->update();
+    elf_entity->addComp<Gift, int>(100);
+    elf_entity->addComp<RenderState,bool>(true);
+    world.push_back(elf_entity);
 
 //hearts
 	shared_ptr<Entity> heart_1(new Entity("Life"));
@@ -215,7 +234,7 @@ void PlayState::onEnter() {
 	systems.push_back(CS);
 
 	intializeGameSettings();
-
+    this->elf_entity=elf_entity;
 	this->mainCamera = mainCamera;
 	this->mainChar = mainChar;
 	charOrientation = 0;
@@ -333,6 +352,7 @@ void PlayState::onDraw(double deltaTime) {
         (*systemIterator)->Run(world, deltaTime, gameSettings, skyLight);
 
 		moveChar(deltaTime);
+		moveelf(deltaTime);
 }
 
 bool PlayState::checkGameOver()
@@ -388,4 +408,24 @@ std::vector<std::shared_ptr<Entity>> PlayState::getEntitiesWithTag(const std::ve
         }
     }
     return temp;
+}
+
+void PlayState::moveelf(double deltaTime) {
+    const int range_from  = 0;
+    const int range_to    = 3;
+
+    std::random_device                  rand_dev;
+    std::mt19937                        generator(rand_dev());
+    std::uniform_int_distribution<int>  distr(range_from, range_to);
+    int x= distr(generator);
+    glm::vec3 position = elf_entity->getComp<Transform>()->get_position()[3];
+    if(x==0) position.z -=  ((float)deltaTime * 20);
+    if(x==1) position.z += ((float)deltaTime * 20);
+    if(x==2) position.x += ((float)deltaTime * 20);
+    if(x==3) position.x -= ((float)deltaTime * 20);
+    if(position.x > -32.5 && position.x < 32.5 && position.z > -22.2 && position.z < 42.8){
+        elf_entity->getComp<Transform>()->set_position(position);
+        elf_entity->getComp<Transform>()->update();
+    }
+
 }

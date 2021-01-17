@@ -120,7 +120,7 @@ void menuState::onEnter() {
       entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 9, -7 }, {0, 0, 3.14/2  }, { 1, 1, 1 });
       entity4->getComp<Transform>()->update();
       entity4->addComp<RenderState>();*/
-    world_menu.push_back(entity2);
+     world_menu.push_back(entity2);
     //world.push_back(entity3);
     //world.push_back(entity4);
 

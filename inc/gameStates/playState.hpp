@@ -24,6 +24,7 @@
 class PlayState : public GameState {
 protected:
 	std::shared_ptr<Entity> mainChar;
+    std::shared_ptr<Entity> elf_entity;
 	std::shared_ptr<Entity> mainCamera;
 	int charOrientation;
 	gameSettings gameSettings;
@@ -36,6 +37,7 @@ public:
 	void moveChar(double deltaTime);
 	bool checkGameOver();
 	void updateLives();
+	void moveelf(double deltaTime);
 	std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
 };
 #endif
