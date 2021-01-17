@@ -22,7 +22,8 @@ void SceneLoader::loadMaterial()
 	//Materials maps
 	unordered_map<string, shared_ptr<Resources::ShaderProgram>> shadersMap;
 	unordered_map<string, shared_ptr<Resources::Sampler>> samplersMap;
-	unordered_map<string, shared_ptr<Resources::Sampler>> meshesMap;
+	unordered_map<string, shared_ptr<Resources::Mesh>> meshesMap;
+	unordered_map<string, shared_ptr<Resources::Texture>> texturesMap;
 
 	//loading shaders
 	for (auto &[name,shader] : resources["shaders"].items())
@@ -42,12 +43,33 @@ void SceneLoader::loadMaterial()
 	for (auto &[name, mesh] : resources["meshes"].items())
 	{
 		std::cout << mesh;
-		/*
-		string path=ASSETS_DIR"/models/"+mesh.value("")
-		shared_ptr<Sampler> meshObject(new Mesh);
-		MeshUtils::loadOBJ(meshObject,)
+		shared_ptr<Mesh> meshObject = loadMesh(mesh);
 		meshesMap[name] = meshObject;
-		*/
+	}
+
+	//loading Textures
+	for (auto &[name, text] : resources["textures"].items())
+	{
+		string path = text.value("path", "");
+		std::cout << text.dump(4);
+		std::cout << text["mipmap"];
+		std::cout << text["mipmap"].get<bool>();
+		bool mipmap = text.value("mipmap", true);
+		string name = text.value("type", "albedo");
+		path = ASSETS_DIR"/image/material/" + path;
+		shared_ptr<Texture> textureObject (new Texture(name,path.c_str(),mipmap));
+		texturesMap[name] = textureObject;
+	}
+
+	//loading shader parameters
+
+
+	//loading material
+	for (auto &[name, materialCotent] : resources["materials"].items())
+	{
+		string shaderName = materialCotent.value("shader", "defaultShader");
+		shared_ptr<Material> materialPtr(new Material(shadersMap[shaderName]));
+
 	}
 
 }
@@ -86,9 +108,24 @@ void SceneLoader::loadEntites(nlohmann::json &json) {
 }
 shared_ptr<Mesh> SceneLoader::loadMesh(const nlohmann::json&j)
 {
-	//string meshPath=j.value("")
-	return NULL;
+	shared_ptr<Mesh> meshObject(new Mesh);
+	string val=j.get<std::string>();
+	if (val == "cubiod")
+		MeshUtils::Cuboid(*meshObject, false);
+
+	else if (val == "sphere")
+		MeshUtils::Sphere(*meshObject);
+
+	//If a path is given, load obj file
+	else
+	{
+		string path = ASSETS_DIR"/models/" + val;
+		MeshUtils::loadOBJ(*meshObject, path.c_str());
+	}
+
+	return meshObject;
 }
+
 shared_ptr<Sampler> SceneLoader::loadSampler(const nlohmann::json& j)
 {
 	GLenum wrap_s = enumsTable.find(j.value("wrap_s", "GL_REPEAT"))->second;
@@ -110,6 +147,7 @@ shared_ptr<ShaderProgram> SceneLoader:: loadShader(const nlohmann::json& j)
 
 	//string dir = ASSETS_DIR;
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new ShaderProgram);
+	shaderProgram->create();
 	shaderProgram->attach(vertexShaderPath, GL_VERTEX_SHADER);
 	shaderProgram->attach(fragmentShaderPath, GL_FRAGMENT_SHADER);
 	shaderProgram->link();
