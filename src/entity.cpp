@@ -10,6 +10,9 @@ Entity::Entity(std::string tag) {
 bool Entity::withTag(std::string tag) {
     return tag == this->tag;
 }
+void Entity::setTag(std::string tag) {
+    this->tag = tag;
+}
 unsigned int Entity::getId() {
     return this->id;
 }

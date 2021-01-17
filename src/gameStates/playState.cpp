@@ -9,8 +9,7 @@ void PlayState::onEnter() {
 	//Intializing resources
 	//shaders
 	shared_ptr< Resources::ShaderProgram> shaderProgram(new Resources::ShaderProgram);
-
-	SceneLoader * sceneLoader = new SceneLoader(ASSETS_DIR"/scenes/scene.json");
+//	SceneLoader * sceneLoader = new SceneLoader(ASSETS_DIR"/scenes/scene.json");
 
 	//Light shaders
 	shaderProgram->create();
@@ -32,8 +31,9 @@ void PlayState::onEnter() {
 	shared_ptr<Mesh> iceMesh(new Mesh);
 	shared_ptr<Mesh> treeMesh(new Mesh);
 	shared_ptr<Mesh> sleighMesh(new Mesh);
-	shared_ptr<Mesh> heartMesh(new Mesh);
-	shared_ptr<Mesh> shaimaaMesh(new Mesh);
+	shared_ptr<Mesh> heartMesh_1(new Mesh);
+	shared_ptr<Mesh> heartMesh_2(new Mesh);
+	shared_ptr<Mesh> heartMesh_3(new Mesh);
 
 	glm::vec3 min;
     glm::vec3 max;
@@ -41,12 +41,14 @@ void PlayState::onEnter() {
 	MeshUtils::loadOBJ(*meshPtr,ASSETS_DIR"/models/Santa Claus/santa.obj");
 	MeshUtils::loadOBJ(*treeMesh,ASSETS_DIR"/models/Tree/tree.obj");
 	MeshUtils::loadOBJ(*sleighMesh,ASSETS_DIR"/models/Sleigh/sleigh.obj");
-	MeshUtils::loadOBJ(*heartMesh,ASSETS_DIR"/models/Heart/heart.obj");
+	MeshUtils::loadOBJ(*heartMesh_1,ASSETS_DIR"/models/Heart/heart.obj");
+	MeshUtils::loadOBJ(*heartMesh_2,ASSETS_DIR"/models/Heart/heart.obj");
+	MeshUtils::loadOBJ(*heartMesh_3,ASSETS_DIR"/models/Heart/heart.obj");
 
 	MeshUtils::Cuboid(*meshPtr2,false);
     MeshUtils::Plane(*iceMesh,{1, 1}, false, {0, 0, 0}, {1, 1}, {0, 0}, {100, 100});
-	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
-    std::cout <<"Max: x " <<meshPtr->getMaxPoint().x << " y "<< meshPtr->getMaxPoint().y << " z "<< meshPtr->getMaxPoint().z <<std::endl;
+//	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
+//    std::cout <<"Max: x " <<meshPtr->getMaxPoint().x << " y "<< meshPtr->getMaxPoint().y << " z "<< meshPtr->getMaxPoint().z <<std::endl;
 
 
 	MeshUtils::Cuboid(*skyMesh);
@@ -81,10 +83,15 @@ void PlayState::onEnter() {
     shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
     shared_ptr<Resources::Texture> iceTexture(new Texture("albedo",ASSETS_DIR"/image/material/ice.jpg"));
     shared_ptr<Resources::Texture> giftTexture(new Texture("albedo",ASSETS_DIR"/image/material/gift.jpg"));
+	shared_ptr<Resources::Texture> heartTexture(new Texture("albedo",ASSETS_DIR"/image/material/heart.jpg"));
 
     //Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
+	shared_ptr<Resources::Material> heartMaterial(new Material(shaderProgram));
     shared_ptr<Resources::Material> material2(new Material(shaderProgram));
+
+	heartMaterial->addTexture(heartTexture,customizedSampler);
+
 	material->addTexture(santaTexture, customizedSampler);
 	material->addTexture(specularTexture,customizedSampler);
 	//material2->addTexture(emissiveTexture, customizedSampler);
@@ -135,17 +142,35 @@ void PlayState::onEnter() {
     gift->addComp<RenderState,bool>(true);
 	world.push_back(gift);
 
-	//heart
-	shared_ptr<Entity> heart(new Entity());
-	heart->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh, material);
-	heart->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 50, 60, -20 }, { 3*3.14/2, 0, 0 }, { 0.05, 0.05,  0.05 });
-	heart->getComp<Transform>()->update();
-    heart->addComp<RenderState,bool>(true);
-	world.push_back(heart);
+//hearts
+	shared_ptr<Entity> heart_1(new Entity());
+	heart_1->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_1, heartMaterial);
+	heart_1->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -35, 60, 50 }, { 3*3.14/2,0 , 0 }, { 0.05, 0.05,  0.05 });
+	heart_1->getComp<Transform>()->update();
+    heart_1->addComp<RenderState,bool>(true);
+	world.push_back(heart_1);
 
-	//Make heart follow Camera
-    heart->getComp<Transform>()->set_parent(camTransformPtr);
-   camTransformPtr->add_child(heart->getComp<Transform>());
+	shared_ptr<Entity> heart_2(new Entity());
+	heart_2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_2, heartMaterial);
+	heart_2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -40, 60, 50 }, { 3*3.14/2, 0, 0 }, { 0.05, 0.05,  0.05 });
+	heart_2->getComp<Transform>()->update();
+    heart_2->addComp<RenderState,bool>(true);
+	world.push_back(heart_2);
+
+	shared_ptr<Entity> heart_3(new Entity());
+	heart_3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(heartMesh_3, heartMaterial);
+	heart_3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ -45, 60, 50 }, { 3*3.14/2,0 , 0 }, { 0.05, 0.05,  0.05 });
+	heart_3->getComp<Transform>()->update();
+    heart_3->addComp<RenderState,bool>(true);
+	world.push_back(heart_3);
+
+	//Make heart follow Main character
+    heart_1->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( heart_1->getComp<Transform>());
+	heart_2->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( heart_2->getComp<Transform>());
+	heart_3->getComp<Transform>()->set_parent(mainTransformPtr);
+    mainTransformPtr->add_child( heart_3->getComp<Transform>());
 
 	//icePlane
     shared_ptr<Entity> icePlane(new Entity());
@@ -297,7 +322,7 @@ void PlayState::moveChar(double deltaTime)
 	else
 		mainChar->getComp<Transform>()->set_position(position);
 
-	mainChar->getComp<Transform>()->update();
+	    mainChar->getComp<Transform>()->update();
 
 }
 

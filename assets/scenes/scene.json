@@ -73,5 +73,22 @@
 
     }
 
+  },
+  "Scene": {
+    "santa": {
+      "tag": "Santa",
+      "components": {
+        "Transform": {
+          "position": [ 0, 10, 35],
+          "rotation": [0, 3.14, 0 ],
+          "scale": [1,1,1]
+        },
+        "MeshRenderer": {
+          "mesh": "santa",
+          "material": "santaMaterial"
+        }
+
+      }
+    }
   }
 }

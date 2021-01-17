@@ -1,7 +1,9 @@
 //
 // Created by 20101 on 1/17/2021.
 //
-
+#include <glm/vec2.hpp>
+#include <json/json.hpp>
+#include <entity.hpp>
 #ifndef GRAPHICSPROJECT_LOADINGFUNCTION_H
 #define GRAPHICSPROJECT_LOADINGFUNCTION_H
 
@@ -24,6 +26,5 @@ namespace glm {
             v[index] = j[index].get<T>();
     }
 }
-
 
 #endif //GRAPHICSPROJECT_LOADINGFUNCTION_H
