@@ -37,7 +37,7 @@ void PlayState::onEnter() {
 	MeshUtils::loadOBJ(*treeMesh,ASSETS_DIR"/models/Tree/tree.obj");
 	MeshUtils::loadOBJ(*sleighMesh,ASSETS_DIR"/models/Sleigh/sleigh.obj");
 
-	MeshUtils::Cuboid(*meshPtr2,true);
+	MeshUtils::Cuboid(*meshPtr2,false);
     MeshUtils::Plane(*iceMesh,{1, 1}, false, {0, 0, 0}, {1, 1}, {0, 0}, {100, 100});
 	std::cout <<"Min: x " <<meshPtr->getMinPoint().x << " y "<< meshPtr->getMinPoint().y << " z "<< meshPtr->getMinPoint().z <<std::endl;
     std::cout <<"Max: x " <<meshPtr->getMaxPoint().x << " y "<< meshPtr->getMaxPoint().y << " z "<< meshPtr->getMaxPoint().z <<std::endl;
@@ -72,14 +72,16 @@ void PlayState::onEnter() {
     shared_ptr<Resources::Sampler> iceSampler(new Sampler(GL_REPEAT, GL_REPEAT, GL_LINEAR, GL_NEAREST));
 	shared_ptr<Resources::Texture> santaTexture(new Texture("albedo",ASSETS_DIR"/image/material/santa.jpg"));
 	shared_ptr<Resources::Texture> specularTexture(new Texture("specular",ASSETS_DIR"/image/material/santa_spec.jpg"));
+    shared_ptr<Resources::Texture> emissiveTexture(new Texture("emissive",ASSETS_DIR"/image/material/santa.jpg"));
     shared_ptr<Resources::Texture> iceTexture(new Texture("albedo",ASSETS_DIR"/image/material/ice.jpg"));
-	shared_ptr<Resources::Texture> giftTexture(new Texture("albedo", ASSETS_DIR"/image/material/gift2.jpg"));
-    
-	//Material classes
+    shared_ptr<Resources::Texture> giftTexture(new Texture("albedo",ASSETS_DIR"/image/material/gift.jpg"));
+
+    //Material classes
 	shared_ptr<Resources::Material> material(new Material(shaderProgram));
     shared_ptr<Resources::Material> material2(new Material(shaderProgram));
 	material->addTexture(santaTexture, customizedSampler);
 	material->addTexture(specularTexture,customizedSampler);
+	//material2->addTexture(emissiveTexture, customizedSampler);
 	material->addShaderParameter(skyLightTopColor);
 	material->addShaderParameter(skyLightMiddleColor);
 	material->addShaderParameter(skyLightBottomColor);
@@ -91,7 +93,7 @@ void PlayState::onEnter() {
 
 	shared_ptr<Resources::Material> giftMaterial(new Material(shaderProgram));
 	giftMaterial->addTexture(giftTexture, customizedSampler);
-	//giftMaterial->addTexture(specularTexture, customizedSampler);
+	giftMaterial->addTexture(specularTexture, customizedSampler);
 	giftMaterial->addShaderParameter(skyLightTopColor);
 	giftMaterial->addShaderParameter(skyLightMiddleColor);
 	giftMaterial->addShaderParameter(skyLightBottomColor);
@@ -197,7 +199,7 @@ void PlayState ::intializeGameSettings()
 	gameSettings.cameraPan = false;
 	gameSettings.spawnPosition = {0,10,35};
 	gameSettings.characterRotation = 0.0f;
-	
+
 }
 
 void PlayState::moveChar(double deltaTime)
@@ -236,10 +238,10 @@ void PlayState::moveChar(double deltaTime)
 	//Update Position
 	position += gameSettings.velocity;
 	//if on board don't allow falling
-	if(position.x > -32.5 && position.x < 32.5 && position.z > -22.2 && position.z < 42.8 && position.y < gameSettings.planeLevel ) 
+	if(position.x > -32.5 && position.x < 32.5 && position.z > -22.2 && position.z < 42.8 && position.y < gameSettings.planeLevel )
 	{
 	   position.y = gameSettings.planeLevel;
-       gameSettings.velocity.y = 0; 
+       gameSettings.velocity.y = 0;
 	}
    if (position.y < gameSettings.groundLevel)
    {
