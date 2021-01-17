@@ -32,7 +32,7 @@ class menuState : public GameState {
     gameSettings gameSettings;
 
 public:
-    menuState(Application* app) :GameState(app) {current=0;};
+    menuState(StateManagerApplication* app) :GameState(app) {current=0;};
 
     void onEnter() override;
     void onDraw(double deltaTime) override;

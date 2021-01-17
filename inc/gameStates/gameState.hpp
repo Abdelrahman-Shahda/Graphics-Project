@@ -9,20 +9,17 @@
 #include <systems/system.hpp>
 #include<entity.hpp>
 
-class Application;
+class StateManagerApplication;
 
 class GameState {
 protected:
     int current;
-	Application* applicationPtr;
+	StateManagerApplication* applicationPtr;
 	std::vector <shared_ptr<Entity>> world;
-    std::vector <shared_ptr<Entity>> world_menu;
 	std::vector<shared_ptr<System>> systems;
     shared_ptr<Entity> skyLight = NULL;
 public:
-	GameState(Application * applicationPtr) : applicationPtr(applicationPtr) {
-
-	};
+	GameState(StateManagerApplication * applicationPtr) : applicationPtr(applicationPtr) {};
     int  getcurrent(){return current;}
     void setcurrent(int c){  current=c;}
     virtual void onEnter()=0;

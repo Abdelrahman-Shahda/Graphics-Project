@@ -259,7 +259,7 @@ void PlayState::moveChar(double deltaTime)
 	//Only jump if you are on ground level
 	if (!(position.y > 1.2*(gameSettings.planeLevel)))
 	{
-	if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
+if(applicationPtr->getKeyboard().isPressed(GLFW_KEY_SPACE))gameSettings.velocity.y += ((float)deltaTime * gameSettings.gameSensitivity *gameSettings.jumpAmount);
     }
 	//Update Rotation
 	if (charOrientation>50)
