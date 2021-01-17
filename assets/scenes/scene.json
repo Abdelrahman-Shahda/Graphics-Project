@@ -16,10 +16,26 @@
       "tree": "Tree/tree.obj"
     },
     "textures": {
-      "santa": "santa.jpg",
-      "santa_spec": "santa_spec.jpg",
-      "ice": "ice.jpg",
-      "gift": "gift.jpg"
+      "santa": {
+        "type": "albedo",
+        "path": "santa.jpg",
+        "mipmap": false
+      },
+      "santa_spec": {
+        "type": "specular",
+        "path": "santa_spec.jpg",
+        "mipmap": true
+      },
+      "ice": {
+        "type": "albedo",
+        "path": "ice.jpg",
+        "mipmap": true
+      },
+      "gift": {
+        "type": "albedo",
+        "path": "gift.jpg",
+        "mipmap": "true"
+      }
     },
     "samplers": {
       "default": {

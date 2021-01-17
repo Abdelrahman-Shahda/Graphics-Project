@@ -20,7 +20,8 @@ void SceneLoader::loadMaterial()
 	//Materials maps
 	unordered_map<string, shared_ptr<Resources::ShaderProgram>> shadersMap;
 	unordered_map<string, shared_ptr<Resources::Sampler>> samplersMap;
-	unordered_map<string, shared_ptr<Resources::Sampler>> meshesMap;
+	unordered_map<string, shared_ptr<Resources::Mesh>> meshesMap;
+	unordered_map<string, shared_ptr<Resources::Texture>> texturesMap;
 
 	//loading shaders
 	for (auto &[name,shader] : resources["shaders"].items())
@@ -44,6 +45,20 @@ void SceneLoader::loadMaterial()
 		meshesMap[name] = meshObject;
 	}
 
+	//loading Textures
+	for (auto &[name, text] : resources["textures"].items())
+	{
+		string path = text.value("path", "");
+		std::cout << text.dump(4);
+		std::cout << text["mipmap"];
+		std::cout << text["mipmap"].get<bool>();
+		bool mipmap = text.value("mipmap", true);
+		string name = text.value("type", "albedo");
+		path = ASSETS_DIR"/image/material/" + path;
+		shared_ptr<Texture> textureObject (new Texture(name,path.c_str(),mipmap));
+		texturesMap[name] = textureObject;
+	}
+
 	//loading shader parameters
 
 
@@ -53,7 +68,6 @@ void SceneLoader::loadMaterial()
 		string shaderName = materialCotent.value("shader", "defaultShader");
 		shared_ptr<Material> materialPtr(new Material(shadersMap[shaderName]));
 
-
 	}
 
 }
@@ -61,16 +75,17 @@ void SceneLoader::loadMaterial()
 shared_ptr<Mesh> SceneLoader::loadMesh(const nlohmann::json&j)
 {
 	shared_ptr<Mesh> meshObject(new Mesh);
-	if (j == "cubiod")
+	string val=j.get<std::string>();
+	if (val == "cubiod")
 		MeshUtils::Cuboid(*meshObject, false);
 
-	else if (j == "sphere")
+	else if (val == "sphere")
 		MeshUtils::Sphere(*meshObject);
 
 	//If a path is given, load obj file
 	else
 	{
-		string path = ASSETS_DIR"/models/" + j;
+		string path = ASSETS_DIR"/models/" + val;
 		MeshUtils::loadOBJ(*meshObject, path.c_str());
 	}
 
