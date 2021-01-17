@@ -20,47 +20,26 @@ void SceneLoader::loadMaterial()
 	//Materials maps
 	unordered_map<string, shared_ptr<Resources::ShaderProgram>> shadersMap;
 	unordered_map<string, shared_ptr<Resources::Sampler>> samplersMap;
-	unordered_map<string, shared_ptr<Resources::Mesh>> meshesMap;
 	unordered_map<string, shared_ptr<Resources::Texture>> texturesMap;
 
 	//loading shaders
 	for (auto &[name,shader] : resources["shaders"].items())
-	{
-		shared_ptr<Resources::ShaderProgram> shaderProgram=loadShader(shader);
-		shadersMap[name] = shaderProgram;
-	}
+		shadersMap[name] = loadShader(shader);
 
 	//loading samplers
 	for (auto &[name, sampler] : resources["samplers"].items())
 	{
-		shared_ptr<Resources::Sampler> samplerObject = loadSampler(sampler);
-		samplersMap[name] = samplerObject;
+		std::cout << name << "\n";
+		samplersMap[name] = loadSampler(sampler);
 	}
 
 	//loading Meshes
 	for (auto &[name, mesh] : resources["meshes"].items())
-	{
-		std::cout << mesh;
-		shared_ptr<Mesh> meshObject = loadMesh(mesh);
-		meshesMap[name] = meshObject;
-	}
+		meshesMap[name] = loadMesh(mesh);
 
 	//loading Textures
 	for (auto &[name, text] : resources["textures"].items())
-	{
-		string path = text.value("path", "");
-		std::cout << text.dump(4);
-		std::cout << text["mipmap"];
-		std::cout << text["mipmap"].get<bool>();
-		bool mipmap = text.value("mipmap", true);
-		string type = text.value("type", "albedo");
-		path = ASSETS_DIR"/image/material/" + path;
-		shared_ptr<Texture> textureObject (new Texture(type,path.c_str(),mipmap));
-		texturesMap[name] = textureObject;
-	}
-
-	//loading shader parameters
-
+		texturesMap[name] = loadTexture(text);
 
 	//loading material
 	for (auto &[name, materialCotent] : resources["materials"].items())
@@ -68,8 +47,25 @@ void SceneLoader::loadMaterial()
 		string shaderName = materialCotent.value("shader", "defaultShader");
 		shared_ptr<Material> materialPtr(new Material(shadersMap[shaderName]));
 
+		//adding textures to material
+		for (auto &[textureName, samplerName] : materialCotent["textures"].items())
+		{
+			std::cout << samplerName.dump(3) << "\n";
+			materialPtr->addTexture(texturesMap[textureName], samplersMap[samplerName.get<string>()]);
+		}
+		materialsMap[name] = materialPtr;
 	}
 
+}
+
+shared_ptr<Texture> SceneLoader::loadTexture(nlohmann::json &j)
+{
+	string path = j.value("path", "");
+	bool mipmap = j.value("mipmap", true);
+	string type = j.value("type", "albedo");
+	path = ASSETS_DIR"/image/material/" + path;
+	shared_ptr<Texture> textureObject(new Texture(type, path.c_str(), mipmap));
+	return textureObject;
 }
 void SceneLoader::loadComponent(std::string component, nlohmann::json &json, std::shared_ptr<Entity> en,Application* application) {
 

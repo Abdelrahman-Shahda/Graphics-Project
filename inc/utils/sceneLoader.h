@@ -29,12 +29,14 @@ static std::map<std::string, GLenum> const enumsTable = { {"GL_REPEAT",GL_REPEAT
 class SceneLoader {
 
     nlohmann::json json;
-	unordered_map<string, Resources::Material> materialsMap;
+	unordered_map<string, shared_ptr<Resources::Material>> materialsMap;
+	unordered_map<string, shared_ptr<Resources::Mesh>> meshesMap;
 
 	void loadMaterial();
 	shared_ptr<ShaderProgram> loadShader(const nlohmann::json& j);
 	shared_ptr<Sampler> loadSampler(const nlohmann::json& j);
 	shared_ptr<Mesh> loadMesh(const nlohmann::json&j);
+	shared_ptr<Texture> loadTexture(nlohmann::json &j);
 
 public:
     SceneLoader(std::string scenePath);
