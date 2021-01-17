@@ -10,6 +10,7 @@
 #include<systems/renderingSystem.hpp>
 #include<entity.hpp>
 #include <gameStates/gameState.hpp>
+#include<gameStates/overState.hpp>
 #include <gameStates/playState.hpp>
 #include <gameStates/menuState.hpp>
 #include <application.hpp>
@@ -64,7 +65,10 @@ private:
                 current_state->setcurrent(4);
             }
             else if(current_state->getcurrent()==2){
-                glfwWindowShouldClose(window);
+                next_state=new overState(static_cast<Application*>(this));
+                goToState(next_state,current_state);
+                current_state = next_state;
+                current_state->setcurrent(4);
             }
 
         }
