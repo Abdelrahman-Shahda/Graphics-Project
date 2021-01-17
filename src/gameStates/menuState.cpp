@@ -126,7 +126,7 @@ void menuState::onEnter() {
 
 
     gameSettings.cameraZoom = false;
-    // gameSettings.cameraRotate = false;
+    gameSettings.cameraRotate = false;
     gameSettings.cameraPan = false;
 
 }
