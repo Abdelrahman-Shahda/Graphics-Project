@@ -53,10 +53,14 @@ void menuState::onEnter() {
 
     world.push_back(menuCuboid);
 
-    gameSettings.cameraZoom = false;
-    gameSettings.cameraRotate = false;
-    gameSettings.cameraPan = false;
+	//light
+	//Creating lights components
+	shared_ptr<Entity> directionalLight(new Entity);
+	directionalLight->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0,1, -3 }, { 1, -1,  -3 }, { 1,1,1 });
+	directionalLight->addComp<Light, LightType, glm::vec3, bool, float, float, float, float, float>(LightType::DIRECTIONAL, { 1.0, 1.0, 1.0 }, true, 0.1f, 0.0f, 0.0f, 0.0f, 0.0f);
+	world.push_back(directionalLight);
 
+	intializeGameSettings();
 }
 
 void menuState::detectchoice(double deltaTime){

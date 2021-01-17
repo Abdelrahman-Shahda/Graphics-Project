@@ -25,12 +25,6 @@
 
 class menuState : public GameState {
 
-    // Index of the current selected menu item
-
-    // A pointer to the current active game (if any).
-
-    gameSettings gameSettings;
-
 public:
     menuState(StateManagerApplication* app) :GameState(app) {current=0;};
 
