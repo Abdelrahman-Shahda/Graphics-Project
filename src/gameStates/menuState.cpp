@@ -28,13 +28,9 @@ void menuState::onEnter() {
 
     //Meshes
     shared_ptr<Mesh> meshPtr1(new Mesh);
-    //shared_ptr<Mesh> meshPtr2(new Mesh);
-    //shared_ptr<Mesh> meshPtr3(new Mesh);
     shared_ptr<Mesh> skyMesh(new Mesh);
 
     MeshUtils::Cuboid(*meshPtr1);
-    //MeshUtils::Cuboid(*meshPtr2);
-    // MeshUtils::Cuboid(*meshPtr3);
     MeshUtils::Cuboid(*skyMesh);
 
     //Sky entity
@@ -69,28 +65,12 @@ void menuState::onEnter() {
     //Material classes
     shared_ptr<Resources::Material> material(new Material(shaderProgram));
     material->addTexture(menu, defaultSampler);
-    material->addTexture(menu, defaultSampler);
-    material->addTexture(menu, defaultSampler);
     material->addShaderParameter(skyLightTopColor);
     material->addShaderParameter(skyLightMiddleColor);
     material->addShaderParameter(skyLightBottomColor);
 
 
-    /*shared_ptr<Resources::Material> material2(new Material(shaderProgram));
-    material2->addTexture(restart, customizedSampler);
-    material2->addTexture(restart, customizedSampler);
-    material2->addTexture(restart, customizedSampler);
-    material2->addShaderParameter(skyLightTopColor);
-    material2->addShaderParameter(skyLightMiddleColor);
-    material2->addShaderParameter(skyLightBottomColor);
 
-    shared_ptr<Resources::Material> material3(new Material(shaderProgram));
-    material3->addTexture(exit, defaultSampler);
-    material3->addTexture(exit, defaultSampler);
-    material3->addTexture(exit, defaultSampler);
-    material3->addShaderParameter(skyLightTopColor);
-    material3->addShaderParameter(skyLightMiddleColor);
-    material3->addShaderParameter(skyLightBottomColor);*/
 
     //Intializing Camera component
     shared_ptr<Entity> mainCamera(new Entity);
@@ -102,8 +82,6 @@ void menuState::onEnter() {
 
     //Creating entities
     shared_ptr<Entity> entity2(new Entity);
-    //  shared_ptr<Entity> entity3(new Entity);
-    ///  shared_ptr<Entity> entity4(new Entity);
 
     entity2->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr1, material);
     entity2->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0,10, -8}, { 0,0,  3.14/2 }, { 2,2,2});
@@ -111,18 +89,8 @@ void menuState::onEnter() {
     entity2->addComp<RenderState,bool>(true);
 
 
-
-    /*  entity3->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr2, material2);
-      entity3->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -7 }, { 0, 0, 3.14/2  }, { 1, 1,  1 });
-      entity3->getComp<Transform>()->update();
-      entity3->addComp<RenderState,bool>(true);
-      entity4->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(meshPtr3, material3);
-      entity4->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 9, -7 }, {0, 0, 3.14/2  }, { 1, 1, 1 });
-      entity4->getComp<Transform>()->update();
-      entity4->addComp<RenderState>();*/
     world.push_back(entity2);
-    //world.push_back(entity3);
-    //world.push_back(entity4);
+
 
 
     this->gameSettings.cameraZoom = false;
