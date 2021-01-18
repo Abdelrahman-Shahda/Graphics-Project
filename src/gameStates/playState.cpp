@@ -22,6 +22,7 @@ void PlayState::onEnter() {
 	shaderProgram->attach(ASSETS_DIR "/shaders/light_array.frag", GL_FRAGMENT_SHADER);
 	shaderProgram->link();
 	//elf
+	//3ak here
 	elfMaterial->addTexture(elfTexture, customizedSampler);
 	//    //giftMaterial->addTexture(specularTexture, customizedSampler);
 	//    elfMaterial->addShaderParameter(skyLightTopColor);
@@ -40,6 +41,8 @@ void PlayState::onEnter() {
 	elf_entity->getComp<Transform>()->update();
 	elf_entity->addComp<Elf, int>(100);
 	elf_entity->addComp<RenderState, bool>(true);
+
+
     //snow
     shared_ptr<Mesh> snowMesh(new Mesh);
     MeshUtils::Sphere(*snowMesh,glm::vec2{32,16},false);
