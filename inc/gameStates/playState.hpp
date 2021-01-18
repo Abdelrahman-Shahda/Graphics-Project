@@ -31,16 +31,17 @@ protected:
 	std::shared_ptr<Entity> mainCamera;
 	int charOrientation;
 public:
-	PlayState(StateManagerApplication* app) :GameState(app) {};
-	void onEnter() override;
-	void onDraw(double deltaTime) override;
+    PlayState(StateManagerApplication* app) :GameState(app) {};
+    void onEnter() override;
+    void onDraw(double deltaTime) override;
     void onExit() override {}
-	void moveChar(double deltaTime);
-	bool checkGameOver();
-	void updateLives();
+    void moveChar(double deltaTime);
+    bool checkGameOver();
+    void updateLives();
 	void moveelf(double deltaTime);
-	void moveSnow(double deltaTime);
-	std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
+    void updateScore();
+    void moveSnow(double deltaTime);
+    std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
     std::shared_ptr<Entity> getEntityWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
 };
 
