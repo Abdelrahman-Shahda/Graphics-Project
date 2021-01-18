@@ -374,7 +374,7 @@
 
     "elf2": {
       "tag": "Elf",
-      "position": [ 6, 10, -3 ],
+      "position": [ 6, 10, 20 ],
       "rotation": [ 0, 0, 0 ],
       "scale": [ 1, 1, 1 ],
       "components": {
