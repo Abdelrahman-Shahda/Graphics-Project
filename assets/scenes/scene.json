@@ -237,7 +237,7 @@
       "components": {
 
         "Gift": {
-          "points": 1
+          "points": 10
         },
         "RenderState": {
           "isVisible": true,

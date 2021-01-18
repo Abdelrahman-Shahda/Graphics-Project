@@ -295,6 +295,14 @@ void PlayState::updateScore()
 {
     std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
     std::vector<std::shared_ptr<Entity>> scores = getEntitiesWithTag(world,"Score");
+    if (playerComp->getScore()>=9)
+    {
+    scores[9]->getComp<RenderState>()->isVisible = true;
+    for (int j =0 ; j<scores.size()-1;j++)
+    scores[j]->getComp<RenderState>()->isVisible = false;
+    return;
+    }
+
     for (int i=0;i<scores.size();i++)
         if (i==playerComp->getScore())
             scores[i]->getComp<RenderState>()->isVisible = true;
