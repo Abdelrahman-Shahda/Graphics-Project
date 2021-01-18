@@ -173,7 +173,7 @@ void PlayState::onEnter() {
 	charOrientation = 0;
     shared_ptr<RenderingSystem> RS(new RenderingSystem);
     shared_ptr<CollisionDetectionSystem> CS(new GiftCollectionSystem(this->mainChar));
-    shared_ptr<CollisionDetectionSystem> ES(new elfCollisionSystem(mainChar));
+    shared_ptr<CollisionDetectionSystem> ES(new elfCollisionSystem(this->mainChar));
     systems.push_back(RS);
     systems.push_back(CS);
     systems.push_back(ES);
