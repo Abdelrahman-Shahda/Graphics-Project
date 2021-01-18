@@ -6,12 +6,16 @@
 #define GRAPHICSPROJECT_OVERSTATE_HPP
 
 #include <gameStates/gameState.hpp>
+#include <gameStates/menuState.hpp>
+
+#include <stateManager.h>
 #include <application.hpp>
 
 #include<components/camera.hpp>
 #include<components/flyCameraController.hpp>
 #include <components/transform.h>
 #include<components/lighting.h>
+#include <stateManager.h>
 
 #include<resources/material.h>
 #include <resources/texture.h>
@@ -20,10 +24,9 @@
 
 #include <systems/renderingSystem.hpp>
 #include <utils/mesh-utils.hpp>
-class overState:public GameState{
-    gameSettings gameSettings;
+class GameOverState:public GameState{
 public:
-    overState(Application* app) :GameState(app) {current=0;};
+	GameOverState(StateManagerApplication* app) :GameState(app) {current=0;};
     void onEnter() override{ shared_ptr<RenderingSystem> RS(new RenderingSystem);
         systems.push_back(RS);
 
@@ -115,7 +118,7 @@ public:
         std::shared_ptr<Camera> cameraPtr= mainCamera->addComp<Camera>();
         std::shared_ptr<Transform> transformPtr= mainCamera->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -10 }, {0, 0, 1 }, { 1,1,1 });
         transformPtr->update();
-        mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(applicationPtr,cameraPtr,transformPtr);
+        mainCamera->addComp<FlyCameraController, Application*,std::shared_ptr<Camera>>(static_cast<Application*>(applicationPtr),cameraPtr,transformPtr);
         world.push_back(mainCamera);
 
         //Creating entities
@@ -159,7 +162,7 @@ public:
 
             if(applicationPtr->getMouse().getMousePosition().x>=b1.x&&applicationPtr->getMouse().getMousePosition().x<=b2.x&&applicationPtr->getMouse().getMousePosition().y>=b1.y && applicationPtr->getMouse().getMousePosition().y<=b2.y)
             {
-                current=1;
+				applicationPtr->setNextState(new menuState(applicationPtr));
             }
 
 

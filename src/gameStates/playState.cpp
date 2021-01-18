@@ -286,8 +286,11 @@ void PlayState::onDraw(double deltaTime) {
 bool PlayState::checkGameOver()
 {
     std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
-    if (playerComp->getLives() == 0)
+	if (playerComp->getLives() == 0)
+	{
+		applicationPtr->setNextState(new menuState(applicationPtr));
         return true;
+	}
     return false;
 }
 
