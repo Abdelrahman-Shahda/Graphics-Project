@@ -38,7 +38,6 @@ public:
     void moveChar(double deltaTime);
     bool checkGameOver();
     void updateLives();
-	void moveelf(double deltaTime);
     void updateScore();
     void moveSnow(double deltaTime);
     std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);

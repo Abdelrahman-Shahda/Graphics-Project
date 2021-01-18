@@ -11,7 +11,7 @@
 #include <components/renderState.hpp>
 #include <components/player.hpp>
 #include <components/gift.hpp>
-
+#include <components/elf.hpp>
 #include <unordered_map>
 #include <typeindex>
 #include <typeinfo>

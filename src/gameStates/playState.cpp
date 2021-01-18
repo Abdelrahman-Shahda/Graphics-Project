@@ -21,27 +21,7 @@ void PlayState::onEnter() {
 	shaderProgram->attach(ASSETS_DIR"/shaders/light_transform.vert", GL_VERTEX_SHADER);
 	shaderProgram->attach(ASSETS_DIR "/shaders/light_array.frag", GL_FRAGMENT_SHADER);
 	shaderProgram->link();
-	//elf
-	//3ak here
-	elfMaterial->addTexture(elfTexture, customizedSampler);
-	//    //giftMaterial->addTexture(specularTexture, customizedSampler);
-	//    elfMaterial->addShaderParameter(skyLightTopColor);
-	//    elfMaterial->addShaderParameter(skyLightMiddleColor);
-	//    elfMaterial->addShaderParameter(skyLightBottomColor);
-	//
-	shared_ptr<Entity> elf_entity(new Entity("Elf"));
-	elf_entity->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(elf, elfMaterial);
-	shared_ptr<Resources::Material> elfMaterial(new Material(shaderProgram)); ////////////////
-	elfMaterial->addTexture(elfTexture, customizedSampler);
-	//giftMaterial->addTexture(specularTexture, customizedSampler);
-	elfMaterial->addShaderParameter(skyLightTopColor);
-	elfMaterial->addShaderParameter(skyLightMiddleColor);
-	elfMaterial->addShaderParameter(skyLightBottomColor);
-	elf_entity->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -8 }, { 0, 0, 0 }, { 1, 1,  1 });
-	elf_entity->getComp<Transform>()->update();
-	elf_entity->addComp<Elf, int>(100);
-	elf_entity->addComp<RenderState, bool>(true);
-
+    shared_ptr<Resources::Sampler> customizedSampler(new Sampler(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_NEAREST));
 
     //snow
     shared_ptr<Mesh> snowMesh(new Mesh);
@@ -315,6 +295,14 @@ void PlayState::updateScore()
 {
     std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
     std::vector<std::shared_ptr<Entity>> scores = getEntitiesWithTag(world,"Score");
+    if (playerComp->getScore()>=9)
+    {
+    scores[9]->getComp<RenderState>()->isVisible = true;
+    for (int j =0 ; j<scores.size()-1;j++)
+    scores[j]->getComp<RenderState>()->isVisible = false;
+    return;
+    }
+
     for (int i=0;i<scores.size();i++)
         if (i==playerComp->getScore())
             scores[i]->getComp<RenderState>()->isVisible = true;
@@ -366,27 +354,6 @@ std::vector<std::shared_ptr<Entity>> PlayState::getEntitiesWithTag(const std::ve
         }
     }
     return temp;
-}
-
-
-void PlayState::moveelf(double deltaTime) {
-    const int range_from  = 0;
-    const int range_to    = 3;
-
-    std::random_device                  rand_dev;
-    std::mt19937                        generator(rand_dev());
-    std::uniform_int_distribution<int>  distr(range_from, range_to);
-    int x= distr(generator);
-    glm::vec3 position = elf_entity->getComp<Transform>()->get_position()[3];
-    if(x==0) position.z -=  ((float)deltaTime * 20);
-    if(x==1) position.z += ((float)deltaTime * 20);
-    if(x==2) position.x += ((float)deltaTime * 20);
-    if(x==3) position.x -= ((float)deltaTime * 20);
-    if(position.x > -32.5 && position.x < 32.5 && position.z > -22.2 && position.z < 42.8){
-        elf_entity->getComp<Transform>()->set_position(position);
-        elf_entity->getComp<Transform>()->update();
-    }
-
 }
 
 void PlayState::moveSnow(double deltaTime)

@@ -11,8 +11,8 @@ void elfCollisionSystem::Run(const std::vector<std::shared_ptr<Entity>> &enititi
 		std::shared_ptr<Elf> elfComp = elves[i]->getComp<Elf>();
 
 		//checking collision with player first
-		if (detectCollision(player, elves[i])) {
-			elves[i]->getComp<RenderState>()->isVisible = false;
+		if (detectCollision(player, elves[i]) && elves[i]->getComp<RenderState>()->isVisible == true) {
+//			elves[i]->getComp<RenderState>()->isVisible = false;
 			playerComp->decrementLives();
 		}
 
