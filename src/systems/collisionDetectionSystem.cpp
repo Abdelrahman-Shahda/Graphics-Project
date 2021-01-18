@@ -14,7 +14,8 @@ bool CollisionDetectionSystem::detectCollision(const std::shared_ptr<Entity> gam
 	//Getting Bounding box coordinates for each entity
 	std::shared_ptr<MeshRenderer> meshRender1 = gameCharacter->getComp<MeshRenderer>();
 	std::shared_ptr<MeshRenderer> meshRender2 = gameObject->getComp<MeshRenderer>();
-
+    std::cout << "Gift "<< gameObject->tag;
+    std::cout << "Char"<< gameCharacter->tag;
 	glm::vec4 minBoundingBox1 = gameCharacter->getComp<Transform>()->get_ModalMatrix() * glm::vec4(meshRender1->getMinBoundingBox(), 1.0);
 	glm::vec4 minBoundingBox2 = gameObject->getComp<Transform>()->get_ModalMatrix()* glm::vec4(meshRender2->getMinBoundingBox(), 1.0);
 

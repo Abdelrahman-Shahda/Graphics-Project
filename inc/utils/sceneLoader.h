@@ -37,12 +37,13 @@ class SceneLoader {
 	shared_ptr<Sampler> loadSampler(const nlohmann::json& j);
 	shared_ptr<Mesh> loadMesh(const nlohmann::json&j);
 	shared_ptr<Texture> loadTexture(nlohmann::json &j);
-
+	void loadEntites( Application* application,nlohmann::json &json, std::shared_ptr<Transform> parent,std::vector<std::shared_ptr<Entity>> &entities);
 public:
     SceneLoader(std::string scenePath);
 
-    void loadEntites( Application* application);
-    void loadComponent(std::string component,nlohmann::json& json, std::shared_ptr<Entity> en,Application* application);
 
+    void loadComponent(std::string component,nlohmann::json& json, std::shared_ptr<Entity> en,Application* application,std::vector<std::shared_ptr<Entity>> &entities);
+    std::vector<std::shared_ptr<Entity>> loadEntities(Application* application);
+    shared_ptr<Entity> loadSky();
 };
 #endif //GRAPHICSPROJECT_SCENELOADER_H
