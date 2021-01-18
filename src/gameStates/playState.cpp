@@ -265,7 +265,6 @@ void PlayState::moveChar(double deltaTime)
         mainChar->getComp<Transform>()->set_position(gameSettings.spawnPosition);
         std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
         playerComp->decrementLives();
-        updateLives();
     }
     else
         mainChar->getComp<Transform>()->set_position(position);
@@ -280,6 +279,7 @@ void PlayState::onDraw(double deltaTime) {
 
     moveChar(deltaTime);
     moveSnow(deltaTime);
+    updateLives();
     updateScore();
 }
 
@@ -298,6 +298,14 @@ void PlayState::updateScore()
 {
     std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
     std::vector<std::shared_ptr<Entity>> scores = getEntitiesWithTag(world,"Score");
+    if (playerComp->getScore()>=9)
+    {
+    scores[9]->getComp<RenderState>()->isVisible = true;
+    for (int j =0 ; j<scores.size()-1;j++)
+    scores[j]->getComp<RenderState>()->isVisible = false;
+    return;
+    }
+
     for (int i=0;i<scores.size();i++)
         if (i==playerComp->getScore())
             scores[i]->getComp<RenderState>()->isVisible = true;
