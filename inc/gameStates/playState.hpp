@@ -2,6 +2,8 @@
 #define GRAPHICSPROJECT_PLAY_STATE_HPP
 
 #include <gameStates/gameState.hpp>
+#include <gameStates/menuState.hpp>
+
 #include <stateManager.h>
 #include<utils/mesh-utils.hpp>
 
