@@ -265,7 +265,6 @@ void PlayState::moveChar(double deltaTime)
         mainChar->getComp<Transform>()->set_position(gameSettings.spawnPosition);
         std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
         playerComp->decrementLives();
-        updateLives();
     }
     else
         mainChar->getComp<Transform>()->set_position(position);
@@ -280,6 +279,7 @@ void PlayState::onDraw(double deltaTime) {
 
     moveChar(deltaTime);
     moveSnow(deltaTime);
+    updateLives();
     updateScore();
 }
 
