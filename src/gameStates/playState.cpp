@@ -237,6 +237,20 @@ void PlayState::onEnter() {
 	this->mainCamera = getEntityWithTag(world,"Camera");
 	this->mainChar = getEntityWithTag(world,"Santa");
 
+	shared_ptr<Entity> elf_entity(new Entity("Elf"));
+	elf_entity->addComp<MeshRenderer, shared_ptr<Mesh>, shared_ptr<Resources::Material>>(elf, elfMaterial);
+	shared_ptr<Resources::Material> elfMaterial(new Material(shaderProgram)); ////////////////
+    elfMaterial->addTexture(elfTexture, customizedSampler);
+    //giftMaterial->addTexture(specularTexture, customizedSampler);
+    elfMaterial->addShaderParameter(skyLightTopColor);
+    elfMaterial->addShaderParameter(skyLightMiddleColor);
+    elfMaterial->addShaderParameter(skyLightBottomColor);
+	elf_entity->addComp<Transform, glm::vec3, glm::vec3, glm::vec3>({ 0, 10, -8 }, { 0, 0, 0 }, { 1, 1,  1 });
+	elf_entity->getComp<Transform>()->update();
+	elf_entity->addComp<Elf, int>(100);
+	elf_entity->addComp<RenderState, bool>(true);
+	world.push_back(elf_entity);
+
 	charOrientation = 0;
     shared_ptr<RenderingSystem> RS(new RenderingSystem);
     shared_ptr<CollisionDetectionSystem> CS(new GiftCollectionSystem(this->mainChar));
@@ -349,7 +363,7 @@ void PlayState::onDraw(double deltaTime) {
 
 		moveChar(deltaTime);
 
-		moveelf(deltaTime);
+		//moveelf(deltaTime);
 
 		moveSnow(deltaTime);
 
