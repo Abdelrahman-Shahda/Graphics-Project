@@ -254,7 +254,7 @@
       "tag": "Gift",
       "position": [ 10, 10, 15 ],
       "rotation": [ 0, 0, 0 ],
-      "scale": [ 1, 1, 1 ],
+      "scale": [ 1, 5, 1 ],
       "components": {
 
         "Gift": {
@@ -274,7 +274,7 @@
       "tag": "Gift",
       "position": [ 20, 10, 20 ],
       "rotation": [ 0, 0, 0 ],
-      "scale": [ 1, 1, 1 ],
+      "scale": [ 1, 3, 1 ],
       "components": {
 
         "Gift": {
@@ -295,7 +295,7 @@
       "tag": "Gift",
       "position": [ -10, 10, -12 ],
       "rotation": [ 0, 0, 0 ],
-      "scale": [ 1, 1, 1 ],
+      "scale": [ 2, 4, 2 ],
       "components": {
 
         "Gift": {
@@ -315,7 +315,7 @@
       "tag": "Gift",
       "position": [ -6, 10, 30 ],
       "rotation": [ 0, 0, 0 ],
-      "scale": [ 1, 1, 1 ],
+      "scale": [ 2, 2, 2 ],
       "components": {
 
         "Gift": {
@@ -335,7 +335,7 @@
       "tag": "Gift",
       "position": [ 20,10, 6 ],
       "rotation": [ 0, 0, 0 ],
-      "scale": [ 1, 1, 1 ],
+      "scale": [ 3, 3, 3 ],
       "components": {
 
         "Gift": {
