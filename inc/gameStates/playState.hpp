@@ -7,6 +7,7 @@
 
 #include<systems/renderingSystem.hpp>
 #include <systems/giftCollectionSystem.h>
+#include <systems/elfCollisionSystem.h>
 
 #include <components/flyCameraController.hpp>
 #include <components/camera.hpp>
@@ -14,6 +15,7 @@
 #include <components/lighting.h>
 #include <components/player.hpp>
 #include <components/gift.hpp>
+#include <components/elf.hpp>
 
 #include <resources/material.h>
 #include <resources/shader.hpp>
@@ -24,9 +26,10 @@
 
 class PlayState : public GameState {
 protected:
-    std::shared_ptr<Entity> mainChar;
-    std::shared_ptr<Entity> mainCamera;
-    int charOrientation;
+	std::shared_ptr<Entity> mainChar;
+    std::shared_ptr<Entity> elf_entity;
+	std::shared_ptr<Entity> mainCamera;
+	int charOrientation;
 public:
     PlayState(StateManagerApplication* app) :GameState(app) {};
     void onEnter() override;
@@ -35,6 +38,7 @@ public:
     void moveChar(double deltaTime);
     bool checkGameOver();
     void updateLives();
+	void moveelf(double deltaTime);
     void updateScore();
     void moveSnow(double deltaTime);
     std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);

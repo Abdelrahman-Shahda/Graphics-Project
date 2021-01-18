@@ -15,6 +15,7 @@ typedef enum{
 	SKYLIGHT,
 	PLAYER,
 	GIFT,
+	ELF,
 	COUNT,
 }  ComponentType;
 
