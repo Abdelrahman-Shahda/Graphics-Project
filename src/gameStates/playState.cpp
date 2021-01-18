@@ -3,6 +3,7 @@
 //
 #include <gameStates/playState.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <gameStates/overState.hpp>
 #include <time.h>
 #include <random>
 void PlayState::onEnter() {
@@ -288,7 +289,7 @@ bool PlayState::checkGameOver()
     std::shared_ptr<Player> playerComp = mainChar->getComp<Player>();
 	if (playerComp->getLives() == 0)
 	{
-		applicationPtr->setNextState(new menuState(applicationPtr));
+		applicationPtr->setNextState(new GameOverState(applicationPtr));
         return true;
 	}
     return false;
