@@ -38,5 +38,7 @@ public:
 	void updateScore();
 	void moveSnow(double deltaTime);
 	std::vector<std::shared_ptr<Entity>> getEntitiesWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
+    std::shared_ptr<Entity> getEntityWithTag(const std::vector<std::shared_ptr<Entity>> &entities,std::string tag);
 };
+
 #endif
