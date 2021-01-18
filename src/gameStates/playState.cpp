@@ -282,6 +282,7 @@ void PlayState::onDraw(double deltaTime) {
     moveSnow(deltaTime);
     updateLives();
     updateScore();
+	checkGameOver();
 }
 
 bool PlayState::checkGameOver()
